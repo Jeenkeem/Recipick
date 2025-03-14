@@ -8,7 +8,7 @@
 <body>
     <h1>map page</h1>
     <div id="map" style="width:500px;height:400px;"></div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=85be5e15a889324a45a7aa4afb743688"></script>
+    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
     <script>
 		var container = document.getElementById('map');
 		var options = {
