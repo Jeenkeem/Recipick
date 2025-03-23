@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
     
-    @GetMapping("/main")
+    @GetMapping("/recipick/main")
     public String getMethodName() {
         return "mainPage/main";
     }
