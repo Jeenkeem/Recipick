@@ -11,14 +11,22 @@ import java.util.List;
 public class RecipeOrderService{
 
     @Autowired
-    final RecipeInfoMapper recipeInfoRepository;
+    final RecipeInfoMapper recipeInfoMapper;
 
     public RecipeOrderService(RecipeInfoMapper recipeInfoRepository) {
-        this.recipeInfoRepository = recipeInfoRepository;
+        this.recipeInfoMapper = recipeInfoRepository;
     }
 
-    public List<RecipeInfo> recipieFindAll() {
-        return recipeInfoRepository.findAll();
+    public List<RecipeInfo> findAllRecipe() {
+        return recipeInfoMapper.findAll();
+    }
+
+    public void saveRecipe(List<RecipeInfo> re) {
+
+        for(RecipeInfo vo : re) {
+            recipeInfoMapper.saveRecipe(vo);
+        }
+
     }
 
 

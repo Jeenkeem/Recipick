@@ -3,10 +3,15 @@ package com.project.recipick.controller;
 import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.service.RecipeOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/recipie")
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/recipick")
 public class DataSaveController {
 
     @Autowired
@@ -17,7 +22,7 @@ public class DataSaveController {
     }
 
 
-    @RequestMapping("saveRecipe")
+    @GetMapping("/saveRecipe")
     public void SaveRecipe() {
 
         RecipeInfo re = new RecipeInfo();
@@ -35,6 +40,10 @@ public class DataSaveController {
         re.setIRDNT_CODE("jelo");
         re.setPC_NM("helo");
 
+        List<RecipeInfo> list = new ArrayList<>();
+        list.add(re);
+
+        recipeOrderService.saveRecipe(list);
 
     }
 
