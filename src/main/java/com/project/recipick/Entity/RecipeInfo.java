@@ -1,15 +1,11 @@
 package com.project.recipick.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.NoArgsConstructor;
 
-@Entity
-@NoArgsConstructor
+import lombok.Data;
+
+@Data
 public class RecipeInfo {
 
-    @Id
-    private Long Id;
 
     private int RECIPE_ID;
     private String RECIPE_NM_KO;

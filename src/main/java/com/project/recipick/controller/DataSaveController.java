@@ -1,12 +1,10 @@
-package com.project.recipick;
+package com.project.recipick.controller;
 
 import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.service.RecipeOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import repository.RecipeInfoRepository;
 
 @RestController("/recipie")
 public class DataSaveController {
@@ -37,7 +35,6 @@ public class DataSaveController {
         re.setIRDNT_CODE("jelo");
         re.setPC_NM("helo");
 
-        recipeOrderService.saveRecipe(re);
 
     }
 
