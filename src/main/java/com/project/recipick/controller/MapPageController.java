@@ -12,7 +12,7 @@ public class MapPageController {
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
-    @GetMapping("mapPage")
+    @GetMapping("/recipick/mapPage")
     public String getMethodName(Model model) {
 
         model.addAttribute("kakaoApiKey", kakaoApiKey);
