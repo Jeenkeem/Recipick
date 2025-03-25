@@ -9,4 +9,6 @@ import java.util.List;
 public interface RecipeInfoMapper {
 
     List<RecipeInfo> findAll();
+
+    void saveRecipe(RecipeInfo re);
 }
