@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface MartInfoMapper {
     List<MartInfo> findAll();
+
+    void saveMartInfo(MartInfo ma);
 }

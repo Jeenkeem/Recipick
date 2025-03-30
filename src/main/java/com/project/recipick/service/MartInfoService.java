@@ -1,6 +1,7 @@
 package com.project.recipick.service;
 
 import com.project.recipick.Entity.MartInfo;
+import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.mapper.MartInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class MartInfoService {
 
     public List<MartInfo> getAllMartInfo() {
         return martInfoMapper.findAll();
+    }
+
+    public void saveMartInfo(List<MartInfo> ma) {
+
+        for(MartInfo vo : ma) {
+            martInfoMapper.saveMartInfo(vo);
+        }
+
     }
 
 

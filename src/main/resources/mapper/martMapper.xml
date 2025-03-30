@@ -8,5 +8,13 @@
         SELECT * FROM mart_info
     </select>
 
+    <insert id="saveMartInfo" parameterType="com.project.recipick.Entity.MartInfo">
+        INSERT INTO public.mart_info
+        (p_seq, m_seq, m_name, a_seq, a_name, a_unit, a_price, p_year_month, add_col, p_date, m_type_code, m_type_name, m_gu_code, m_gu_name)
+        VALUES
+        (#{pSeq}, #{mSeq}, #{mName}, #{aSeq}, #{aName}, #{aUnit}, #{aPrice}, #{pYearMonth}, #{addCol}, #{pDate}, #{mTypeCode}, #{mTypeName}, #{mGuCode}, #{mGuName})
+    </insert>
+
+
 
 </mapper>
