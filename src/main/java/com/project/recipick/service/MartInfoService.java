@@ -23,14 +23,9 @@ public class MartInfoService {
         return martInfoMapper.findAll();
     }
 
-    public void saveMartInfo(List<MartInfo> ma) {
-
-        for(MartInfo vo : ma) {
-            martInfoMapper.saveMartInfo(vo);
-        }
-
+    public List<MartInfo> findMartInfo(String M_NAME) {
+        return martInfoMapper.findSameMartInfo(M_NAME);
     }
-
 
 
 }
