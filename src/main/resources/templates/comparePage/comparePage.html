@@ -3,229 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/comparePriceStyle.css">
 </head>
 
 <body>
-  <h1 style = "text-align: center;"> 메뉴바 </h1>
-  <div class = "total-table-wrapper">
-    <div class = "table-wrapper">
-      <button class = "table-title-button"> A마트 장보기 </button>
-      <div class = "table-header">
-        <table>
-          <thead>
+  <div id="compare-page">
+    <h1 style = "text-align: center;"> 메뉴바 </h1>
+    <div class = "total-table-wrapper">
+      <div class = "table-wrapper">
+        <button class = "table-title-button"> A마트 장보기 </button>
+        <div class = "table-header">
+          <table>
+            <thead>
+              <tr>
+                <th> 품목 </th>
+                <th> 가격 </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <div class = "table-content">
+          <table>
+            <tbody>
+              <tr v-for="(item, index) in leftItems" :key="index" @click="addToRight(item)">
+                <td> {{ item.name }} </td>
+                <td> {{ item.price }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class = "table-footer">
+          <table>
+            <tfoot>
+              <tr>
+                <td> 배고파 </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class = "table-wrapper">
+        <button class = "table-title-button"> A마트 영수증 </button>
+        <div class = "table-header">
+          <table>
+            <thead>
             <tr>
               <th> 품목 </th>
               <th> 가격 </th>
             </tr>
-          </thead>
-        </table>
-      </div>
+            </thead>
+          </table>
+        </div>
 
-      <div class = "table-content">
-        <table>
-          <tbody>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-            <tr>
-              <td> test </td>
-              <td> test </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class = "table-content">
+          <table>
+            <tbody>
+              <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="removeFromRight(index)">
+                <td> {{ item.name }} </td>
+                <td> {{ item.price }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div class = "table-footer">
-        <table>
-          <tfoot>
-            <tr>
-              <td> 1,000,000,000,000원 </td>
-            </tr>
-          </tfoot>
-        </table>
+        <div class = "table-footer">
+          <table>
+            <tfoot>
+              <tr>
+                <td> {{ rightTotal }}원 </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div class = "table-wrapper">
-      <button class = "table-title-button"> A마트 영수증 </button>
-      <div class = "table-header">
-        <table>
-          <thead>
-          <tr>
-            <th> 품목 </th>
-            <th> 가격 </th>
-          </tr>
-          </thead>
-        </table>
-      </div>
-
-      <div class = "table-content">
-        <table>
-          <tbody>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          <tr>
-            <td> test </td>
-            <td> test </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class = "table-footer">
-        <table>
-          <tfoot>
-            <tr>
-              <td> 1,000,000,000,000원 </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+    <div class = "next-button-wrapper">
+      <button class = "next-button"> 다음 </button>
     </div>
   </div>
 
-  <div class = "next-button-wrapper">
-    <button class = "next-button"> 다음 </button>
-  </div>
+  <script>
+    new Vue({
+      el: '#compare-page',
+      data: {
+        leftItems: [
+          { name: '딸기', price: 10000 },
+          { name: '당근', price: 2000 },
+          { name: '수박', price: 12000 },
+          { name: '참외', price: 3500 },
+          { name: '메론', price: 4500 }
+        ],
+        rightItems: []
+      },
+      computed: {
+        rightTotal() {
+          return this.rightItems.reduce((sum, item) => sum + item.price, 0).toLocaleString();
+        }
+      },
+      methods: {
+        addToRight(item) {
+          this.rightItems.push(item);
+        },
+        removeFromRight(index) {
+          this.rightItems.splice(index, 1);
+        }
+      }
+    });
+  </script>
+
 </body>
 </html>
