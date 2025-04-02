@@ -8,4 +8,7 @@ import java.util.List;
 @Mapper
 public interface MartInfoMapper {
     List<MartInfo> findAll();
+
+    List<MartInfo> findSameMartInfo(String M_NAME);
+
 }

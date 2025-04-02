@@ -33,7 +33,7 @@ public class MapPageController {
 
 
         MartInfo ma = martInfoList.get(0);
-        
+
         System.out.println(ma.getM_NAME());
 
 
