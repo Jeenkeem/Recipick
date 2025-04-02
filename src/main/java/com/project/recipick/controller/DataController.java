@@ -79,7 +79,7 @@ public class DataController {
         // API 키 설정
         String apiKey = "KakaoAK "  + kakaoRestApiKey;
         String url = "https://dapi.kakao.com/v2/local/search/keyword.json"
-                + "?y=37.514322572335935&x=127.06283102249932&radius=20000&query=카카오프렌즈";
+                + "?y=37.514322572335935&x=127.06283102249932&radius=20000&query=관악신사시장(신림4동)";
 
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
