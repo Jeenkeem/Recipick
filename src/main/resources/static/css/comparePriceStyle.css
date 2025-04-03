@@ -36,6 +36,21 @@ table {
     margin-bottom: 16px;
 }
 
+.table-title-button:disabled {
+    width: 100%;
+    padding: 10px 25px;         /* 버튼 안쪽 여백 */
+    border: 2px solid #000;
+    font-weight: 500;
+    font-size: 30px;
+    color: #000;
+    background: transparent;    /* 배경 투명 */
+    cursor: default;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
 .table-title-button:hover {
     color: #FFF;
     background: #000;
@@ -44,6 +59,13 @@ table {
     -4px -4px 5px 0px #fff9,
     7px 7px 20px 0px #0002,
     4px 4px 5px 0px #0001;
+}
+
+.table-title-button:disabled:hover {
+  background: transparent;
+  color: #000;
+  box-shadow: none;
+  cursor: default;
 }
 
 .table-header {
