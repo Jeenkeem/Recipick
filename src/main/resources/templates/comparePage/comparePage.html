@@ -33,8 +33,8 @@
                 <td> {{ item.price }} </td>
                 <td>
                   <div v-if = "selectedIndex == index && page != 2" class = "quantity-control">
-                    <button @click.stop = "decreaseQuantity(index)"> - </button>
-                    <button @click.stop = "increaseQuantity(index)"> + </button>
+                    <button class = "quantity-button" @click.stop = "decreaseQuantity(index)"> - </button>
+                    <button class = "quantity-button" @click.stop = "increaseQuantity(index)"> + </button>
                   </div>
                 </td>
               </tr>
@@ -101,8 +101,6 @@
         <button class = "nav-button" @click = "toNext">다음</button>
       </div>
     </div>
-
-    <p> 클릭 횟수 : {{ clickCount }} </p>
   </div>
 
   <script>
@@ -233,6 +231,5 @@
       }
     });
   </script>
-
 </body>
 </html>
