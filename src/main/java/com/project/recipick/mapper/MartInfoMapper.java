@@ -9,6 +9,8 @@ import java.util.List;
 public interface MartInfoMapper {
     List<MartInfo> findAll();
 
-    List<MartInfo> findSameMartInfo(String M_NAME);
+    List<MartInfo> findSameMartInfo(String gu_name);
+
+    List<String> getProductByCuCode(String gu_name);
 
 }
