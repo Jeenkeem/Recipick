@@ -7,10 +7,9 @@ import com.project.recipick.service.RecipeOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,9 +26,13 @@ public class DataController {
     @Autowired
     final MartInfoService martInfoService;
 
-    public DataController(RecipeOrderService recipeOrderService, MartInfoService martInfoService) {
+    @Autowired
+    private final ResourceLoader resourceLoader;
+
+    public DataController(RecipeOrderService recipeOrderService, MartInfoService martInfoService, ResourceLoader resourceLoader) {
         this.recipeOrderService = recipeOrderService;
         this.martInfoService = martInfoService;
+        this.resourceLoader = resourceLoader;
     }
 
     @Autowired
@@ -70,9 +73,15 @@ public class DataController {
     }
 
     @GetMapping("/getSameMartInfo")
-    public List<MartInfo> getMartInfo(@RequestParam String M_NAME) {
-        return martInfoService.findMartInfo(M_NAME);
+    public List<MartInfo> getMartInfo(@RequestParam String gu_name) {
+        return martInfoService.findMartInfo(gu_name);
     }
+
+    @GetMapping("/getProductByCuCode")
+    public List<String> getProductByCuCode(@RequestParam String gu_name) {
+        return martInfoService.getProductByCuCode(gu_name);
+    }
+
 
     @GetMapping("/findMartLocation")
     public ResponseEntity<String> findMartLocation() {
@@ -101,5 +110,16 @@ public class DataController {
     }
 
 
+
+
+
+    @GetMapping("/polygon")
+    public ResponseEntity<Resource> ctprvnGetGeoJson() {
+        // 경로를 'static/ctprvn-wgs84.json'으로 설정
+        Resource resource = resourceLoader.getResource("classpath:static/gu-geojson.json");
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(resource);
+    }
 
 }

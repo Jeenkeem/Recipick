@@ -10,7 +10,12 @@
 
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE m_name = #{M_NAME}
+        WHERE m_gu_code = #{gu_name}
+    </select>
+
+    <select id="getProductByCuCode" resultType="String">
+        SELECT DISTINCT m_name FROM mart_info
+        WHERE m_gu_code = #{gu_name}
     </select>
 
     <select id="findMartInfoByMartNames" resultType="com.project.recipick.Entity.MartInfo">
