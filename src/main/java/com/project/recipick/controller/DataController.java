@@ -110,9 +110,6 @@ public class DataController {
     }
 
 
-
-
-
     @GetMapping("/polygon")
     public ResponseEntity<Resource> ctprvnGetGeoJson() {
         // 경로를 'static/ctprvn-wgs84.json'으로 설정
