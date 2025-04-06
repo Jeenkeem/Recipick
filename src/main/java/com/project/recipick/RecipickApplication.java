@@ -10,7 +10,8 @@ public class RecipickApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecipickApplication.class, args);
-		System.out.println("Hello World");
+    
+		System.out.println("push push");
 	}
 
 }
