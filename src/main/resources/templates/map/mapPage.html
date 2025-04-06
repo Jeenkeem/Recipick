@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <body>
     <h1>map page</h1>
-    <div id="map" style="width:500px;height:400px;"></div>
-    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
-    <script>
-		var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 3
-		};
+    <div id="map" style="width:1500px;height:800px;"></div>
 
-		var map = new kakao.maps.Map(container, options);
-	</script>
+    <button onclick="sendLocation()">위치 정보 전송</button>
+
+    <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+    <script src="/resources/js/mapPageJs.js"></script>
+
 </body>
 </html>
