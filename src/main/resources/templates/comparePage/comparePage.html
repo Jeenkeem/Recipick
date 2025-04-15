@@ -8,113 +8,239 @@
 </head>
 
 <body>
-<div id="compare-page">
-  <h1 style = "text-align: center;"> 메뉴바 </h1>
-  <div class = "total-table-wrapper">
-    <div class = "table-wrapper">
-      <button class = "table-title-button"> A마트 장보기 </button>
-      <div class = "table-header">
-        <table>
-          <thead>
-          <tr>
-            <th> 품목 </th>
-            <th> 가격 </th>
-          </tr>
-          </thead>
-        </table>
-      </div>
+  <div id="compare-page">
+    <div class="menu-wrapper">
+      <img src="/static/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
 
-      <div class = "table-content">
-        <table>
-          <tbody>
-          <tr v-for="(item, index) in leftItems" :key="index" @click="addToRight(item)">
-            <td> {{ item.name }} </td>
-            <td> {{ item.price }} </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class = "table-footer">
-        <table>
-          <tfoot>
-          <tr>
-            <td> 배고파 </td>
-          </tr>
-          </tfoot>
-        </table>
+      <div class="menu-buttons">
+        <button class="menu-btn">레시피검색</button>
+        <button class="menu-btn">내동네시장</button>
+        <button class="menu-btn">비교장보기</button>
       </div>
     </div>
 
-    <div class = "table-wrapper">
-      <button class = "table-title-button"> A마트 영수증 </button>
-      <div class = "table-header">
-        <table>
-          <thead>
-          <tr>
-            <th> 품목 </th>
-            <th> 가격 </th>
-          </tr>
-          </thead>
-        </table>
+    <div class = "total-table-wrapper">
+      <!-- 왼쪽 테이블 -->
+      <div class = "table-wrapper">
+        <img src="/static/image/recipe_background.png" class="bg-img" alt="배경 이미지">
+        <button class = "table-title-button" :disabled = "!isActivated"> {{ firstTitle }} </button>
+        <div class = "table-header">
+          <table>
+            <thead>
+              <tr>
+                <th> 품목 </th>
+                <th> 가격 </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+        <div class = "table-content">
+          <table>
+            <tbody>
+              <tr v-for="(item, index) in leftItems" :key="index" @click="page != 2 ? toggleRow(index) : null">
+                <td> {{ item.name }} <span v-if = "page == 2"> ({{ item.quantity }}개)</span> </td>
+                <td> {{ item.price }} </td>
+                <td>
+                  <div v-if = "selectedIndex == index && page != 2" class = "quantity-control">
+                    <button class = "quantity-button" @click.stop = "decreaseQuantity(index)"> - </button>
+                    <button class = "quantity-button" @click.stop = "increaseQuantity(index)"> + </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class = "table-footer">
+          <table>
+            <tfoot>
+              <tr v-if = "page == 2">
+                <td> 총 금액:  {{ leftTotal }}원 </td>
+              </tr>
+              <tr v-else>
+                <td> &nbsp; </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
 
-      <div class = "table-content">
-        <table>
-          <tbody>
-          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="removeFromRight(index)">
-            <td> {{ item.name }} </td>
-            <td> {{ item.price }} </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- 오른쪽 테이블 -->
+      <div class = "table-wrapper">
+        <img src="/static/image/recipe_background.png" class="bg-img" alt="배경 이미지">
+        <button class = "table-title-button" :disabled = "!isActivated"> {{ secondTitle }} </button>
+        <div class = "table-header">
+          <table>
+            <thead>
+            <tr>
+              <th> 품목 </th>
+              <th> 가격 </th>
+            </tr>
+            </thead>
+          </table>
+        </div>
 
-      <div class = "table-footer">
-        <table>
-          <tfoot>
-          <tr>
-            <td> {{ rightTotal }}원 </td>
-          </tr>
-          </tfoot>
-        </table>
+        <div class = "table-content">
+          <table>
+            <tbody>
+              <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="removeFromRight(index)">
+                <td> {{ item.name }} ({{ item.quantity }}개) </td>
+                <td> {{ (item.price * item.quantity).toLocaleString() }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class = "table-footer">
+          <table>
+            <tfoot>
+              <tr>
+                <td> 총 금액:  {{ rightTotal }}원 </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class = "nav-button-wrapper">
+      <div class = "prev-button-box">
+        <button class = "nav-button" @click = "toPrev" :disabled = "clickCount == 0">이전</button>
+      </div>
+      <div class = "next-button-box">
+        <button class = "nav-button" @click = "toNext">다음</button>
       </div>
     </div>
   </div>
 
-  <div class = "next-button-wrapper">
-    <button class = "next-button"> 다음 </button>
-  </div>
-</div>
+  <script>
+    new Vue({
+      el: '#compare-page',
 
-<script>
-  new Vue({
-    el: '#compare-page',
-    data: {
-      leftItems: [
-        { name: '딸기', price: 10000 },
-        { name: '당근', price: 2000 },
-        { name: '수박', price: 12000 },
-        { name: '참외', price: 3500 },
-        { name: '메론', price: 4500 }
-      ],
-      rightItems: []
-    },
-    computed: {
-      rightTotal() {
-        return this.rightItems.reduce((sum, item) => sum + item.price, 0).toLocaleString();
-      }
-    },
-    methods: {
-      addToRight(item) {
-        this.rightItems.push(item);
+      data: {
+        PAGE_COUNT: 3,
+        clickCount: 0,
+        itemA: [
+          { name: '딸기', price: 10000, quantity: 1 },
+          { name: '당근', price: 2000, quantity: 1 },
+          { name: '수박', price: 12000, quantity: 1 },
+          { name: '참외', price: 3500, quantity: 1 },
+          { name: '메론', price: 4500, quantity: 1 }
+        ],
+        itemB: [
+          { name: '딸기', price: 10000, quantity: 1 },
+          { name: '당근', price: 2000, quantity: 1 },
+          { name: '수박', price: 12000, quantity: 1 },
+          { name: '참외', price: 3500, quantity: 1 },
+          { name: '메론', price: 4500, quantity: 1 }
+        ],
+        recipeA: [],
+        recipeB: [],
+        selectedIndex: null
       },
-      removeFromRight(index) {
-        this.rightItems.splice(index, 1);
-      }
-    }
-  });
-</script>
 
+      created() {
+        this.itemA.sort((a, b) => a.name.localeCompare(b.name));
+        this.itemB.sort((a, b) => a.name.localeCompare(b.name));
+      },
+
+      computed: {
+        page() {
+          return this.clickCount % this.PAGE_COUNT;
+        },
+
+        isActivated() {
+          return this.page == 2;
+        },
+
+        leftItems() {
+          if(this.page == 0)  return this.itemA;
+          else if(this.page == 1) return this.itemB;
+          else return this.recipeA;
+        },
+
+        rightItems() {
+          if(this.page == 0)  return this.recipeA;
+          else return this.recipeB;
+        },
+
+        leftTotal() {
+          return this.leftItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString();
+        },
+
+        rightTotal() {
+          return this.rightItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString();
+        },
+
+        firstTitle() {
+          if (this.page == 0) return 'A마트 장보기';
+          else if (this.page == 1) return 'B마트 장보기';
+          else return 'A마트 영수증';
+        },
+
+        secondTitle() {
+          if (this.page == 0) return 'A마트 영수증';
+          else if (this.page == 1) return 'B마트 영수증';
+          else return 'B마트 영수증';
+        }
+      },
+
+      methods: {
+        selectItem(index) {
+          this.selectedIndex = index;
+        },
+
+        toggleRow(index) {
+          if(this.selectedIndex == index) this.selectedIndex = null;
+          else this.selectedIndex = index;
+        },
+
+        increaseQuantity(index) {
+          const item = this.leftItems[index];
+          const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+          const existing = targetList.find(el => el.name === item.name);
+
+          if (existing) {
+            existing.quantity++;
+          } else {
+            targetList.push({ name: item.name, price: item.price, quantity: 1 });
+          }
+        },
+
+        decreaseQuantity(index) {
+          const item = this.leftItems[index];
+          const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+          const existingIndex = targetList.findIndex(el => el.name === item.name);
+
+          if (existingIndex !== -1) {
+            const existing = targetList[existingIndex];
+            existing.quantity--;
+
+            if (existing.quantity <= 0) {
+              targetList.splice(existingIndex, 1);
+            }
+          }
+        },
+
+        removeFromRight(index) {
+          if (this.page == 0) this.recipeA.splice(index, 1);
+          else if (this.page == 1) this.recipeB.splice(index, 1);
+        },
+
+        toNext() {
+          this.clickCount++;
+          this.selectedIndex = null;
+        },
+
+        toPrev() {
+          if (this.clickCount > 0) {
+            this.clickCount--;
+            this.selectedIndex = null;
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
