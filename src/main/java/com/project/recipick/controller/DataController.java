@@ -3,10 +3,9 @@ package com.project.recipick.controller;
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.service.MartInfoService;
-import com.project.recipick.service.RecipeOrderService;
+import com.project.recipick.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
@@ -21,7 +20,7 @@ import java.util.List;
 public class DataController {
 
     @Autowired
-    final RecipeOrderService recipeOrderService;
+    final RecipeService recipeOrderService;
 
     @Autowired
     final MartInfoService martInfoService;
@@ -29,7 +28,7 @@ public class DataController {
     @Autowired
     private final ResourceLoader resourceLoader;
 
-    public DataController(RecipeOrderService recipeOrderService, MartInfoService martInfoService, ResourceLoader resourceLoader) {
+    public DataController(RecipeService recipeOrderService, MartInfoService martInfoService, ResourceLoader resourceLoader) {
         this.recipeOrderService = recipeOrderService;
         this.martInfoService = martInfoService;
         this.resourceLoader = resourceLoader;
