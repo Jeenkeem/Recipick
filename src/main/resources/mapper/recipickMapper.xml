@@ -15,5 +15,9 @@
         VALUES(#{RECIPE_ID}, #{RECIPE_NM_KO}, #{SUMRY}, #{NATION_CODE}, #{NATION_NM}, #{TY_CODE}, #{TY_NM}, #{COOKING_TIME}, #{CALORIE}, #{QNT}, #{LEVEL_NM}, #{IRDNT_CODE}, #{PC_NM});
     </insert>
 
+    <select id="findRecipe" resultType="com.project.recipick.Entity.RecipeInfo">
+        SELECT * FROM recipe_info
+        WHERE recipe_nm_ko = #{recipe_nm}
+    </select>
 
 </mapper>
