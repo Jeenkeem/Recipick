@@ -2,6 +2,7 @@ package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
+import com.project.recipick.dto.MartItemDto;
 import com.project.recipick.service.MartInfoService;
 import com.project.recipick.service.RecipeOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,14 +105,10 @@ public class DataController {
 
     @GetMapping("/initMartData")
     public List<MartInfo> getPresetMarts(){
-        List<String> martNames = List.of("관악신사시장(신림4동)", "대명여울빛거리시장", "은행나무시장", "영동전통시장");
+        List<String> martNames = List.of("관악신사시장(신림4동)", "대명여울빛거리시장");
 
         return martInfoService.getMartInfoByMartNames(martNames);
     }
-
-
-
-
 
     @GetMapping("/polygon")
     public ResponseEntity<Resource> ctprvnGetGeoJson() {
