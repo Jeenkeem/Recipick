@@ -29,6 +29,8 @@ else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치�
     displayMarker(locPosition, message);
 }
 
+
+
 // 지도에 마커와 인포윈도우를 표시하는 함수입니다
 function displayMarker(locPosition, message) {
     var marker = new kakao.maps.Marker({
@@ -124,15 +126,72 @@ function init(path) {
 
                     // 폴리곤 클릭 시 동작 작성.
                     kakao.maps.event.addListener(polygon, 'click', function () {
+                        const guName = feature.properties.SIG_KOR_NM; // 자치구 이름 가져오기
 
+                        fetch('/recipick/getProductByCuCode?gu_name=' + encodeURIComponent(guName), {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+
+                            // 시장명으로 카카오 키워드 검색
+                             data.forEach(market => {
+                                    searchMarket(market); // 하나씩 넘겨서 검색
+                                });
+                           })
+                        .catch(error => console.error('Error:', error));
                     });
 
                     polygons.push(polygon);
                 });
+
+
+
+
             });
         })
         .catch(error => console.error('GeoJSON 데이터 로드 실패:', error));
 }
+
+function searchMarket(keyword) {
+    const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
+
+    fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(keyword)}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'KakaoAK ' + kakaoApiKey
+        }
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.documents && result.documents.length > 0) {
+            console.log(`"${keyword}" 검색 결과:`, result.documents);
+
+            // 결과를 지도에 마커로 찍는 예시
+            const place = result.documents[0]; // 가장 첫 번째 결과 사용
+            const marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(place.y, place.x),
+                title: place.place_name
+            });
+
+            const infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="padding:5px;">${place.place_name}</div>`
+            });
+            infowindow.open(map, marker);
+        } else {
+            console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
+        }
+    })
+    .catch(err => {
+        console.error(`"${keyword}" 검색 중 오류 발생:`, err);
+    });
+}
+
 
 function removePolygons() {
 // 모든 폴리곤을 지도에서 제거하고 배열을 초기화합니다.

@@ -46,8 +46,6 @@ public class MartInfoService {
         return guNameList;
     }
 
-    public List<MartInfo> getMartInfoByMartNames(List<String> martNames) { return martInfoMapper.findMartInfoByMartNames(martNames); }
-
     public List<MartItemDto> getMartItemsByMartName(String martName) {
         return martInfoMapper.selectItemsByMartName(martName);
     }

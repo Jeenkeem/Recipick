@@ -14,7 +14,5 @@ public interface MartInfoMapper {
 
     List<String> getProductByCuCode(String gu_name);
 
-    List<MartInfo> findMartInfoByMartNames(List<String> martNames);
-
     List<MartItemDto> selectItemsByMartName(String martName);
 }

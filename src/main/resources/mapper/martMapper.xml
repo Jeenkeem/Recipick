@@ -19,17 +19,6 @@
         WHERE m_gu_code = #{gu_name}
     </select>
 
-    <!-- 마트 4개 이름 하드코딩 용도 -->
-    <select id="findMartInfoByMartNames" resultType="com.project.recipick.Entity.MartInfo">
-        SELECT DISTINCT ON (m_name, a_name) *
-        FROM mart_info
-        WHERE m_name IN
-        <foreach item="name" collection="martNames" open="(" separator="," close=")">
-            #{name}
-        </foreach>
-        ORDER BY m_name, a_name
-    </select>
-
     <!-- 마트 하드코딩 선택 후 왼쪽 표에 넘길 용도 -->
     <select id="selectItemsByMartName" resultType="com.project.recipick.dto.MartItemDto">
         SELECT DISTINCT ON (a_name) a_name, a_price

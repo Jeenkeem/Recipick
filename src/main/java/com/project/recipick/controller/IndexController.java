@@ -1,7 +1,7 @@
 package com.project.recipick.controller;
 
 import com.project.recipick.Entity.RecipeInfo;
-import com.project.recipick.service.RecipeOrderService;
+import com.project.recipick.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,9 @@ import java.util.List;
 public class IndexController {
 
     @Autowired
-    final RecipeOrderService recipeOrderService;
+    final RecipeService recipeOrderService;
 
-    public IndexController(RecipeOrderService recipeOrderService) {
+    public IndexController(RecipeService recipeOrderService) {
         this.recipeOrderService = recipeOrderService;
     }
 

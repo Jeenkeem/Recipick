@@ -1,6 +1,5 @@
 package com.project.recipick.service;
 
-import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +8,12 @@ import com.project.recipick.mapper.RecipeInfoMapper;
 import java.util.List;
 
 @Service
-public class RecipeOrderService{
+public class RecipeService {
 
     @Autowired
     final RecipeInfoMapper recipeInfoMapper;
 
-    public RecipeOrderService(RecipeInfoMapper recipeInfoRepository) {
+    public RecipeService(RecipeInfoMapper recipeInfoRepository) {
         this.recipeInfoMapper = recipeInfoRepository;
     }
 
@@ -30,6 +29,9 @@ public class RecipeOrderService{
 
     }
 
+    public RecipeInfo findRecipe(String recipe_name) {
+        return recipeInfoMapper.findRecipe(recipe_name);
+    }
 
 
 }
