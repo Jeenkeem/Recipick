@@ -7,6 +7,7 @@ import com.project.recipick.mapper.MartInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.project.recipick.dto.MartItemDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,8 @@ public class MartInfoService {
         return guNameList;
     }
 
-    public List<MartInfo> getMartInfoByMartNames(List<String> martNames) { return martInfoMapper.findMartInfoByMartNames(martNames); }
-
+    public List<MartItemDto> getMartItemsByMartName(String martName) {
+        return martInfoMapper.selectItemsByMartName(martName);
+    }
 
 }
