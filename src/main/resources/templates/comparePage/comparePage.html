@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <link rel="stylesheet" type="text/css" href="/css/comparePriceStyle.css">
+  <link rel="stylesheet" type="text/css" href="/resources/css/comparePriceStyle.css">
 </head>
 
 <body>
 <div id="compare-page">
   <div class="menu-wrapper">
-    <img src="image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
+    <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
     <div class="menu-buttons">
       <button class="menu-btn">레시피검색</button>
       <button class="menu-btn">내동네시장</button>
@@ -21,7 +21,7 @@
   <div class="total-table-wrapper">
     <!-- 왼쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/image/recipe_background.png" class="bg-img" alt="배경 이미지">
+      <img src="/resources/image/recipe_background.png" class="bg-img" alt="배경 이미지">
       <button class="table-title-button" :disabled="!isActivated"> {{ firstTitle }} </button>
       <div class="table-header">
         <table>
@@ -62,7 +62,7 @@
 
     <!-- 오른쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/image/recipe_background.png" class="bg-img" alt="배경 이미지">
+      <img src="/resources/image/recipe_background.png" class="bg-img" alt="배경 이미지">
       <button class="table-title-button" :disabled="!isActivated"> {{ secondTitle }} </button>
       <div class="table-header">
         <table>

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class RecipeController {
@@ -27,7 +26,8 @@ public class RecipeController {
 
         model.addAttribute("recipe_title", re.getRECIPE_NM_KO());
         model.addAttribute("recipe_sumry", re.getSUMRY());
-
+        model.addAttribute("recipe_level", re.getLEVEL_NM());
+        model.addAttribute("recipe_cookingTime", re.getCOOKING_TIME());
         return "recipePage/recipeInfo";
     }
 }

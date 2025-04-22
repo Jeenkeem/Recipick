@@ -3,10 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>레시피 상세 정보</title>
+    <style>
+        .recipe-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .recipe-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .main-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .ingredients-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .steps-section {
+            margin: 30px 0;
+        }
+        .step {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .step-number {
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-right: 10px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .nav-item {
+            padding: 10px 20px;
+            margin: 0 15px;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .nav-item.active {
+            font-weight: bold;
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+        }
+        .bg-img {
+            width: 200px; /* 원하는 너비로 조절 가능 */
+            height: auto; /* 비율 유지 */
+            top: 50%;
+            left: 50%;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h3 th:text="${recipe_sumry}"></h3><br>
-    <h1 th:text="${recipe_title}"></h1>
+    <div class="recipe-container">
+        <div class="recipe-header">
+            <img src="/resources/image/recipick_logo.png" alt="레시피 대표 이미지" class="bg-img">
+            
+        </div>
+        <!-- 네비게이션 추가 -->
+        <div class="nav-container">
+            <div class="nav-item active">레시피검색</div>
+            <div class="nav-item">내 동네시장</div>
+            <div class="nav-item">비교찾기</div>
+        </div>
+
+        <div>
+            <span th:text="${recipe_sumry}"></span>
+            <h1 th:text="${recipe_title}"></h1>
+            <span th:text="${recipe_level}"></span> <br>
+            <span th:text="${recipe_cookingTime}"></span>
+            
+        </div>
+        
+
+        <div class="ingredients-section">
+            <h2>🥘 필요한 재료</h2>
+            <ul th:each="ingredient : ${ingredients}">
+                <li>
+                    <span th:text="${ingredient.name}"></span>
+                    <span th:text="${ingredient.amount}"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="steps-section">
+            <h2>📝 조리 순서</h2>
+            <div class="step" th:each="step, stepStat : ${recipe_steps}">
+                <span class="step-number" th:text="'STEP ' + ${stepStat.count}"></span>
+                <p th:text="${step}"></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
