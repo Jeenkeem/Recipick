@@ -3,7 +3,7 @@
 body {
     font-family: 'Pretendard';
     padding: 20px;
-    background-image: url('/static/image/page_background.png');
+    background-image: url('/image/page_background.png');
     background-size: fill;
     background-position: center;
 }
