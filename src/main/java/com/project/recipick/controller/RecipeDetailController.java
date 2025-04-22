@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class RecipeController {
+public class RecipeDetailController {
 
     @Autowired
     final RecipeService recipeService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeDetailController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
