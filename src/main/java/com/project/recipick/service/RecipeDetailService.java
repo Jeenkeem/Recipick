@@ -8,12 +8,12 @@ import com.project.recipick.mapper.RecipeInfoMapper;
 import java.util.List;
 
 @Service
-public class RecipeService {
+public class RecipeDetailService {
 
     @Autowired
     final RecipeInfoMapper recipeInfoMapper;
 
-    public RecipeService(RecipeInfoMapper recipeInfoRepository) {
+    public RecipeDetailService(RecipeInfoMapper recipeInfoRepository) {
         this.recipeInfoMapper = recipeInfoRepository;
     }
 

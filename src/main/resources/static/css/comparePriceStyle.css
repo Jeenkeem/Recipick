@@ -1,12 +1,6 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-body {
-    font-family: 'Pretendard';
-    padding: 20px;
-    background-image: url('/image/page_background.png');
-    background-size: fill;
-    background-position: center;
-}
+
 
 table {
     width:100%;                   /* 테이블이 부모 너비의 100% 차지 */

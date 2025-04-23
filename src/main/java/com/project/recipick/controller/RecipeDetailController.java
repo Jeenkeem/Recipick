@@ -1,7 +1,7 @@
 package com.project.recipick.controller;
 
 import com.project.recipick.Entity.RecipeInfo;
-import com.project.recipick.service.RecipeService;
+import com.project.recipick.service.RecipeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RecipeDetailController {
 
     @Autowired
-    final RecipeService recipeService;
+    final RecipeDetailService recipeDetailService;
 
-    public RecipeDetailController(RecipeService recipeService) {
-        this.recipeService = recipeService;
+    public RecipeDetailController(RecipeDetailService recipeDetailService) {
+        this.recipeDetailService = recipeDetailService;
     }
 
     @GetMapping("/recipick/recipeInfo")
     public String recipeInfo(@RequestParam String recipe_name, Model model) {
-        RecipeInfo re = recipeService.findRecipe(recipe_name);
+        RecipeInfo re = recipeDetailService.findRecipe(recipe_name);
 
         System.out.println(re.getRECIPE_NM_KO());
 
@@ -28,6 +28,6 @@ public class RecipeDetailController {
         model.addAttribute("recipe_sumry", re.getSUMRY());
         model.addAttribute("recipe_level", re.getLEVEL_NM());
         model.addAttribute("recipe_cookingTime", re.getCOOKING_TIME());
-        return "recipePage/recipeInfo";
+        return "recipePage/recipeDetail";
     }
 }
