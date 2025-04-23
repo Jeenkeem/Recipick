@@ -1,15 +1,11 @@
 package com.project.recipick.service;
 
 import com.project.recipick.Entity.MartInfo;
-import com.project.recipick.Entity.Product;
-import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.mapper.MartInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import com.project.recipick.dto.MartItemDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,8 +14,6 @@ public class MartInfoService {
     @Autowired
     final MartInfoMapper martInfoMapper;
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     public MartInfoService(MartInfoMapper martInfoMapper) {
         this.martInfoMapper = martInfoMapper;
