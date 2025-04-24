@@ -2,12 +2,10 @@ package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
-import com.project.recipick.dto.MartItemDto;
 import com.project.recipick.service.MartInfoService;
 import com.project.recipick.service.RecipeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
@@ -47,6 +45,7 @@ public class DataController {
     public void SaveRecipe() {
 
         RecipeInfo re = new RecipeInfo();
+        /*
         re.setRECIPE_ID(1);
         re.setRECIPE_NM_KO("나물");
         re.setSUMRY("Hello world");
@@ -60,6 +59,8 @@ public class DataController {
         re.setLEVEL_NM("LOW");
         re.setIRDNT_CODE("jelo");
         re.setPC_NM("helo");
+
+         */
 
         List<RecipeInfo> list = new ArrayList<>();
         list.add(re);
