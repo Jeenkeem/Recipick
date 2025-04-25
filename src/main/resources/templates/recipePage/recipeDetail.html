@@ -112,9 +112,15 @@
               <button class="menu-btn">비교장보기</button>
             </div>
           </div>
-        
 
-        <div class="ingredients-section">
+        <span th:text="${recipe_sumry}"></span>
+        <h2><span th:text="${recipe_title}"></span></h2>
+        난이도 <span th:text="${recipe_level}"></span> <br>
+        조리시간 <span th:text="${recipe_cookingTime}"></span>
+
+
+
+        <!--<div class="ingredients-section">
             <h2>🥘 필요한 재료</h2>
             <ul th:each="ingredient : ${ingredients}">
                 <li>
@@ -130,7 +136,7 @@
                 <span class="step-number" th:text="'STEP ' + ${stepStat.count}"></span>
                 <p th:text="${step}"></p>
             </div>
-        </div>
+        </div>-->
     </div>
 </body>
 </html>
