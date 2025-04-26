@@ -2,7 +2,7 @@ package com.project.recipick.mapper;
 
 import com.project.recipick.Entity.MartInfo;
 import org.apache.ibatis.annotations.Mapper;
-import com.project.recipick.dto.MartItemDto;
+import com.project.recipick.dto.MartItemDTO;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface MartInfoMapper {
 
     List<String> getProductByCuCode(String gu_name);
 
-    List<MartItemDto> selectItemsByMartName(String martName);
+    List<MartItemDTO> selectItemsByMartName(String martName);
 }

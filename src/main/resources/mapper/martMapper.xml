@@ -20,7 +20,7 @@
     </select>
 
     <!-- 마트 하드코딩 선택 후 왼쪽 표에 넘길 용도 -->
-    <select id="selectItemsByMartName" resultType="com.project.recipick.dto.MartItemDto">
+    <select id="selectItemsByMartName" resultType="com.project.recipick.dto.MartItemDTO">
         SELECT DISTINCT ON (a_name) a_name, a_price
         FROM mart_info
         WHERE m_name = #{martName}

@@ -1,6 +1,6 @@
 package com.project.recipick.controller;
 
-import com.project.recipick.dto.MartItemDto;
+import com.project.recipick.dto.MartItemDTO;
 import com.project.recipick.service.MartInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class ComparePageController {
     // 👉 마트 데이터 JSON으로 내려주는 API (프론트에서 fetch로 호출함)
     @ResponseBody
     @GetMapping("/mart-items")
-    public List<MartItemDto> getMartItems(@RequestParam String martName) {
+    public List<MartItemDTO> getMartItems(@RequestParam String martName) {
         return martInfoService.getMartItemsByMartName(martName);
     }
 

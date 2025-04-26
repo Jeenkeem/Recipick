@@ -118,6 +118,15 @@
         난이도 <span th:text="${recipe_level}"></span> <br>
         조리시간 <span th:text="${recipe_cookingTime}"></span>
 
+        <div class="ingredients-section">
+            <h2>🥘 필요한 재료</h2>
+            <ul th:each="ingredient : ${list}">
+                <li>
+                    <span th:text="${ingredient.IRDNT_NM}"></span>
+                    <span th:text="${ingredient.IRDNT_CPCTY}"></span>
+                </li>
+            </ul>
+        </div>
 
 
         <!--<div class="ingredients-section">

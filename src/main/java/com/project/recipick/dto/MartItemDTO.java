@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MartItemDto {
+public class MartItemDTO {
     private String a_name; // 품목 이름
     private int a_price; // 가격
 }
