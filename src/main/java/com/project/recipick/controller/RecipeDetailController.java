@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.Entity.RecipeIrdnt;
+import com.project.recipick.Entity.RecipeProcedure;
 import com.project.recipick.service.RecipeDetailService;
 import io.micrometer.core.instrument.MultiGauge;
 import org.json.simple.JSONArray;
@@ -84,11 +85,53 @@ public class RecipeDetailController {
             list.add(reIrdnt);
         }
 
+        /**********************************************/
+
+
+        String apiUrlRecipeProcedure = "http://211.237.50.150:7080/openapi/2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8/json/Grid_20150827000000000228_1/1/1000?RECIPE_ID="+recipe_id;
+
+        // HTTP GET 요청 보내기
+        ResponseEntity<String> response = restTemplate.getForEntity(apiUrlRecipeProcedure, String.class);
+
+        // 응답 값
+        String resBody = response.getBody();
+        System.out.println("GET Response: " + resBody);
+
+        String jsonString = resBody;
+        JSONParser parser2 = new JSONParser();
+
+        JSONObject jsonObject = (JSONObject) parser2.parse(jsonString);
+        String Grid228 = jsonObject.get("Grid_20150827000000000228_1").toString();
+        System.out.println("Grid -> " + Grid228);
+
+        JSONObject jsonObjectGrid = (JSONObject) parser2.parse(Grid228);
+        System.out.println("row -> " + jsonObjectGrid.get("row").toString());
+
+        String row228 = jsonObjectGrid.get("row").toString();
+        JSONArray jsonArray228 = (JSONArray) parser.parse(row228);
+
+        System.out.println(jsonArray228.get(0));
+
+        ArrayList<RecipeProcedure> list228 = new ArrayList<>();
+
+        for(int i=0; i<jsonArray228.size(); i++) {
+            JSONObject obj = (JSONObject) jsonArray228.get(i);
+
+            RecipeProcedure recipeProcedure = new RecipeProcedure();
+
+            recipeProcedure.setRECIPE_ID(Integer.parseInt(obj.get("RECIPE_ID").toString()));
+            recipeProcedure.setCOOKING_NO(obj.get("COOKING_NO").toString());
+            recipeProcedure.setCOOKING_DC(obj.get("COOKING_DC").toString());
+            recipeProcedure.setSTEP_TIP(obj.get("STEP_TIP").toString());
+            list228.add(recipeProcedure);
+        }
+
         model.addAttribute("recipe_title", re.getRECIPE_NM_KO());
         model.addAttribute("recipe_sumry", re.getSUMRY());
         model.addAttribute("recipe_level", re.getLEVEL_NM());
         model.addAttribute("recipe_cookingTime", re.getCOOKING_TIME());
         model.addAttribute("list", list);
+        model.addAttribute("list228", list228);
 
         return "recipePage/recipeDetail";
     }

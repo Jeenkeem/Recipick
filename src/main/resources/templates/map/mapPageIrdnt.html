@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipick</title>
+    <style>
+        .recipe-container {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .menu-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .menu-logo {
+            height: 20px; /* 로고 높이 조정 */
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            gap: 30px; /* 버튼 간격 */
+            justify-content: center;
+        }
+
+        .menu-btn {
+            position: relative;
+            background: transparent;
+            border: none;
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            padding-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background-color: #000;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn:hover::after {
+            transform: scaleX(1);
+        }
+
+        .titleText {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .search-bar {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+
+        .search-result {
+          display: flex;
+          justify-content: center;
+        }
+
+        .search-input {
+          width: 90%;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 999px;
+          background-color: #f0f0f0;
+          font-size: 16px;
+          outline: none;
+        }
+
+        .search-input::placeholder {
+          color: #999;
+        }
+
+        .ingredient-buttons {
+          width: 90%;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+          margin-top: 20px;
+        }
+
+        .ingredient-button {
+          padding: 8px 16px;
+          border: 2px solid #ccc;
+          border-radius: 999px;
+          background-color: #fff;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .ingredient-button.selected {
+          background-color: #ff7131;
+          border-color: #ff7131;
+          color: white;
+        }
+
+        .ingredient-button:hover {
+          border-color: #ff7131;
+          color: #ff7131;
+        }
+
+        .map-section{
+          padding: 50px;
+          display: flex;
+          justify-content: center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="recipe-container">
+        <div class="menu-wrapper">
+            <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
+            <div class="menu-buttons">
+                <button class="menu-btn">레시피검색</button>
+                <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/mapPage'">내 동네시장</button>
+                <button class="menu-btn">비교장보기</button>
+            </div>
+        </div>
+
+        <div>
+            <div class="titleText">내 주변 식료품점 찾기</div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+            </div>
+            <div class="search-result">
+                <div id="ingredient-buttons" class="ingredient-buttons">
+                    <!-- JS로 버튼 생성 예정 -->
+                </div>
+            </div>
+
+
+
+            <script>
+                // URL에서 irdnts 파라미터 가져오기
+                function getIrdntsFromUrl() {
+                  const params = new URLSearchParams(window.location.search);
+                  const irdnts = params.get('irdntNames');
+                  if (!irdnts) return [];
+                  return irdnts.split(',').map(name => decodeURIComponent(name.trim()));
+                }
+
+                // 버튼 생성 함수
+                function renderIngredientButtons(irdnts) {
+                  const container = document.getElementById('ingredient-buttons');
+                  irdnts.forEach((name, index) => {
+                    const button = document.createElement('div');
+                    button.className = 'ingredient-button';
+                    button.textContent = name;
+
+                  // 클릭하면 selected 클래스를 토글
+                  button.addEventListener('click', function() {
+                    button.classList.toggle('selected');
+                  });
+
+                    container.appendChild(button);
+                  });
+
+                  // 전체 조회하기 버튼 추가
+                  const allButton = document.createElement('div');
+                  allButton.className = 'ingredient-button';
+                  allButton.textContent = '전체 조회하기';
+                  container.appendChild(allButton);
+                }
+
+                // 실행
+                const irdnts = getIrdntsFromUrl();
+                renderIngredientButtons(irdnts);
+            </script>
+
+            <div class="map-section">
+                <div id="map" style="width:100%;height:800px;"></div>
+                <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+                <script src="/resources/js/mapPageJs.js"></script>
+            </div>
+
+
+        </div>
+
+
+
+
+        <button onclick="sendLocation()">위치 정보 전송</button>
+
+
+    </div>
+
+
+
+</body>
+</html>
