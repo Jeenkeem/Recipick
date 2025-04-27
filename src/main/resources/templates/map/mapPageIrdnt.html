@@ -4,135 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipick</title>
-    <style>
-        .recipe-container {
-            max-width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .menu-wrapper {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 0 20px 0;
-            margin-bottom: 40px;
-        }
-
-        .menu-logo {
-            height: 20px; /* 로고 높이 조정 */
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-
-        .menu-buttons {
-            display: flex;
-            gap: 30px; /* 버튼 간격 */
-            justify-content: center;
-        }
-
-        .menu-btn {
-            position: relative;
-            background: transparent;
-            border: none;
-            color: #000;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            padding-bottom: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-btn::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 2px;
-            width: 100%;
-            background-color: #000;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-
-        .menu-btn:hover::after {
-            transform: scaleX(1);
-        }
-
-        .titleText {
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 20px;
-          text-align: center;
-        }
-
-        .search-bar {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 20px;
-        }
-
-        .search-result {
-          display: flex;
-          justify-content: center;
-        }
-
-        .search-input {
-          width: 90%;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 999px;
-          background-color: #f0f0f0;
-          font-size: 16px;
-          outline: none;
-        }
-
-        .search-input::placeholder {
-          color: #999;
-        }
-
-        .ingredient-buttons {
-          width: 90%;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 5px;
-          margin-top: 20px;
-        }
-
-        .ingredient-button {
-          padding: 8px 16px;
-          border: 2px solid #ccc;
-          border-radius: 999px;
-          background-color: #fff;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .ingredient-button.selected {
-          background-color: #ff7131;
-          border-color: #ff7131;
-          color: white;
-        }
-
-        .ingredient-button:hover {
-          border-color: #ff7131;
-          color: #ff7131;
-        }
-
-        .map-section{
-          padding: 50px;
-          display: flex;
-          justify-content: center;
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="/resources/css/mapPageIrdntStyle.css">
 </head>
 <body>
 
@@ -147,7 +19,7 @@
         </div>
 
         <div>
-            <div class="titleText">내 주변 식료품점 찾기</div>
+            <div class="titleText">내 주변 시장 찾기</div>
 
             <div class="search-bar">
                 <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
@@ -158,52 +30,101 @@
                 </div>
             </div>
 
+            <div class="map-section">
+                <div id="map"></div>
+                <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+                <script src="/resources/js/mapPageJs.js"></script>
 
+                <!-- 오른쪽 슬라이드 패널 -->
+                <div id="slidePanel" class="slide-panel">
+                    <div class="slide-title" id="ingredientName">식재료명</div>
+                    <div class="sort-options">정렬 거리순 할인율순 가격순</div>
+                    <div class="store-list" id="storeList">
+                        <!-- 가게 목록이 들어갈 자리 -->
+                    </div>
+                </div>
+            </div>
 
             <script>
-                // URL에서 irdnts 파라미터 가져오기
+
+                // URL에서 irdntNames 파라미터 가져오기
                 function getIrdntsFromUrl() {
-                  const params = new URLSearchParams(window.location.search);
-                  const irdnts = params.get('irdntNames');
-                  if (!irdnts) return [];
-                  return irdnts.split(',').map(name => decodeURIComponent(name.trim()));
+                    const params = new URLSearchParams(window.location.search);
+                    const irdnts = params.get('irdntNames');
+                    if (!irdnts) return [];
+                    return irdnts.split(',').map(name => decodeURIComponent(name.trim()));
                 }
 
-                // 버튼 생성 함수
+                // 패널 요소 가져오기
+                const panel = document.getElementById('slidePanel');
+                const ingredientName = document.getElementById('ingredientName');
+                const storeList = document.getElementById('storeList');
+
+                let selectedButton = null; // 현재 선택된 버튼 기억
+
+                // 버튼 생성 + 클릭 이벤트 등록 함수
                 function renderIngredientButtons(irdnts) {
-                  const container = document.getElementById('ingredient-buttons');
-                  irdnts.forEach((name, index) => {
-                    const button = document.createElement('div');
-                    button.className = 'ingredient-button';
-                    button.textContent = name;
+                    const container = document.getElementById('ingredient-buttons');
 
-                  // 클릭하면 selected 클래스를 토글
-                  button.addEventListener('click', function() {
-                    button.classList.toggle('selected');
-                  });
+                    irdnts.forEach(name => {
+                        const button = document.createElement('div');
+                        button.className = 'ingredient-button';
+                        button.textContent = name;
 
-                    container.appendChild(button);
-                  });
+                        button.addEventListener('click', function() {
+                            if (selectedButton === button) {
+                                // 같은 버튼 다시 클릭 ➔ 선택 해제 + 패널 닫기
+                                button.classList.remove('selected');
+                                panel.classList.remove('open');
+                                selectedButton = null;
+                                return;
+                            }
 
-                  // 전체 조회하기 버튼 추가
-                  const allButton = document.createElement('div');
-                  allButton.className = 'ingredient-button';
-                  allButton.textContent = '전체 조회하기';
-                  container.appendChild(allButton);
+                            // 다른 버튼 클릭 ➔ 이전 선택 해제
+                            if (selectedButton) {
+                                selectedButton.classList.remove('selected');
+                            }
+
+                            // 새 버튼 선택
+                            button.classList.add('selected');
+                            selectedButton = button;
+
+                            // 패널 열기
+                            panel.classList.add('open');
+
+                            // 제목 바꾸기
+                            ingredientName.textContent = button.textContent;
+
+                            // 가게 리스트 새로 세팅
+                            storeList.innerHTML = '';
+                            for (let i = 0; i < 5; i++) {
+                                const storeItem = document.createElement('div');
+                                storeItem.className = 'store-item';
+                                storeItem.innerHTML = `
+                                    <div>
+                                        <div class="store-name">가게 ${i+1}번</div>
+                                        <div>메뉴명 가격 0,000원(개)</div>
+                                    </div>
+                                    <div class="check-icon">✔</div>
+                                `;
+                                storeList.appendChild(storeItem);
+                            }
+                        });
+
+                        container.appendChild(button);
+                    });
+
+                    // "전체 조회하기" 버튼은 별도로 추가
+                    const allButton = document.createElement('div');
+                    allButton.className = 'ingredient-button';
+                    allButton.textContent = '전체 조회하기';
+                    container.appendChild(allButton);
                 }
 
                 // 실행
                 const irdnts = getIrdntsFromUrl();
                 renderIngredientButtons(irdnts);
             </script>
-
-            <div class="map-section">
-                <div id="map" style="width:100%;height:800px;"></div>
-                <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
-                <script src="/resources/js/mapPageJs.js"></script>
-            </div>
-
-
         </div>
 
 
