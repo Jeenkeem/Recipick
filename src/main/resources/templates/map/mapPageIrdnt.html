@@ -61,7 +61,35 @@
                 const storeList = document.getElementById('storeList');
 
                 let selectedButton = null; // 현재 선택된 버튼 기억
+                let isPanelOpen = false;    // 패널 열림 여부 기억
 
+                // 패널 열기
+                function openPanel() {
+                    if (isPanelOpen) return;
+                    panel.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        panel.classList.add('open'); // 슬라이드 이동
+                    });
+                    isPanelOpen = true;
+                }
+
+                // 패널 닫기
+                function closePanel() {
+                    if (!isPanelOpen) return;
+                    panel.classList.remove('open');
+                    isPanelOpen = false;
+
+                    panel.addEventListener('transitionend', function handler(event) {
+                        if (event.propertyName === 'transform') {
+                            if (!isPanelOpen) {
+                                panel.style.display = 'none';
+                            }
+                            panel.removeEventListener('transitionend', handler);
+                        }
+                    });
+                }
+
+                // 버튼 생성 + 클릭 이벤트 등록 함수
                 // 버튼 생성 + 클릭 이벤트 등록 함수
                 function renderIngredientButtons(irdnts) {
                     const container = document.getElementById('ingredient-buttons');
@@ -75,7 +103,7 @@
                             if (selectedButton === button) {
                                 // 같은 버튼 다시 클릭 ➔ 선택 해제 + 패널 닫기
                                 button.classList.remove('selected');
-                                panel.classList.remove('open');
+                                closePanel();
                                 selectedButton = null;
                                 return;
                             }
@@ -90,7 +118,7 @@
                             selectedButton = button;
 
                             // 패널 열기
-                            panel.classList.add('open');
+                            openPanel();
 
                             // 제목 바꾸기
                             ingredientName.textContent = button.textContent;
