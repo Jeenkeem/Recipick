@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>레시피 상세 정보</title>
+    <title>Recipick</title>
     <style>
         .recipe-container {
-            max-width: 800px;
+            max-width: 50%;
             margin: 0 auto;
             padding: 20px;
         }
@@ -74,6 +74,7 @@
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
+            margin-top: 70px;
         }
         .steps-section {
             margin: 30px 0;
@@ -99,6 +100,33 @@
             left: 50%;
             margin: 20px 0;
         }
+        .custom-button {
+          background-color: #ff7131; /* 주황색 */
+          color: white;
+          padding: 12px 24px;
+          margin-top: 30px;
+          margin-bottom: 50px;
+          border: none;
+          border-radius: 999px; /* 완전 둥근 버튼 */
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: background-color 0.3s ease;
+        }
+
+        .custom-button:hover {
+          background-color: #ff8c4a; /* 약간 밝은 주황 */
+        }
+
+        .main-section {
+          border-radius: 20px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          background-color: #ffffff;
+          padding: 50px;
+          padding-top: 70px;
+          padding-bottom: 200px;
+        }
     </style>
 </head>
 <body>
@@ -111,41 +139,52 @@
               <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/mapPage'">내 동네시장</button>
               <button class="menu-btn">비교장보기</button>
             </div>
-          </div>
-
-        <span th:text="${recipe_sumry}"></span>
-        <h2><span th:text="${recipe_title}"></span></h2>
-        난이도 <span th:text="${recipe_level}"></span> <br>
-        조리시간 <span th:text="${recipe_cookingTime}"></span>
-
-        <div class="ingredients-section">
-            <h2>🥘 필요한 재료</h2>
-            <ul th:each="ingredient : ${list}">
-                <li>
-                    <span th:text="${ingredient.IRDNT_NM}"></span>
-                    <span th:text="${ingredient.IRDNT_CPCTY}"></span>
-                </li>
-            </ul>
         </div>
 
+        <div class="main-section">
+            <span th:text="${recipe_sumry}"></span>
+            <h2><span th:text="${recipe_title}"></span></h2>
+            난이도 <span th:text="${recipe_level}"></span> <br>
+            조리시간 <span th:text="${recipe_cookingTime}"></span>
 
-        <!--<div class="ingredients-section">
-            <h2>🥘 필요한 재료</h2>
-            <ul th:each="ingredient : ${ingredients}">
-                <li>
-                    <span th:text="${ingredient.name}"></span>
-                    <span th:text="${ingredient.amount}"></span>
-                </li>
-            </ul>
-        </div>
+            <div class="ingredients-section">
+                <h2>🥘 필요한 재료</h2>
+                <ul th:each="ingredient : ${list}">
+                    <li>
+                        <span th:text="${ingredient.IRDNT_NM}"></span>
+                        <span th:text="${ingredient.IRDNT_CPCTY}"></span>
+                    </li>
+                </ul>
 
-        <div class="steps-section">
-            <h2>📝 조리 순서</h2>
-            <div class="step" th:each="step, stepStat : ${recipe_steps}">
-                <span class="step-number" th:text="'STEP ' + ${stepStat.count}"></span>
-                <p th:text="${step}"></p>
+                <div id="irdntContainer">
+                    <input type="hidden" th:each="ingredient : ${list}"
+                           th:value="${ingredient.IRDNT_NM}" />
+                </div>
+
+                <div class="btn-section">
+                    <button class="custom-button" onclick="goToMapPage()">내주변 최저가 식재료 탐색</button>
+                </div>
+
+                <script>
+                    function goToMapPage() {
+                        const inputs = document.querySelectorAll('#irdntContainer input');
+                        const names = Array.from(inputs).map(input => input.value).join(',');
+                        const url = `http://localhost:8080/recipick/mapPageIrdnt?irdntNames=${encodeURIComponent(names)}`;
+                        location.href = url;
+                      }
+                </script>
             </div>
-        </div>-->
+
+
+            <div class="steps-section">
+                <h2>📝 조리 순서</h2>
+                <div class="step" th:each="cookingStep : ${list228}">
+                    <span class="step-number" th:text="'STEP ' + ${cookingStep.COOKING_NO}"></span>
+                    <p th:text="${cookingStep.COOKING_DC}"></p>
+                </div>
+            </div>
+
+        </div>
     </div>
 </body>
 </html>

@@ -8,18 +8,18 @@ public class RecipeInfo {
 
 
     private int RECIPE_ID;
-    private String RECIPE_NM_KO;
-    private String SUMRY;
-    private String NATION_CODE;
-    private String NATION_NM;
-    private String TY_CODE;
-    private String TY_NM;
-    private String COOKING_TIME;
-    private String CALORIE;
-    private String QNT;
-    private String LEVEL_NM;
-    private String IRDNT_CODE;
-    private String PC_NM;
+    private String RECIPE_NM_KO;  // 레시피 한글 이름
+    private String SUMRY; // 간략(요약) 소개
+    private String NATION_CODE; // 유형 코드
+    private String NATION_NM; // 유형 분류
+    private String TY_CODE; // 음식분류코드
+    private String TY_NM; // 음식분류
+    private String COOKING_TIME; // 조리시간
+    private String CALORIE; // 칼로리
+    private String QNT; // 분량
+    private String LEVEL_NM; // 난이도
+    private String IRDNT_CODE; // 재료별 분류명
+    private String PC_NM; // 가격별 분류
 
     public int getRECIPE_ID() {
         return RECIPE_ID;
