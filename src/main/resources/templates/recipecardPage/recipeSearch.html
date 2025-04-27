@@ -25,15 +25,15 @@
             <span class="difficulty">중간</span>
             <span class="time">30분</span>
         </div>
-        <div th:each="recipe : ${recipeCards}" class="recipe-card">
-<!--            <img th:src="${recipe.rcpImgUrl}" alt="레시피 이미지" />-->
+    </div>
+    <div th:each="recipe : ${recipeCards}" class="recipe-card">
+        <img th:src="${recipe.rcpImgUrl}" alt="레시피 이미지" />
             <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
-<!--            <div class="recipe-meta">-->
-<!--                <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>-->
-<!--                <span class="time" th:text="${recipe.cookingTime}">시간</span>-->
-<!--                <span class="kcal" th:text="${recipe.calorie}">칼로리</span>-->
-<!--            </div>-->
-        </div>
+            <div class="recipe-meta">
+                <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>
+                <span class="time" th:text="${recipe.cookingTime}">시간</span>
+                <span class="kcal" th:text="${recipe.calorie}">칼로리</span>
+            </div>
     </div>
 
 

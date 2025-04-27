@@ -19,8 +19,7 @@ public class RecipeCardController {
     @GetMapping("/cards")
     public String getRecipeCards(Model model) {
         List<RecipeCardDTO> recipeCardLists = recipeCardService.getRecipeCardList();
-        System.out.println(recipeCardLists);
-        model.addAttribute("recipeCards", recipeCardLists);
+        model.addAttribute("recipeCards", recipeCardService.getRecipeCardList());
 
         return "recipecardPage/recipeSearch";
     }
