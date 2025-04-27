@@ -12,7 +12,8 @@
     <insert id="saveRecipe" parameterType="com.project.recipick.Entity.RecipeInfo">
         INSERT INTO public.recipe_info
         (recipe_id, recipe_nm_ko, sumry, nation_code, nation_nm, ty_code, ty_nm, cooking_time, calorie, qnt, level_nm, irdnt_code, pc_nm)
-        VALUES(#{RECIPE_ID}, #{RECIPE_NM_KO}, #{SUMRY}, #{NATION_CODE}, #{NATION_NM}, #{TY_CODE}, #{TY_NM}, #{COOKING_TIME}, #{CALORIE}, #{QNT}, #{LEVEL_NM}, #{IRDNT_CODE}, #{PC_NM});
+        VALUES(#{RECIPE_ID}, #{RECIPE_NM_KO}, #{SUMRY}, #{NATION_CODE}, #{NATION_NM}, #{TY_CODE}, #{TY_NM}, #{COOKING_TIME}, #{CALORIE}, #{QNT}, #{LEVEL_NM}, #{IRDNT_CODE}, #{PC_NM})
+        ON CONFLICT (recipe_id) DO NOTHING;
     </insert>
 
     <select id="findRecipe" resultType="com.project.recipick.Entity.RecipeInfo">

@@ -1,6 +1,6 @@
 var container = document.getElementById('map');
 var options = {
-    center: new kakao.maps.LatLng(37.4967, 127.0630),
+    center: new kakao.maps.LatLng(37.5601, 126.9960),
     level: 8
 };
 
@@ -125,7 +125,7 @@ function init(path) {
                     });
 
                     // 폴리곤 클릭 시 동작 작성.
-                    kakao.maps.event.addListener(polygon, 'click', function () {
+                    kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
                         const guName = feature.properties.SIG_KOR_NM; // 자치구 이름 가져오기
 
                         fetch('/recipick/getProductByCuCode?gu_name=' + encodeURIComponent(guName), {
@@ -138,20 +138,45 @@ function init(path) {
                         .then(data => {
                             console.log('Success:', data);
 
+                            const clickPosition = mouseEvent.latLng; // 클릭한 위치
+
+                            map.panTo(clickPosition); // 지도 중심 이동
+
+                            let currentLevel = map.getLevel(); // 현재 레벨 가져오기
+                            const targetLevel = 6;              // 최종 목표 레벨 (5단계 확대)
+                            const intervalSpeed = 300;           // ★ 여기: 200ms(=0.2초)마다 한 단계 확대
+
+                            const zoomInterval = setInterval(function () {
+                                if (currentLevel > targetLevel) {
+                                    currentLevel--;
+                                    map.setLevel(currentLevel);
+                                } else {
+                                    clearInterval(zoomInterval); // 다 줄어들면 interval 멈추기
+                                }
+                            }, intervalSpeed); // ★ 여기 속도로 조절 (ms 단위)
+
+
                             // 시장명으로 카카오 키워드 검색
-                             data.forEach(market => {
+                            data.forEach(market => {
                                     searchMarket(market); // 하나씩 넘겨서 검색
-                                });
-                           })
+                            });
+                        })
                         .catch(error => console.error('Error:', error));
+                    });
+
+                    // 지도 줌 레벨이 바뀔 때마다 체크
+                    kakao.maps.event.addListener(map, 'zoom_changed', function() {
+                        const currentLevel = map.getLevel();
+
+                        if (currentLevel <= 6) {
+                            polygon.setMap(null); // 폴리곤 숨기기
+                        } else {
+                            polygon.setMap(map); // 폴리곤 다시 보이기
+                        }
                     });
 
                     polygons.push(polygon);
                 });
-
-
-
-
             });
         })
         .catch(error => console.error('GeoJSON 데이터 로드 실패:', error));

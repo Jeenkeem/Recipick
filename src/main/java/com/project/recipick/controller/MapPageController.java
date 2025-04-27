@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -40,6 +42,17 @@ public class MapPageController {
 
         return "map/mapPage";
     }
+
+    @GetMapping("/recipick/mapPageIrdnt")
+    public String mapPage(@RequestParam String irdntNames, Model model) {
+
+        model.addAttribute("kakaoApiKey", kakaoApiKey);
+
+        String[] names = irdntNames.split(",");
+        model.addAttribute("irdntsList", Arrays.asList(names));
+        return "map/mapPageIrdnt";
+    }
+
 
     static class Location {
         private double latitude;
