@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.recipick.mapper.RecipeCardMapper">
+    <insert id="insertMAFRARecipes" parameterType="java.util.List">
+        Insert INTO public.recipe_mafra (row_num, recipe_id, recipe_nm_ko, sumry, nation_code, nation_nm, ty_code, ty_nm, cooking_time, calorie, qnt, level_nm, irdnt_code, pc_nm)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.rowNum}, #{item.recipeId}, #{item.recipeNmKo}, #{item.sumry}, #{item.nationCode}, #{item.nationNm}, #{item.tyCode}, #{item.tyNm}, #{item.cookingTime}, #{item.calorie}, #{item.qnt}, #{item.levelNm}, #{item.irdntCode}, #{item.pcNm})
+        </foreach>
+    </insert>
+
+    <select id="getRecipeCardList" resultType="com.project.recipick.dto.RecipeCardDTO">
+        SELECT r.recipe_id,
+                        r.recipe_nm_ko,
+                        r.cooking_time,
+                        r.calorie,
+                        r.level_nm,
+                        MIN(rt."RCP_IMG_URL") AS rcp_img_url
+        FROM recipe_info r
+                 JOIN recipe_tb rt ON r.recipe_nm_ko = rt."CKG_NM"
+        GROUP BY r.recipe_id, r.recipe_nm_ko, r.cooking_time, r.calorie, r.level_nm
+        ORDER BY r.recipe_id
+    </select>
+</mapper>

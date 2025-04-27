@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>레시피 리스트</title>
+    <link rel="stylesheet" href="/resources/css/recipeSearchStyle.css" />
+    <script src="/resources/js/recipeSearch.js" defer></script>
+</head>
+<body>
+<div class="menu-wrapper">
+    <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
+    <div class="menu-buttons">
+        <button class="menu-btn">레시피검색</button>
+        <button class="menu-btn">내 동네시장</button>
+        <button class="menu-btn">비교장보기</button>
+    </div>
+</div>
+<div class="recipe-container" id="recipe-container">
+    <!-- 카드 하나 예시 (필요한 만큼 반복해서 삽입하거나 JS로 동적으로 생성 가능) -->
+    <div class="recipe-card">
+        <img src="https://placehold.co/260x230" alt="레시피 이미지" />
+        <h3>치킨 마요 덮밥</h3>
+        <div class="recipe-meta">
+            <span class="difficulty">중간</span>
+            <span class="time">30분</span>
+        </div>
+    </div>
+    <div th:each="recipe : ${recipeCards}" class="recipe-card">
+        <img th:src="${recipe.rcpImgUrl}" alt="레시피 이미지" />
+            <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
+            <div class="recipe-meta">
+                <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>
+                <span class="time" th:text="${recipe.cookingTime}">시간</span>
+                <span class="kcal" th:text="${recipe.calorie}">칼로리</span>
+            </div>
+    </div>
+
+
+</div>
+</body>
+</html>
