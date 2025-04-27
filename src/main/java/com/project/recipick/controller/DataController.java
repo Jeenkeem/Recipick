@@ -3,6 +3,7 @@ package com.project.recipick.controller;
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
 import com.project.recipick.service.MartInfoService;
+import com.project.recipick.service.RecipeCardService;
 import com.project.recipick.service.RecipeDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,9 @@ public class DataController {
 
     @Autowired
     final MartInfoService martInfoService;
+
+    @Autowired
+    private RecipeCardService recipeCardService;
 
     @Autowired
     private final ResourceLoader resourceLoader;
@@ -111,6 +115,13 @@ public class DataController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(resource);
+    }
+
+    @GetMapping("/saveMafraRecipe")
+    public void callMAFRARecipeApi(){
+        String apiKey = "8d6d9d4bb3d2f6bc550aff59664c8f940d21003e41d7c03303b975b3b17510ab";
+        String addr = "http://211.237.50.150:7080/openapi/";
+        recipeCardService.callRecipeApiAndSaveData(apiKey, addr);
     }
 
 }
