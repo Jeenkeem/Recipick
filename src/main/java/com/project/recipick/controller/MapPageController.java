@@ -34,12 +34,6 @@ public class MapPageController {
 
         model.addAttribute("kakaoApiKey", kakaoApiKey);
 
-        List<MartInfo> martInfoList = martInfoService.getAllMartInfo();
-
-        MartInfo ma = martInfoList.get(0);
-
-        System.out.println(ma.getM_NAME());
-
         return "map/mapPage";
     }
 
