@@ -1,13 +1,24 @@
 package com.project.recipick.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class MartItemDTO {
-    private String a_name; // 품목 이름
-    private int a_price; // 가격
+    private String aName;
+    private int aPrice;
+
+    public MartItemDTO() {}
+
+    public String getaName() {
+        return aName;
+    }
+
+    public void setaName(String aName) {
+        this.aName = aName;
+    }
+
+    public int getaPrice() {
+        return aPrice;
+    }
+
+    public void setaPrice(int aPrice) {
+        this.aPrice = aPrice;
+    }
 }

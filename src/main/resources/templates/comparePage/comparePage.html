@@ -201,7 +201,7 @@
         fetch(`/recipick/mart-items?martName=${encodeURIComponent(martName)}`)
           .then(res => res.json())
           .then(data => {
-            const items = data.map(d => ({ name: d.a_name, price: d.a_price, quantity: 1 }));
+            const items = data.map(d => ({ name: d.aName, price: d.aPrice, quantity: 1 }));
             if (this.page === 0) this.itemA = items;
             else if (this.page === 1) this.itemB = items;
           });
