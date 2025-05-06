@@ -2,7 +2,6 @@ package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
-import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.service.MartInfoService;
 import com.project.recipick.service.RecipeCardService;
 import com.project.recipick.service.RecipeDetailService;
