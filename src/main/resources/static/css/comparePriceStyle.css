@@ -69,15 +69,17 @@ table {
 
 .total-table-wrapper {
     display: flex;              /* 두 테이블을 수평 배치 */
-    gap: 120px;                  /* 테이블 사이의 간격 */
+    gap: 5vw;                   /* 테이블 사이의 간격 */
     justify-content: center;    /* 두 테이블을 가운데 정렬 */
 }
 
 .table-wrapper {
     position: relative;
-    width: 395px;
-    height: 500px;
-    padding-bottom: 20px;
+    width: 30vw;
+    min-width: 300px;
+    max-width: 500px;
+    height: auto;
+    padding-bottom: 2vw;
     box-sizing: border-box;
     background: transparent;
 }
@@ -96,8 +98,8 @@ table {
 
 .table-title-button {
     width: 100%;
-    padding: 10px 25px;         /* 버튼 안쪽 여백 */
-    border: 2px solid #000;
+    padding: 1vw 2vw;         /* 버튼 안쪽 여백 */
+    border: 0.2vw solid #000;
     font-weight: 700;
     font-size: 30px;
     color: #0000FF;
@@ -106,7 +108,7 @@ table {
     transition: all 0.3s ease;
     position: relative;
     display: inline-block;
-    margin-bottom: 16px;
+    margin-bottom: 1vw;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -152,7 +154,7 @@ table {
  }
 
  .table-header table th {
-    padding: 20px 15px;
+    padding: 1.5vw 1vw;
     text-align: center;
     font-weight: 500;
     font-size: 20px;
@@ -168,7 +170,7 @@ table {
  }
 
 .table-content {
-    height: 300px;                         /* 테이블 내용 부분 높이 */
+    height: 20vw;                         /* 테이블 내용 부분 높이 */
     overflow-y:auto;                      /* 세로 스크롤 */
     border: 2px solid #000;               /* 테두리 색 */
     border-top: none;
@@ -178,7 +180,7 @@ table {
 }
 
 .table-content table td {
-    padding: 15px;
+    padding: 1vw;
     text-align: left;
     vertical-align:middle;
     font-weight: 500;
@@ -232,8 +234,8 @@ table {
 }
 
 .nav-button {
-    width: 100px;
-    padding: 10px 25px;
+    width: 8vw;
+    padding: 1vw 2vw;
     border: 2px solid #000;
     font-weight: 500;
     font-size: 20px;
@@ -265,14 +267,12 @@ table {
 }
 
 .quantity-button {
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    margin: 0;
+    width: 2vw;
+    height: 2vw;
     font-size: 20px;
     font-weight: 600;
     line-height: 1;
-    border: 2px solid #000;
+    border: 0.2vw solid #000;
     background: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
