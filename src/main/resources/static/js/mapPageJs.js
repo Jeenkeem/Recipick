@@ -1,5 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fromCompare = urlParams.get("from") === "compare";
+const highlightMarket = new URLSearchParams(window.location.search).get("highlight");
 
 
 const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
@@ -38,6 +39,11 @@ else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치�
     displayMarker(locPosition, message);
 }
 
+// 비교 장보기에서 선택한 시장의 마커 하이라이트
+if (highlightMarket) {
+  console.log("📌 하이라이트 마트:", highlightMarket);
+  searchMarket(highlightMarket, true); // 추가 인자 전달
+}
 
 
 // 지도에 마커와 인포윈도우를 표시하는 함수입니다
@@ -191,7 +197,7 @@ function init(path) {
         .catch(error => console.error('GeoJSON 데이터 로드 실패:', error));
 }
 
-function searchMarket(keyword) {
+function searchMarket(keyword, focus = false) {
     const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
 
     fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(keyword)}`, {
@@ -225,6 +231,10 @@ function searchMarket(keyword) {
             kakao.maps.event.addListener(marker, 'click', function () {
                 handleMarkerClick(place.place_name);
             });
+            if (focus) {
+                map.setLevel(5); // 확대
+                map.panTo(new kakao.maps.LatLng(place.y, place.x)); // 카메라 이동
+            }
         } else {
             console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
         }
@@ -280,6 +290,27 @@ function handleMarkerClick(martName) {
         localStorage.setItem("mart1", selectedMarts[0]);
         localStorage.setItem("mart2", selectedMarts[1]);
         console.log(`📝 저장됨: mart1=${selectedMarts[0]}, mart2=${selectedMarts[1]}`);
+
+        if(confirm(`${selectedMarts[0]}, ${selectedMarts[1]}을 선택했습니다.\n비교장보기 페이지로 이동할까요?`)) {
+            window.location.href = "/recipick/comparePage";
+        }
     }
 }
 
+// 토스트 메시지 출력 함수
+function showCompareToast() {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// 페이지 로딩 시 쿼리 파라미터 확인
+window.addEventListener('DOMContentLoaded', () => {
+    if (fromCompare) {
+        showCompareToast();
+    }
+});
