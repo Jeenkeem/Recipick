@@ -28,11 +28,4 @@ public class ComparePageController {
         return martInfoService.getMartItemsByMartName(martName);
     }
 
-    // 👉 마트 이름만 간단히 내려주는 API
-    @ResponseBody
-    @GetMapping("/mart-names")
-    public List<String> getMartNames() {
-        return List.of("관악신사시장(신림4동)", "대명여울빛거리시장");
-    }
-
 }
