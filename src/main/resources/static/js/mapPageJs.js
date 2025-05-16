@@ -1,3 +1,12 @@
+const urlParams = new URLSearchParams(window.location.search);
+const fromCompare = urlParams.get("from") === "compare";
+
+
+const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+let selectedMarts = []; // 선택한 마트 이름 2개 저장
+let selectedMarkers = {}; // 마트 이름 → 마커 객체 연결
+
+
 var container = document.getElementById('map');
 var options = {
     center: new kakao.maps.LatLng(37.5601, 126.9960),
@@ -208,6 +217,14 @@ function searchMarket(keyword) {
                 content: `<div style="padding:5px;">${place.place_name}</div>`
             });
             infowindow.open(map, marker);
+
+            // 👉 마커 객체 저장 (클릭 시 접근 위해)
+            selectedMarkers[place.place_name] = marker;
+
+            // 👉 마커 클릭 이벤트 연결
+            kakao.maps.event.addListener(marker, 'click', function () {
+                handleMarkerClick(place.place_name);
+            });
         } else {
             console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
         }
@@ -226,3 +243,43 @@ polygons.forEach(function (polygon) {
 polygons = [];
 console.log("폴리곤 제거 완료");
 }
+
+function handleMarkerClick(martName) {
+    if (!fromCompare) {
+        console.log("❌ 비교장보기 진입이 아님. 마커 선택 불가");
+        return;
+      }
+
+    const marker = selectedMarkers[martName];
+
+    // 이미 선택된 경우: 제거 + 마커 원래대로
+    if (selectedMarts.includes(martName)) {
+        selectedMarts = selectedMarts.filter(m => m !== martName);
+        marker.setImage(null); // 기본 파란 마커로 복원
+        console.log(`❌ 선택 해제: ${martName}`);
+        return;
+    }
+
+    // 2개 초과 선택 방지
+    if (selectedMarts.length >= 2) {
+        alert("2개까지만 선택할 수 있어요.");
+        return;
+    }
+
+    // 새로 선택: 빨간색 마커 적용
+    selectedMarts.push(martName);
+    const markerImage = new kakao.maps.MarkerImage(
+        RED_MARKER,
+        new kakao.maps.Size(24, 35)
+    );
+    marker.setImage(markerImage);
+    console.log(`✅ 선택됨: ${martName}`);
+
+    // 2개 다 선택되면 localStorage에 저장
+    if (selectedMarts.length === 2) {
+        localStorage.setItem("mart1", selectedMarts[0]);
+        localStorage.setItem("mart2", selectedMarts[1]);
+        console.log(`📝 저장됨: mart1=${selectedMarts[0]}, mart2=${selectedMarts[1]}`);
+    }
+}
+

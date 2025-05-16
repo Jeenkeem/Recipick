@@ -13,9 +13,9 @@
   <div class="menu-wrapper">
     <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
     <div class="menu-buttons">
-      <button class="menu-btn">레시피검색</button>
-      <button class="menu-btn">내 동네시장</button>
-      <button class="menu-btn">비교장보기</button>
+      <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+      <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
+      <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
     </div>
   </div>
 
@@ -116,13 +116,9 @@
       martBName: ''
     },
     created() {
-      fetch('/recipick/mart-names') // ✅ 마트 이름 가져오기
-        .then(res => res.json())
-        .then(data => {
-          this.martAName = data[0];
-          this.martBName = data[1];
-          this.fetchItems(); // ✅ 첫 마트 데이터 호출
-        });
+      this.martAName = localStorage.getItem("mart1");
+      this.martBName = localStorage.getItem("mart2");
+      this.fetchItems();
     },
     computed: {
       page() {
