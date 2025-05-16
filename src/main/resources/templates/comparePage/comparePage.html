@@ -37,8 +37,8 @@
           <tr v-for="(item, index) in leftItems" :key="index">
             <td>{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
             <td>{{ item.price.toLocaleString() }}</td>
-            <td>
-              <div v-if="page != 2" class="quantity-control">
+            <td v-if="page != 2">
+              <div class="quantity-control">
                 <button class="quantity-button" @click.stop="decreaseQuantity(index)">-</button>
                 <button class="quantity-button" @click.stop="increaseQuantity(index)">+</button>
               </div>
