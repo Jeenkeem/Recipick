@@ -34,11 +34,11 @@
       <div class="table-content">
         <table>
           <tbody>
-          <tr v-for="(item, index) in leftItems" :key="index" @click="page != 2 ? toggleRow(index) : null">
+          <tr v-for="(item, index) in leftItems" :key="index">
             <td>{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
             <td>{{ item.price.toLocaleString() }}</td>
             <td>
-              <div v-if="selectedIndex == index && page != 2" class="quantity-control">
+              <div v-if="page != 2" class="quantity-control">
                 <button class="quantity-button" @click.stop="decreaseQuantity(index)">-</button>
                 <button class="quantity-button" @click.stop="increaseQuantity(index)">+</button>
               </div>
@@ -113,8 +113,7 @@
       recipeA: [],
       recipeB: [],
       martAName: '',
-      martBName: '',
-      selectedIndex: null
+      martBName: ''
     },
     created() {
       fetch('/recipick/mart-names') // ✅ 마트 이름 가져오기
@@ -157,9 +156,6 @@
       }
     },
     methods: {
-      toggleRow(index) {
-        this.selectedIndex = this.selectedIndex === index ? null : index;
-      },
       increaseQuantity(index) {
         const item = this.leftItems[index];
         const targetList = this.page === 0 ? this.recipeA : this.recipeB;
