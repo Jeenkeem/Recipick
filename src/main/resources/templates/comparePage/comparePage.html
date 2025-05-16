@@ -23,7 +23,7 @@
     <!-- 왼쪽 테이블 -->
     <div class="table-wrapper">
       <img src="/resources/image/recipe_background.png" class="bg-img">
-      <button class="table-title-button" :disabled="!isActivated"> {{ firstTitle }} </button>
+      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
       <div class="table-header">
         <table>
           <thead>
@@ -64,7 +64,7 @@
     <!-- 오른쪽 테이블 -->
     <div class="table-wrapper">
       <img src="/resources/image/recipe_background.png" class="bg-img">
-      <button class="table-title-button" :disabled="!isActivated"> {{ secondTitle }} </button>
+      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
       <div class="table-header">
         <table>
           <thead>
@@ -75,7 +75,7 @@
       <div class="table-content">
         <table>
           <tbody>
-          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="removeFromRight(index)">
+          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="page != 2 ? removeFromRight(index) : null">
             <td>{{ item.name }} ({{ item.quantity }}개)</td>
             <td>{{ (item.price * item.quantity).toLocaleString() }}</td>
           </tr>
@@ -198,6 +198,11 @@
             if (this.page === 0) this.itemA = items;
             else if (this.page === 1) this.itemB = items;
           });
+      },
+      goToMap(martName) {
+        if (this.page !== 2) return;
+        const url = `/recipick/mapPage?highlight=${encodeURIComponent(martName)}`;
+        window.location.href = url;
       }
     }
   });
