@@ -26,6 +26,7 @@
         a_price AS aPrice
         FROM mart_info
         WHERE m_name = #{martName}
+            AND a_price::int > 0
         ORDER BY a_name, m_gu_name DESC
     </select>
 
