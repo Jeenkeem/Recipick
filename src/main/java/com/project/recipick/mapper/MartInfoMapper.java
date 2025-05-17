@@ -15,4 +15,8 @@ public interface MartInfoMapper {
     List<String> getProductByCuCode(String gu_name);
 
     List<MartItemDTO> selectItemsByMartName(String martName);
+
+    List<MartInfo> getIrdntPrice(String ingredient);
+
+    void saveMartInfo(MartInfo martInfo);
 }

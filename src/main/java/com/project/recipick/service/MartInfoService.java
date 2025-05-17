@@ -14,9 +14,12 @@ public class MartInfoService {
     @Autowired
     final MartInfoMapper martInfoMapper;
 
-
     public MartInfoService(MartInfoMapper martInfoMapper) {
         this.martInfoMapper = martInfoMapper;
+    }
+
+    public void saveMartInfo(MartInfo martInfo) {
+        martInfoMapper.saveMartInfo(martInfo);
     }
 
     public List<MartInfo> getAllMartInfo() {
@@ -42,6 +45,14 @@ public class MartInfoService {
 
     public List<MartItemDTO> getMartItemsByMartName(String martName) {
         return martInfoMapper.selectItemsByMartName(martName);
+    }
+
+    public List<MartInfo> getIrdntPrice(String ingredient) {
+
+        List<MartInfo> list = martInfoMapper.getIrdntPrice(ingredient);
+        System.out.println("service" + list);
+
+        return martInfoMapper.getIrdntPrice(ingredient);
     }
 
 }

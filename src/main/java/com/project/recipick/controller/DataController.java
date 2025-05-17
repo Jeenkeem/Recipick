@@ -160,4 +160,50 @@ public class DataController {
         recipeCardService.callRecipeApiAndSaveData(apiKey, addr);
     }
 
+    @GetMapping("/saveMartInfo")
+    public void saveMartInfo() throws ParseException {
+        String apiKey = "4d48764c53776c67373041696a576b";
+        String url = "http://openAPI.seoul.go.kr:8088/" + apiKey + "/json/ListNecessariesPricesService/1001/2000/?P_YEAR_MONTH=2025-05";
+
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String responseBody = responseEntity.getBody();
+        //System.out.println(responseBody);
+
+        String jsonString = responseBody;
+        JSONParser parser = new JSONParser();
+
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+        String ListNecessariesPricesService = jsonObject.get("ListNecessariesPricesService").toString();
+
+        JSONObject jsonObj = (JSONObject) parser.parse(ListNecessariesPricesService);
+        String row = jsonObj.get("row").toString();
+
+        JSONArray jsonArray = (JSONArray) parser.parse(row);
+
+        System.out.println(jsonArray.get(0));
+
+        for(int i=0; i<jsonArray.size(); i++) {
+            JSONObject obj = (JSONObject) jsonArray.get(i);
+
+            MartInfo martInfo = new MartInfo();
+
+            martInfo.setP_SEQ(obj.get("P_SEQ").toString());
+            martInfo.setM_SEQ(obj.get("M_SEQ").toString());
+            martInfo.setM_NAME(obj.get("M_NAME").toString());
+            martInfo.setA_SEQ(obj.get("A_SEQ").toString());
+            martInfo.setA_NAME(obj.get("A_NAME").toString());
+            martInfo.setA_UNIT(obj.get("A_UNIT").toString());
+            martInfo.setA_PRICE(obj.get("A_PRICE").toString());
+            martInfo.setP_YEAR_MONTH(obj.get("P_YEAR_MONTH").toString());
+            martInfo.setADD_COL(obj.get("ADD_COL").toString());
+            martInfo.setP_DATE(obj.get("P_DATE").toString());
+            martInfo.setM_TYPE_CODE(obj.get("M_TYPE_CODE").toString());
+            martInfo.setM_TYPE_NAME(obj.get("M_TYPE_NAME").toString());
+            martInfo.setM_GU_CODE(obj.get("M_GU_CODE").toString());
+            martInfo.setM_GU_NAME(obj.get("M_GU_NAME").toString());
+
+            martInfoService.saveMartInfo(martInfo);
+        }
+    }
+
 }
