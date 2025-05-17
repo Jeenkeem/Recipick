@@ -71,19 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
             openPanel();
             ingredientName.textContent = button.firstChild.textContent;
 
-            storeList.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const storeItem = document.createElement('div');
-                storeItem.className = 'store-item';
-                storeItem.innerHTML = `
-                    <div>
-                        <div class="store-name">가게 ${i + 1}번</div>
-                        <div>메뉴명 가격 0,000원(개)</div>
-                    </div>
-                    <div class="check-icon">✔</div>
-                `;
-                storeList.appendChild(storeItem);
-            }
         });
 
         const removeBtn = button.querySelector('.remove-btn');
@@ -97,6 +84,29 @@ document.addEventListener('DOMContentLoaded', function () {
             updateAllButtonVisibility();
         });
     }
+
+    function updateStoreList(storeData) {
+        storeList.innerHTML = ''; // 기존 리스트 제거
+
+        if (!Array.isArray(storeData) || storeData.length === 0) {
+            storeList.innerHTML = '<div>검색된 가게가 없습니다.</div>';
+            return;
+        }
+
+        storeData.forEach((item, index) => {
+            const storeItem = document.createElement('div');
+            storeItem.className = 'store-item';
+            storeItem.innerHTML = `
+                <div>
+                    <div class="store-name">${item.mName || '가게'} (${item.mGuName || ''})</div>
+                    <div>${item.aName} 가격 ${item.aPrice}원 (${item.aUnit})</div>
+                </div>
+                <div class="check-icon">✔</div>
+            `;
+            storeList.appendChild(storeItem);
+        });
+    }
+
 
     function createIngredientButton(name) {
         const button = document.createElement('div');
@@ -153,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(data => {
             console.log('서버 응답:', data);
+            updateStoreList(data);
         })
         .catch(error => {
             console.error('전송 실패:', error);

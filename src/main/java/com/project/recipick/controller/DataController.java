@@ -187,20 +187,20 @@ public class DataController {
 
             MartInfo martInfo = new MartInfo();
 
-            martInfo.setP_SEQ(obj.get("P_SEQ").toString());
-            martInfo.setM_SEQ(obj.get("M_SEQ").toString());
-            martInfo.setM_NAME(obj.get("M_NAME").toString());
-            martInfo.setA_SEQ(obj.get("A_SEQ").toString());
-            martInfo.setA_NAME(obj.get("A_NAME").toString());
-            martInfo.setA_UNIT(obj.get("A_UNIT").toString());
-            martInfo.setA_PRICE(obj.get("A_PRICE").toString());
-            martInfo.setP_YEAR_MONTH(obj.get("P_YEAR_MONTH").toString());
-            martInfo.setADD_COL(obj.get("ADD_COL").toString());
-            martInfo.setP_DATE(obj.get("P_DATE").toString());
-            martInfo.setM_TYPE_CODE(obj.get("M_TYPE_CODE").toString());
-            martInfo.setM_TYPE_NAME(obj.get("M_TYPE_NAME").toString());
-            martInfo.setM_GU_CODE(obj.get("M_GU_CODE").toString());
-            martInfo.setM_GU_NAME(obj.get("M_GU_NAME").toString());
+            martInfo.setpSeq(obj.get("P_SEQ").toString());
+            martInfo.setmSeq(obj.get("M_SEQ").toString());
+            martInfo.setmName(obj.get("M_NAME").toString());
+            martInfo.setaSeq(obj.get("A_SEQ").toString());
+            martInfo.setaName(obj.get("A_NAME").toString());
+            martInfo.setaUnit(obj.get("A_UNIT").toString());
+            martInfo.setaPrice(obj.get("A_PRICE").toString());
+            martInfo.setpYearMonth(obj.get("P_YEAR_MONTH").toString());
+            martInfo.setAddCol(obj.get("ADD_COL").toString());
+            martInfo.setpDate(obj.get("P_DATE").toString());
+            martInfo.setmTypeCode(obj.get("M_TYPE_CODE").toString());
+            martInfo.setmTypeName(obj.get("M_TYPE_NAME").toString());
+            martInfo.setmGuCode(obj.get("M_GU_CODE").toString());
+            martInfo.setmGuName(obj.get("M_GU_NAME").toString());
 
             martInfoService.saveMartInfo(martInfo);
         }

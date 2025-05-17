@@ -82,7 +82,7 @@ public class MapPageController {
         String ingredient = request.get("ingredient");
         System.out.println("선택된 식재료: " + ingredient);
 
-        // 로직 수행 (DB 저장 등)
+        // 로직 수행
         List<MartInfo> list = martInfoService.getIrdntPrice(ingredient);
 
 

@@ -16,7 +16,7 @@
 
     <select id="getProductByCuCode" resultType="String">
         SELECT DISTINCT m_name FROM mart_info
-        WHERE m_gu_code = #{gu_name}
+        WHERE m_gu_name = #{gu_name}
     </select>
 
     <!-- 마트 하드코딩 선택 후 왼쪽 표에 넘길 용도 -->
@@ -29,27 +29,10 @@
         ORDER BY a_name, m_gu_name DESC
     </select>
 
-    <resultMap id="MartInfoMap" type="com.project.recipick.Entity.MartInfo">
-        <result property="P_SEQ" column="p_seq"/>
-        <result property="M_SEQ" column="m_seq"/>
-        <result property="M_NAME" column="m_name"/>
-        <result property="A_SEQ" column="a_seq"/>
-        <result property="A_NAME" column="a_name"/>
-        <result property="A_UNIT" column="a_unit"/>
-        <result property="A_PRICE" column="a_price"/>
-        <result property="P_YEAR_MONTH" column="p_year_month"/>
-        <result property="ADD_COL" column="add_col"/>
-        <result property="P_DATE" column="p_date"/>
-        <result property="M_TYPE_CODE" column="m_type_code"/>
-        <result property="M_TYPE_NAME" column="m_type_name"/>
-        <result property="M_GU_CODE" column="m_gu_code"/>
-        <result property="M_GU_NAME" column="m_gu_name"/>
-    </resultMap>
-
-    <select id="getIrdntPrice" resultType="com.project.recipick.Entity.MartInfo">
-        SELECT *
-        FROM mart_info
+    <select id="getIrdntPrice" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
         WHERE a_name LIKE CONCAT(#{ingredient}, ' %')
+        and a_price != '0';
     </select>
 
     <insert id="saveMartInfo" parameterType="MartInfo">

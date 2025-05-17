@@ -50,7 +50,7 @@ public class MartInfoService {
     public List<MartInfo> getIrdntPrice(String ingredient) {
 
         List<MartInfo> list = martInfoMapper.getIrdntPrice(ingredient);
-        System.out.println("service" + list);
+        System.out.println("service " + list);
 
         return martInfoMapper.getIrdntPrice(ingredient);
     }
