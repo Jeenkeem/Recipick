@@ -287,6 +287,7 @@ console.log("폴리곤 제거 완료");
 }
 */
 
+
 function handleMarkerClick(martName) {
     if (!fromCompare) {
         console.log("❌ 비교장보기 진입이 아님. 마커 선택 불가");
