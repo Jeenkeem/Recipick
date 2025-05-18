@@ -10,9 +10,15 @@ import java.util.List;
 public interface MartInfoMapper {
     List<MartInfo> findAll();
 
+    List<String> getAllMartName();
+
     List<MartInfo> findSameMartInfo(String gu_name);
 
     List<String> getProductByCuCode(String gu_name);
 
     List<MartItemDTO> selectItemsByMartName(String martName);
+
+    List<MartInfo> getIrdntPrice(String ingredient);
+
+    void saveMartInfo(MartInfo martInfo);
 }

@@ -106,7 +106,7 @@ body {
   padding: 8px 16px;
   border: 2px solid #ccc;
   border-radius: 999px;
-  background-color: #fff;
+  background-color: white;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -121,11 +121,17 @@ body {
   color: white;
 }
 
+/* 일반 버튼 hover 시 */
 .ingredient-button:hover {
   border-color: #ff7131;
-  color: #ff7131;
+  background-color: #ff7131;
+  color: white;  /* ✅ hover 시 글자 흰색으로 */
 }
 
+/* 선택된 버튼 hover 시에는 따로 스타일을 주고 싶다면 여기에 추가 가능 */
+.ingredient-button.selected:hover {
+  border-color: red;
+}
 .map-section{
   padding-top: 50px;
   position: relative;
@@ -141,20 +147,19 @@ body {
 .slide-panel {
 
   position: absolute;
-  top: 50px;
-  right: 0;
-  width: 400px;
-  height: 800px;
-  background-color: #f0f0f0;
+  top: 75px;
+  right: 25px;
+  width: 40%;
+  height: 750px;
+  background-color: white;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   transition: right 0.3s ease;
   padding-left: 20px;
   padding-right: 20px;
   overflow-y: auto;
   z-index: 1000;
-  border-bottom-left-radius: 20px;
-  border-top-left-radius: 20px;
-
+  border-bottom-left-radius: 30px;
+  border-top-left-radius: 30px;
   transform: translateX(100%);
   transition: transform 0.3s ease;
   display: none; /* ★ 처음에는 아예 숨겨놓기 */
@@ -167,6 +172,9 @@ body {
 .slide-title {
   font-size: 24px;
   font-weight: bold;
+  padding-top: 10%;
+  padding-left: 10%;
+  padding-right: 10%;
   margin-bottom: 10px;
 }
 
@@ -179,13 +187,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-bottom: 10%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .store-item {
-  background-color: #333;
-  color: white;
+  background-color: white;
+  color: black;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
   padding: 10px;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;

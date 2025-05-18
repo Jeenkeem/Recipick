@@ -23,11 +23,27 @@
         <div class="search-bar">
             <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
         </div>
+        <div class="search-result">
+            <div id="ingredient-buttons" class="ingredient-buttons">
+                <!-- JS로 버튼 생성 예정 -->
+            </div>
+        </div>
+
 
         <div class="map-section">
             <div id="map"></div>
-            <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+
+            <!-- 카카오 SDK (서비스 포함 + autoload false) -->
+            <script type="text/javascript"
+                    th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoApiKey} + '&libraries=services'">
+            </script>
+
+            <script th:inline="javascript">
+                const martNames = [[${martNames}]];
+            </script>
+
             <script src="/resources/js/mapPageJs.js"></script>
+
 
             <!-- 오른쪽 슬라이드 패널 -->
             <div id="slidePanel" class="slide-panel">
@@ -40,6 +56,8 @@
         </div>
 
     </div>
+
+    <script src="/resources/js/mapPageSearch.js"></script>
 
 
 
