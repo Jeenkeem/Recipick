@@ -23,6 +23,7 @@ public class MapPageController {
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
+
     @Autowired
     final MartInfoService martInfoService;
 
@@ -33,7 +34,10 @@ public class MapPageController {
     @GetMapping("/recipick/mapPage")
     public String getMethodName(Model model) {
 
+        List<String> list = martInfoService.getAllMartName();
+
         model.addAttribute("kakaoApiKey", kakaoApiKey);
+        model.addAttribute("martNames", list);
 
         return "map/mapPage";
     }

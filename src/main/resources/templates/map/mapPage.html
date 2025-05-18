@@ -32,8 +32,18 @@
 
         <div class="map-section">
             <div id="map"></div>
-            <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+
+            <!-- 카카오 SDK (서비스 포함 + autoload false) -->
+            <script type="text/javascript"
+                    th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoApiKey} + '&libraries=services'">
+            </script>
+
+            <script th:inline="javascript">
+                const martNames = [[${martNames}]];
+            </script>
+
             <script src="/resources/js/mapPageJs.js"></script>
+
 
             <!-- 오른쪽 슬라이드 패널 -->
             <div id="slidePanel" class="slide-panel">

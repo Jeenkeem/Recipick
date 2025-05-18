@@ -7,16 +7,46 @@ const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mar
 let selectedMarts = []; // 선택한 마트 이름 2개 저장
 let selectedMarkers = {}; // 마트 이름 → 마커 객체 연결
 
-
-var container = document.getElementById('map');
-var options = {
-    center: new kakao.maps.LatLng(37.5601, 126.9960),
-    level: 8
+const mapContainer = document.getElementById('map');
+const mapOption = {
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 7
 };
 
-var map = new kakao.maps.Map(container, options);
+const map = new kakao.maps.Map(mapContainer, mapOption);
+const ps = new kakao.maps.services.Places();
 
-init('/recipick/polygon');
+console.log(martNames);
+
+martNames.forEach(mart => {
+    ps.keywordSearch(mart, function (data, status) {
+        if (status === kakao.maps.services.Status.OK && data.length > 0) {
+            const place = data[0];
+
+            const marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(place.y, place.x),
+                title: place.place_name
+            });
+
+            // ✅ 인포윈도우 생성
+            const infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
+            });
+
+            // ✅ 마커 클릭 이벤트 등록
+            kakao.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+        } else {
+            console.warn(`❌ ${mart} 검색 결과 없음`);
+        }
+    }, {
+        rect: "126.76,37.41,127.23,37.71"
+    });
+});
+
+//init('/recipick/polygon');
 
 // HTML5의 geolocation으로 사용자 위치를 얻어 지도 중심을 변경합니다
 if (navigator.geolocation) {
@@ -87,6 +117,7 @@ function sendLocation() {
     }
 }
 
+/*
 function init(path) {
     fetch(path)
         .then(function (response) {
@@ -196,6 +227,7 @@ function init(path) {
         })
         .catch(error => console.error('GeoJSON 데이터 로드 실패:', error));
 }
+*/
 
 function searchMarket(keyword, focus = false) {
     const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
@@ -244,7 +276,7 @@ function searchMarket(keyword, focus = false) {
     });
 }
 
-
+/*
 function removePolygons() {
 // 모든 폴리곤을 지도에서 제거하고 배열을 초기화합니다.
 polygons.forEach(function (polygon) {
@@ -253,6 +285,7 @@ polygons.forEach(function (polygon) {
 polygons = [];
 console.log("폴리곤 제거 완료");
 }
+*/
 
 function handleMarkerClick(martName) {
     if (!fromCompare) {

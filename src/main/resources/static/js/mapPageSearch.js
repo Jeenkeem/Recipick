@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
             storeItem.className = 'store-item';
             storeItem.innerHTML = `
                 <div>
-                    <div class="store-name">${item.mName || '가게'} (${item.mGuName || ''})</div>
-                    <div>${item.aName} 가격 ${item.aPrice}원 (${item.aUnit})</div>
+                    <div class="store-name">${item.mName || '가게'}</div>
+                    <div>${item.aName} 가격 ${item.aPrice}원</div>
                 </div>
                 <div class="check-icon">✔</div>
             `;

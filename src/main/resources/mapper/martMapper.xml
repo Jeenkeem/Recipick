@@ -9,6 +9,10 @@
         SELECT * FROM mart_info
     </select>
 
+    <select id="getAllMartName" resultType="String">
+        SELECT distinct m_name FROM mart_info
+    </select>
+
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
         WHERE m_gu_code = #{gu_name}
