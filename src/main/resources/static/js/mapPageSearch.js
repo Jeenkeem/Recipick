@@ -14,6 +14,22 @@ document.addEventListener('DOMContentLoaded', function () {
     allButton.style.display = 'none'; // 초기 숨김
     ingredientButtonsContainer.appendChild(allButton); // 항상 맨 마지막에 위치
 
+    allButton.addEventListener('click', function () {
+        // 기존 선택된 버튼 초기화
+        const allIngredientButtons = ingredientButtonsContainer.querySelectorAll('.ingredient-button');
+        allIngredientButtons.forEach(btn => btn.classList.remove('selected'));
+
+        allButton.classList.add('selected');
+        selectedButton = allButton;
+
+        ingredientName.textContent = '전체 식재료';
+
+        openPanel();
+
+        // 슬라이드에 전체 가격 및 마트 목록 표시
+        updateAllStoreSummary();
+    });
+
     // 슬라이드 패널 열기
     function openPanel() {
         if (isPanelOpen) return;
@@ -85,27 +101,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function updateStoreList(storeData) {
-        storeList.innerHTML = ''; // 기존 리스트 제거
+    let currentStoreData = [];  // 전체 store data 저장용
 
-        if (!Array.isArray(storeData) || storeData.length === 0) {
-            storeList.innerHTML = '<div>검색된 가게가 없습니다.</div>';
+    function updateStoreList(storeData) {
+        currentStoreData = storeData;
+        applyGuFilter()
+    }
+
+    function applyGuFilter() {
+        const guFilter = document.getElementById('guFilter');
+        const sortSelect = document.querySelector('.sort-options');
+        const selectedGu = guFilter.value;
+        const selectedSort = sortSelect.value;
+        storeList.innerHTML = '';
+
+        // 자치구 필터
+        let filtered = selectedGu === 'all'
+            ? currentStoreData
+            : currentStoreData.filter(item => item.mGuName === selectedGu);
+
+        // 가격순 정렬 옵션
+        if (selectedSort === '가격순') {
+            filtered = filtered.slice().sort((a, b) => a.aPrice - b.aPrice);
+        }
+
+        // 결과 없을 때
+        if (filtered.length === 0) {
+            storeList.innerHTML = '<div>선택한 자치구에 해당하는 가게가 없습니다.</div>';
             return;
         }
 
-        storeData.forEach((item, index) => {
+        filtered.forEach((item, index) => {
             const storeItem = document.createElement('div');
             storeItem.className = 'store-item';
             storeItem.innerHTML = `
                 <div>
                     <div class="store-name">${item.mName || '가게'}</div>
                     <div>${item.aName} 가격 ${item.aPrice}원</div>
+                    <div>${item.mGuName}</div>
                 </div>
-                <div class="check-icon">✔</div>
+                <!-- <div class="check-icon">✔</div> -->
             `;
             storeList.appendChild(storeItem);
         });
     }
+
 
 
     function createIngredientButton(name) {
@@ -169,5 +209,83 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('전송 실패:', error);
         });
     }
+
+    function updateAllStoreSummary() {
+        storeList.innerHTML = '';
+
+        if (!Array.isArray(currentStoreData) || currentStoreData.length === 0) {
+            storeList.innerHTML = '<div>검색된 가게가 없습니다.</div>';
+            return;
+        }
+
+        // 전체 버튼을 제외한 사용자가 추가한 식재료 버튼 목록
+        const selectedIngredients = Array.from(ingredientButtonsContainer.children)
+            .filter(btn => btn !== allButton)
+            .map(btn => btn.firstChild.textContent);
+
+        if (selectedIngredients.length === 0) {
+            storeList.innerHTML = '<div>선택된 식재료가 없습니다.</div>';
+            return;
+        }
+
+        // 마트별로 { [마트이름]: { 재료명: 가격, ... } } 구조로 수집
+        const martIngredientMap = {};
+
+        currentStoreData.forEach(item => {
+            const martName = item.mName;
+            const ingredient = item.aName;
+            const price = item.aPrice;
+
+            if (!martIngredientMap[martName]) {
+                martIngredientMap[martName] = {};
+            }
+
+            martIngredientMap[martName][ingredient] = price;
+        });
+
+        // 선택된 식재료를 모두 포함한 마트만 필터링
+        const matchingMarts = [];
+
+        for (const mart in martIngredientMap) {
+            const ingredientsInMart = martIngredientMap[mart];
+
+            // 이 마트가 모든 식재료를 가지고 있는지 확인
+            const hasAllIngredients = selectedIngredients.every(ing => ingredientsInMart.hasOwnProperty(ing));
+
+            if (hasAllIngredients) {
+                // 총 가격 계산
+                const totalPrice = selectedIngredients.reduce((sum, ing) => sum + ingredientsInMart[ing], 0);
+
+                matchingMarts.push({ martName: mart, totalPrice });
+            }
+        }
+
+        if (matchingMarts.length === 0) {
+            storeList.innerHTML = '<div>모든 식재료를 포함한 마트가 없습니다.</div>';
+            return;
+        }
+
+        // 결과 표시
+        matchingMarts.forEach(mart => {
+            const storeItem = document.createElement('div');
+            storeItem.className = 'store-item';
+            storeItem.innerHTML = `
+                <div>
+                    <div class="store-name">${mart.martName}</div>
+                    <div>총합 가격: ${mart.totalPrice.toLocaleString()}원</div>
+                </div>
+            `;
+            storeList.appendChild(storeItem);
+        });
+    }
+
+
+
+
+    const guFilter = document.getElementById('guFilter');
+    guFilter.addEventListener('change', applyGuFilter);
+
+    const sortSelect = document.querySelector('.sort-options');
+    sortSelect.addEventListener('change', applyGuFilter);
 
 });

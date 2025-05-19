@@ -1,6 +1,7 @@
 package com.project.recipick.service;
 
 import com.project.recipick.Entity.MartInfo;
+import com.project.recipick.Entity.MartNameAndLocation;
 import com.project.recipick.mapper.MartInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,7 @@ public class MartInfoService {
         this.restTemplate = restTemplate;
     }
 
-    public List<String> getAllMartName() {
+    public List<MartNameAndLocation> getAllMartName() {
         return martInfoMapper.getAllMartName();
     }
 
