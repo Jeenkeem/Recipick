@@ -1,6 +1,7 @@
 package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
+import com.project.recipick.Entity.MartNameAndLocation;
 import com.project.recipick.service.MartInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +36,15 @@ public class MapPageController {
     @GetMapping("/recipick/mapPage")
     public String getMethodName(Model model) {
 
-        List<String> list = martInfoService.getAllMartName();
+        List<MartNameAndLocation> list = martInfoService.getAllMartName();
+
+        ArrayList<String> martNames = new ArrayList<>();
+        for(MartNameAndLocation arr : list) {
+            martNames.add(arr.getmName());
+        }
 
         model.addAttribute("kakaoApiKey", kakaoApiKey);
-        model.addAttribute("martNames", list);
+        model.addAttribute("martNames", martNames);
 
         return "map/mapPage";
     }

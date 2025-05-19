@@ -178,9 +178,31 @@ body {
   margin-bottom: 10px;
 }
 
-.sort-options {
-  font-size: 14px;
+.sort-container {
+  display: flex;
+  gap: 10px;
   margin-bottom: 20px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.sort-options,
+#guFilter {
+  font-size: 14px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.sort-options:hover,
+#guFilter:hover {
+  background-color: #eaeaea;
+}
+
+.sort-options:focus,
+#guFilter:focus {
+  border-color: #888;
 }
 
 .store-list {

@@ -1,6 +1,7 @@
 package com.project.recipick.mapper;
 
 import com.project.recipick.Entity.MartInfo;
+import com.project.recipick.Entity.MartNameAndLocation;
 import org.apache.ibatis.annotations.Mapper;
 import com.project.recipick.dto.MartItemDTO;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface MartInfoMapper {
     List<MartInfo> findAll();
 
-    List<String> getAllMartName();
+    List<MartNameAndLocation> getAllMartName();
 
     List<MartInfo> findSameMartInfo(String gu_name);
 

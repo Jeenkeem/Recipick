@@ -9,8 +9,9 @@
         SELECT * FROM mart_info
     </select>
 
-    <select id="getAllMartName" resultType="String">
-        SELECT distinct m_name FROM mart_info
+    <select id="getAllMartName" resultType="com.project.recipick.Entity.MartNameAndLocation">
+        SELECT DISTINCT ON (m_name) m_name, m_gu_name
+        FROM mart_info
     </select>
 
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
