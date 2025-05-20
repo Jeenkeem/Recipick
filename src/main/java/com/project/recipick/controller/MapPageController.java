@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -99,5 +97,64 @@ public class MapPageController {
 
         return ResponseEntity.ok(list);
     }
-    
+
+    @PostMapping("/recipick/selectAll")
+    public ResponseEntity<?> selectMultipleIngredients(@RequestBody Map<String, List<String>> request) {
+        List<String> ingredients = request.get("ingredients");
+        System.out.println("선택된 전체 식재료: " + ingredients);
+
+        // 전체 마트 정보를 식재료별로 가져옴
+        List<MartInfo> allData = new ArrayList<>();
+        for (String ingredient : ingredients) {
+            List<MartInfo> data = martInfoService.getIrdntPrice(ingredient);
+            allData.addAll(data);
+        }
+
+        for(int i=0; i<allData.size(); i++) {
+            System.out.println(allData.get(i).getmName());
+            System.out.println(allData.get(i).getmName());
+        }
+
+
+
+        // 마트+자치구를 하나의 키로 묶어서 가격 정보 집계
+        Map<String, List<MartInfo>> martGrouped = new HashMap<>();
+        for (MartInfo item : allData) {
+            String key = item.getmName() + "::" + item.getmGuName(); // 마트명+자치구명으로 묶기
+            martGrouped.computeIfAbsent(key, k -> new ArrayList<>()).add(item);
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map.Entry<String, List<MartInfo>> entry : martGrouped.entrySet()) {
+            List<MartInfo> martItems = entry.getValue();
+
+            // 해당 마트가 모든 식재료를 가지고 있는지 확인
+            Set<String> available = martItems.stream()
+                    .map(MartInfo::getaName)
+                    .collect(Collectors.toSet());
+
+            if (available.containsAll(ingredients)) {
+                int total = martItems.stream()
+                        .filter(i -> ingredients.contains(i.getaName()))
+                        .mapToInt(MartInfo::getaPrice)
+                        .sum();
+
+                MartInfo first = martItems.get(0); // 대표 마트 정보
+
+                Map<String, Object> martInfo = new HashMap<>();
+                martInfo.put("mName", first.getmName());
+                martInfo.put("mGuName", first.getmGuName());
+                martInfo.put("aName", String.join(", ", ingredients)); // 포함된 식재료 이름들 (옵션)
+                martInfo.put("totalPrice", total);
+
+                result.add(martInfo);
+            }
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+
+
 }

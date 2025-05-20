@@ -38,6 +38,7 @@ martNames.forEach(mart => {
             kakao.maps.event.addListener(marker, 'click', function () {
                 infowindow.open(map, marker);
             });
+
         } else {
             console.warn(`❌ ${mart} 검색 결과 없음`);
         }
@@ -52,8 +53,6 @@ if (highlightMarket) {
   console.log("📌 하이라이트 마트:", highlightMarket);
   searchMarket(highlightMarket, true); // 추가 인자 전달
 }
-
-
 
 
 function searchMarket(keyword, focus = false) {

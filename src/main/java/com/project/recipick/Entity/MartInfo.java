@@ -69,8 +69,8 @@ public class MartInfo {
         this.aUnit = aUnit;
     }
 
-    public String getaPrice() {
-        return aPrice;
+    public int getaPrice() {
+        return Integer.parseInt(aPrice);
     }
 
     public void setaPrice(String aPrice) {
