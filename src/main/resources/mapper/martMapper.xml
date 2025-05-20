@@ -11,12 +11,12 @@
 
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE m_gu_code = #{gu_name}
+        WHERE m_gu_code = #{gu_code}
     </select>
 
     <select id="getProductByCuCode" resultType="String">
         SELECT DISTINCT m_name FROM mart_info
-        WHERE m_gu_code = #{gu_name}
+        WHERE m_gu_name = #{gu_name}
     </select>
 
     <!-- 마트 하드코딩 선택 후 왼쪽 표에 넘길 용도 -->
