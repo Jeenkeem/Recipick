@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>레시피 리스트</title>
+    <link rel="stylesheet" href="/resources/css/recipeSearchStyle.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/resources/js/recipeSearch.js"></script>
+</head>
+<body>
+<div id="recipeSearch-page">
+    <div class="menu-wrapper">
+        <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
+        <div class="menu-buttons">
+            <button class="menu-btn">레시피검색</button>
+            <button class="menu-btn">내 동네시장</button>
+            <button class="menu-btn">비교장보기</button>
+        </div>
+    </div>
+    <!-- 검색 창-->
+    <div class="search-section">
+        <p class="search-subtitle">먹고 싶은 요리를 검색해보세요.</p>
+        <h1 class="search-title">레시피 검색하기</h1>
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input  v-model="searchWord"
+                    type="text"
+                    class="search-input"
+                    placeholder="오늘 먹고 싶은 요리를 검색해보세요!"
+                    @keyup.enter="search"
+            />
+        </div>
+    </div>
+    <!-- 레시피 카드 목록 -->
+    <div id="card-area">
+        <div v-if="searched" class="recipe-container">
+            <div v-for="recipe in results" :key="recipe.recipeId" class="recipe-card">
+                <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
+                <h3>{{recipe.recipeNmKo}}</h3>
+                <div class="recipe-meta">
+                    <span class="difficulty">{{recipe.levelNm}}</span>
+                    <span class="difficulty">{{recipe.cookingTime}}</span>
+                    <span class="difficulty">{{recipe.calorie}}</span>
+                </div>
+            </div>
+        </div>
+        <!--  thymeleaf  -->
+        <div v-else class="recipe-container" id="recipe-container">
+            <div th:each="recipe : ${recipeCards}" class="recipe-card">
+                <img th:src="${recipe.rcpImgUrl}"
+                     th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
+                     alt="레시피 이미지" />
+                <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
+                <div class="recipe-meta">
+                    <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>
+                    <span class="time" th:text="${recipe.cookingTime}">시간</span>
+                    <span class="kcal" th:text="${recipe.calorie}">칼로리</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
