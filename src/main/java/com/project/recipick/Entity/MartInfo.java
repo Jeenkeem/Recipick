@@ -6,131 +6,130 @@ import lombok.Setter;
 
 @Data
 public class MartInfo {
-    private String P_SEQ; // 일련번호
-    private String M_SEQ;  // 시장/마트번호
-    private String M_NAME; // 시장/마트이름
-    private String A_SEQ; // 품목 번호
-    private String A_NAME; // 품목 이름
-    private String A_UNIT; // 실판매규격
-    private String A_PRICE; // 가격(원)
-    private String P_YEAR_MONTH; // 년도, 월
-    private String ADD_COL; // 비고
-    private String P_DATE; // 점검일자
-    private String M_TYPE_CODE; // 시장유형 구분 코드
-    private String M_TYPE_NAME; // 시장유형 구분 이름
-    private String M_GU_CODE; // 자치구 코드
-    private String M_GU_NAME; // 자치구 이름
+    private String pSeq;           // p_seq: 일련번호
+    private String mSeq;           // m_seq: 시장/마트번호
+    private String mName;          // m_name: 시장/마트이름
+    private String aSeq;           // a_seq: 품목 번호
+    private String aName;          // a_name: 품목 이름
+    private String aUnit;          // a_unit: 실판매규격
+    private String aPrice;         // a_price: 가격(원)
+    private String pYearMonth;     // p_year_month: 년도, 월
+    private String addCol;         // add_col: 비고
+    private String pDate;          // p_date: 점검일자
+    private String mTypeCode;      // m_type_code: 시장유형 구분 코드
+    private String mTypeName;      // m_type_name: 시장유형 구분 이름
+    private String mGuCode;        // m_gu_code: 자치구 코드
+    private String mGuName;        // m_gu_name: 자치구 이름
 
-    // Getter and Setter methods
-    public String getP_SEQ() {
-        return P_SEQ;
+    public String getpSeq() {
+        return pSeq;
     }
 
-    public void setP_SEQ(String p_SEQ) {
-        P_SEQ = p_SEQ;
+    public void setpSeq(String pSeq) {
+        this.pSeq = pSeq;
     }
 
-    public String getM_SEQ() {
-        return M_SEQ;
+    public String getmSeq() {
+        return mSeq;
     }
 
-    public void setM_SEQ(String m_SEQ) {
-        M_SEQ = m_SEQ;
+    public void setmSeq(String mSeq) {
+        this.mSeq = mSeq;
     }
 
-    public String getM_NAME() {
-        return M_NAME;
+    public String getmName() {
+        return mName;
     }
 
-    public void setM_NAME(String m_NAME) {
-        M_NAME = m_NAME;
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 
-    public String getA_SEQ() {
-        return A_SEQ;
+    public String getaSeq() {
+        return aSeq;
     }
 
-    public void setA_SEQ(String a_SEQ) {
-        A_SEQ = a_SEQ;
+    public void setaSeq(String aSeq) {
+        this.aSeq = aSeq;
     }
 
-    public String getA_NAME() {
-        return A_NAME;
+    public String getaName() {
+        return aName;
     }
 
-    public void setA_NAME(String a_NAME) {
-        A_NAME = a_NAME;
+    public void setaName(String aName) {
+        this.aName = aName;
     }
 
-    public String getA_UNIT() {
-        return A_UNIT;
+    public String getaUnit() {
+        return aUnit;
     }
 
-    public void setA_UNIT(String a_UNIT) {
-        A_UNIT = a_UNIT;
+    public void setaUnit(String aUnit) {
+        this.aUnit = aUnit;
     }
 
-    public String getA_PRICE() {
-        return A_PRICE;
+    public String getaPrice() {
+        return aPrice;
     }
 
-    public void setA_PRICE(String a_PRICE) {
-        A_PRICE = a_PRICE;
+    public void setaPrice(String aPrice) {
+        this.aPrice = aPrice;
     }
 
-    public String getP_YEAR_MONTH() {
-        return P_YEAR_MONTH;
+    public String getpYearMonth() {
+        return pYearMonth;
     }
 
-    public void setP_YEAR_MONTH(String p_YEAR_MONTH) {
-        P_YEAR_MONTH = p_YEAR_MONTH;
+    public void setpYearMonth(String pYearMonth) {
+        this.pYearMonth = pYearMonth;
     }
 
-    public String getADD_COL() {
-        return ADD_COL;
+    public String getAddCol() {
+        return addCol;
     }
 
-    public void setADD_COL(String aDD_COL) {
-        ADD_COL = aDD_COL;
+    public void setAddCol(String addCol) {
+        this.addCol = addCol;
     }
 
-    public String getP_DATE() {
-        return P_DATE;
+    public String getpDate() {
+        return pDate;
     }
 
-    public void setP_DATE(String p_DATE) {
-        P_DATE = p_DATE;
+    public void setpDate(String pDate) {
+        this.pDate = pDate;
     }
 
-    public String getM_TYPE_CODE() {
-        return M_TYPE_CODE;
+    public String getmTypeCode() {
+        return mTypeCode;
     }
 
-    public void setM_TYPE_CODE(String m_TYPE_CODE) {
-        M_TYPE_CODE = m_TYPE_CODE;
+    public void setmTypeCode(String mTypeCode) {
+        this.mTypeCode = mTypeCode;
     }
 
-    public String getM_TYPE_NAME() {
-        return M_TYPE_NAME;
+    public String getmTypeName() {
+        return mTypeName;
     }
 
-    public void setM_TYPE_NAME(String m_TYPE_NAME) {
-        M_TYPE_NAME = m_TYPE_NAME;
+    public void setmTypeName(String mTypeName) {
+        this.mTypeName = mTypeName;
     }
 
-    public String getM_GU_CODE() {
-        return M_GU_CODE;
+    public String getmGuCode() {
+        return mGuCode;
     }
 
-    public void setM_GU_CODE(String m_GU_CODE) {
-        M_GU_CODE = m_GU_CODE;
+    public void setmGuCode(String mGuCode) {
+        this.mGuCode = mGuCode;
     }
 
-    public String getM_GU_NAME() {
-        return M_GU_NAME;
+    public String getmGuName() {
+        return mGuName;
     }
 
-    public void setM_GU_NAME(String m_GU_NAME) {
-        M_GU_NAME = m_GU_NAME;
+    public void setmGuName(String mGuName) {
+        this.mGuName = mGuName;
     }
 }

@@ -1,6 +1,7 @@
 package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
+import com.project.recipick.Entity.MartNameAndLocation;
 import com.project.recipick.service.MartInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -21,6 +24,7 @@ public class MapPageController {
     
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
+
 
     @Autowired
     final MartInfoService martInfoService;
@@ -32,7 +36,15 @@ public class MapPageController {
     @GetMapping("/recipick/mapPage")
     public String getMethodName(Model model) {
 
+        List<MartNameAndLocation> list = martInfoService.getAllMartName();
+
+        ArrayList<String> martNames = new ArrayList<>();
+        for(MartNameAndLocation arr : list) {
+            martNames.add(arr.getmName());
+        }
+
         model.addAttribute("kakaoApiKey", kakaoApiKey);
+        model.addAttribute("martNames", martNames);
 
         return "map/mapPage";
     }
@@ -74,6 +86,18 @@ public class MapPageController {
     public ResponseEntity<String> updateLocation(@RequestBody Location location) {
         System.out.println("Received latitude: " + location.getLatitude() + ", longitude: " + location.getLongitude());
         return ResponseEntity.ok("Location received");
+    }
+
+    @PostMapping("/recipick/select")
+    public ResponseEntity<?> selectIngredient(@RequestBody Map<String, String> request) {
+        String ingredient = request.get("ingredient");
+        System.out.println("선택된 식재료: " + ingredient);
+
+        // 로직 수행
+        List<MartInfo> list = martInfoService.getIrdntPrice(ingredient);
+
+
+        return ResponseEntity.ok(list);
     }
     
 }

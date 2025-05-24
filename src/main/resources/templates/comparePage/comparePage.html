@@ -8,21 +8,22 @@
 </head><link rel="stylesheet" type="text/css" href="/resources/css/comparePriceStyle.css">
 
 <body>
+<img src="/resources/image/page_background.png" class="page-background">
 <div id="compare-page">
   <div class="menu-wrapper">
     <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
     <div class="menu-buttons">
-      <button class="menu-btn">레시피검색</button>
-      <button class="menu-btn">내 동네시장</button>
-      <button class="menu-btn">비교장보기</button>
+      <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+      <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
+      <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
     </div>
   </div>
 
   <div class="total-table-wrapper">
     <!-- 왼쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/resources/image/recipe_background.png" class="bg-img" alt="배경 이미지">
-      <button class="table-title-button" :disabled="!isActivated"> {{ firstTitle }} </button>
+      <img src="/resources/image/recipe_background.png" class="bg-img">
+      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
       <div class="table-header">
         <table>
           <thead>
@@ -33,11 +34,11 @@
       <div class="table-content">
         <table>
           <tbody>
-          <tr v-for="(item, index) in leftItems" :key="index" @click="page != 2 ? toggleRow(index) : null">
+          <tr v-for="(item, index) in leftItems" :key="index">
             <td>{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
             <td>{{ item.price.toLocaleString() }}</td>
-            <td>
-              <div v-if="selectedIndex == index && page != 2" class="quantity-control">
+            <td v-if="page != 2">
+              <div class="quantity-control">
                 <button class="quantity-button" @click.stop="decreaseQuantity(index)">-</button>
                 <button class="quantity-button" @click.stop="increaseQuantity(index)">+</button>
               </div>
@@ -62,8 +63,8 @@
 
     <!-- 오른쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/resources/image/recipe_background.png" class="bg-img" alt="배경 이미지">
-      <button class="table-title-button" :disabled="!isActivated"> {{ secondTitle }} </button>
+      <img src="/resources/image/recipe_background.png" class="bg-img">
+      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
       <div class="table-header">
         <table>
           <thead>
@@ -74,7 +75,7 @@
       <div class="table-content">
         <table>
           <tbody>
-          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="removeFromRight(index)">
+          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="page != 2 ? removeFromRight(index) : null">
             <td>{{ item.name }} ({{ item.quantity }}개)</td>
             <td>{{ (item.price * item.quantity).toLocaleString() }}</td>
           </tr>
@@ -112,17 +113,12 @@
       recipeA: [],
       recipeB: [],
       martAName: '',
-      martBName: '',
-      selectedIndex: null
+      martBName: ''
     },
     created() {
-      fetch('/recipick/mart-names') // ✅ 마트 이름 가져오기
-        .then(res => res.json())
-        .then(data => {
-          this.martAName = data[0];
-          this.martBName = data[1];
-          this.fetchItems(); // ✅ 첫 마트 데이터 호출
-        });
+      this.martAName = localStorage.getItem("mart1");
+      this.martBName = localStorage.getItem("mart2");
+      this.fetchItems();
     },
     computed: {
       page() {
@@ -156,9 +152,6 @@
       }
     },
     methods: {
-      toggleRow(index) {
-        this.selectedIndex = this.selectedIndex === index ? null : index;
-      },
       increaseQuantity(index) {
         const item = this.leftItems[index];
         const targetList = this.page === 0 ? this.recipeA : this.recipeB;
@@ -201,10 +194,15 @@
         fetch(`/recipick/mart-items?martName=${encodeURIComponent(martName)}`)
           .then(res => res.json())
           .then(data => {
-            const items = data.map(d => ({ name: d.a_name, price: d.a_price, quantity: 1 }));
+            const items = data.map(d => ({ name: d.aName, price: d.aPrice, quantity: 1 }));
             if (this.page === 0) this.itemA = items;
             else if (this.page === 1) this.itemB = items;
           });
+      },
+      goToMap(martName) {
+        if (this.page !== 2) return;
+        const url = `/recipick/mapPage?highlight=${encodeURIComponent(martName)}`;
+        window.location.href = url;
       }
     }
   });
