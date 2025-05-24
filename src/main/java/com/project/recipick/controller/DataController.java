@@ -213,11 +213,4 @@ public class DataController {
         }
     }
 
-    @GetMapping("/saveRecipeIngredient")
-    public void callRecipeIngredientApi(){
-        String apiKey = "2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8";
-        String addr = "http://211.237.50.150:7080/openapi/";
-        recipeCardService.callRecipeIngredientAndSaveData(apiKey, addr);
-    }
-
 }
