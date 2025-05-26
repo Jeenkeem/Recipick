@@ -27,32 +27,32 @@ body {
 }
 
 .menu-btn {
-  position: relative;
-  background: transparent;
-  border: none;
-  color: #000;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  padding-bottom: 4px;
-  transition: all 0.3s ease;
+    position: relative;
+    background: transparent;
+    border: none;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding-bottom: 4px;
+    transition: all 0.3s ease;
 }
 
 .menu-btn::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background-color: #000;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #000;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
 }
 
 .menu-btn:hover::after {
-  transform: scaleX(1);
+    transform: scaleX(1);
 }
 
 /*검색*/
@@ -141,4 +141,67 @@ body {
     padding: 0 16px 16px;
     color: #666;
     font-size: 14px;
+}
+
+/* 자동완성 목록 */
+.autocomplete-list {
+    position: absolute;
+    background-color: white;
+    width: 800px;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-top: -150px;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.autocomplete-list li {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.autocomplete-list li:hover {
+    background-color: #f5f5f5;
+}
+
+/* 선택된 재료 */
+.selected-ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 60px;
+}
+
+.ingredient-tag {
+    display: flex;
+    align-items: center;
+    background-color: #f5ca7b;
+    color: #000;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    margin-left: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.clear-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
 }

@@ -4,18 +4,18 @@ import lombok.Data;
 
 public class RecipeCardDTO {
 
-        private int recipeId;
+        private String recipeId;
         private String recipeNmKo;
         private String cookingTime;
         private String calorie;
         private String levelNm;
         private String rcpImgUrl;  // 이미지 url
 
-        public int getRecipeId() {
+        public String getRecipeId() {
                 return recipeId;
         }
 
-        public void setRecipeId(int recipeId) {
+        public void setRecipeId(String  recipeId) {
                 this.recipeId = recipeId;
         }
 
