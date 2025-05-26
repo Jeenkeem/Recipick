@@ -112,7 +112,7 @@ public class MapPageController {
 
         for(int i=0; i<allData.size(); i++) {
             System.out.println(allData.get(i).getmName());
-            System.out.println(allData.get(i).getmName());
+            System.out.println(allData.get(i).getaName());
         }
 
 
@@ -124,37 +124,84 @@ public class MapPageController {
             martGrouped.computeIfAbsent(key, k -> new ArrayList<>()).add(item);
         }
 
-        List<Map<String, Object>> result = new ArrayList<>();
+        ArrayList<MartTotal> result = new ArrayList<>();
 
-        for (Map.Entry<String, List<MartInfo>> entry : martGrouped.entrySet()) {
-            List<MartInfo> martItems = entry.getValue();
+        // 마트별로 <마트이름, Map<식재료이름, MartInfo>> 형태로 정리
+        Map<String, Map<String, MartInfo>> martMap = new HashMap<>();
 
-            // 해당 마트가 모든 식재료를 가지고 있는지 확인
-            Set<String> available = martItems.stream()
-                    .map(MartInfo::getaName)
-                    .collect(Collectors.toSet());
+        for (MartInfo info : allData) {
+            String martName = info.getmName();
+            String ingredient = info.getaName();
 
-            if (available.containsAll(ingredients)) {
-                int total = martItems.stream()
-                        .filter(i -> ingredients.contains(i.getaName()))
-                        .mapToInt(MartInfo::getaPrice)
-                        .sum();
+            martMap.putIfAbsent(martName, new HashMap<>());
+            martMap.get(martName).put(ingredient, info);
+        }
 
-                MartInfo first = martItems.get(0); // 대표 마트 정보
+        System.out.println("모든 식재료를 갖춘 마트 정보:");
+        for (Map.Entry<String, Map<String, MartInfo>> entry : martMap.entrySet()) {
+            String martName = entry.getKey();
+            Map<String, MartInfo> ingredientMap = entry.getValue();
 
-                Map<String, Object> martInfo = new HashMap<>();
-                martInfo.put("mName", first.getmName());
-                martInfo.put("mGuName", first.getmGuName());
-                martInfo.put("aName", String.join(", ", ingredients)); // 포함된 식재료 이름들 (옵션)
-                martInfo.put("totalPrice", total);
+            MartTotal martTotal = new MartTotal();
 
-                result.add(martInfo);
+            // 현재 마트가 모든 식재료를 갖추고 있는지 확인
+            boolean hasAllIngredients = ingredients.stream().allMatch(ingredientMap::containsKey);
+
+            if (hasAllIngredients) {
+                int totalPrice = 0;
+                String district = "";
+
+                for (String ingredient : ingredients) {
+                    MartInfo info = ingredientMap.get(ingredient);
+                    totalPrice += info.getaPrice();
+                    district = info.getmGuName(); // 같은 마트니까 아무 식재료의 district 써도 됨
+
+                }
+
+                martTotal.setMartName(martName);
+                martTotal.setDistrict(district);
+                martTotal.setPrice(totalPrice);
+
+                System.out.println("마트: " + martName);
+                System.out.println("자치구: " + district);
+                System.out.println("총합: " + totalPrice + "원");
+                System.out.println("-------------------------");
             }
         }
+
 
         return ResponseEntity.ok(result);
     }
 
+    class MartTotal {
+        String martName;
+        String district;
+        int price;
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
+        public String getDistrict() {
+            return district;
+        }
+
+        public void setDistrict(String district) {
+            this.district = district;
+        }
+
+        public String getMartName() {
+            return martName;
+        }
+
+        public void setMartName(String martName) {
+            this.martName = martName;
+        }
+    }
 
 
 }
