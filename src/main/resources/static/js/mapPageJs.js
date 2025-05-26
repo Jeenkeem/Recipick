@@ -34,10 +34,34 @@ martNames.forEach(mart => {
                 content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
             });
 
+            let isInfowindowOpen = false;
+
             // 마커 클릭 이벤트 등록
             kakao.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map, marker);
+                if (isInfowindowOpen) {
+                    infowindow.close();
+                    isInfowindowOpen = false;
+                } else {
+                    infowindow.open(map, marker);
+                    isInfowindowOpen = true;
+                }
             });
+
+            // 👉 마커 객체 저장 (클릭 시 접근 위해)
+            selectedMarkers[place.place_name] = marker;
+
+            // 👉 마커 클릭 이벤트 연결
+            // 비교장보기 탭일 때만 실행 됨
+            kakao.maps.event.addListener(marker, 'click', function () {
+                handleMarkerClick(place.place_name);
+            });
+            /*
+            if (focus) {
+                map.setLevel(5); // 확대
+                map.panTo(new kakao.maps.LatLng(place.y, place.x)); // 카메라 이동
+            }
+            */
+
         } else {
             console.warn(`❌ ${mart} 검색 결과 없음`);
         }
@@ -52,8 +76,6 @@ if (highlightMarket) {
   console.log("📌 하이라이트 마트:", highlightMarket);
   searchMarket(highlightMarket, true); // 추가 인자 전달
 }
-
-
 
 
 function searchMarket(keyword, focus = false) {
@@ -83,17 +105,7 @@ function searchMarket(keyword, focus = false) {
             });
             infowindow.open(map, marker);
 
-            // 👉 마커 객체 저장 (클릭 시 접근 위해)
-            selectedMarkers[place.place_name] = marker;
 
-            // 👉 마커 클릭 이벤트 연결
-            kakao.maps.event.addListener(marker, 'click', function () {
-                handleMarkerClick(place.place_name);
-            });
-            if (focus) {
-                map.setLevel(5); // 확대
-                map.panTo(new kakao.maps.LatLng(place.y, place.x)); // 카메라 이동
-            }
         } else {
             console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
         }

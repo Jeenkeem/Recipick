@@ -23,12 +23,39 @@ document.addEventListener('DOMContentLoaded', function () {
         selectedButton = allButton;
 
         ingredientName.textContent = '전체 식재료';
-
         openPanel();
 
-        // 슬라이드에 전체 가격 및 마트 목록 표시
-        updateAllStoreSummary();
+        // 전체 식재료 목록 추출
+        const selectedIngredients = Array.from(ingredientButtonsContainer.children)
+            .filter(btn => btn !== allButton)
+            .map(btn => btn.firstChild.textContent);
+
+        // 서버에 전체 식재료 요청
+        sendMultipleIngredients(selectedIngredients);
     });
+
+    function sendMultipleIngredients(ingredientList) {
+        fetch('/recipick/selectAll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ingredients: ingredientList })  // 배열로 전송
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('서버 오류');
+            return response.json();
+        })
+        .then(data => {
+            console.log('전체 식재료 서버 응답:', data);
+            updateStoreList(data);     // 내부적으로 applyGuFilter() 실행됨
+            updateAllStoreSummary();   // 마트별 가격 합계 계산 및 출력
+        })
+        .catch(error => {
+            console.error('전체 식재료 전송 실패:', error);
+        });
+    }
+
 
     // 슬라이드 패널 열기
     function openPanel() {

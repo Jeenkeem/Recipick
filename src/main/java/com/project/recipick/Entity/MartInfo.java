@@ -1,8 +1,6 @@
 package com.project.recipick.Entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class MartInfo {
@@ -69,8 +67,8 @@ public class MartInfo {
         this.aUnit = aUnit;
     }
 
-    public String getaPrice() {
-        return aPrice;
+    public int getaPrice() {
+        return Integer.parseInt(aPrice);
     }
 
     public void setaPrice(String aPrice) {
