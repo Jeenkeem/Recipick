@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/mapPageIrdntStyle.css">
 </head>
 <body>
+<div class="bg-deco">
+    <img src="/resources/image/carrot.png" class="bg-img carrot">
+    <img src="/resources/image/green_onion.png" class="bg-img g_onion">
+</div>
+
 <div class="recipe-container">
     <div class="menu-wrapper">
         <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
@@ -18,11 +23,14 @@
     </div>
 
     <div>
-        <div class="titleText">내 주변 시장 찾기</div>
+        <div class="search-wrapper">
+            <div class="titleText">내 주변 시장 찾기</div>
 
-        <div class="search-bar">
-            <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+            </div>
         </div>
+
         <div class="search-result">
             <div id="ingredient-buttons" class="ingredient-buttons">
                 <!-- JS로 버튼 생성 예정 -->

@@ -5,6 +5,34 @@ body {
   overflow-x: hidden; /* 오른쪽 슬라이드 나올 때 스크롤바 안생기게 */
 }
 
+.bg-deco {
+  position: fixed;           /* 페이지 전체에 고정 */
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -999;             /* 가장 뒤에 위치 */
+  pointer-events: none;      /* 클릭 막지 않도록 */
+}
+
+.bg-img {
+  position: absolute;
+  opacity: 0.05;             /* 연하게 */
+  z-index: -1;
+  user-select: none;
+}
+
+.carrot {
+  bottom: 0;
+  left: 0;
+  width: 500px;
+}
+
+.g_onion {
+  top: -700px;
+  right: 0;
+  width: 1000px;
+}
+
 .recipe-container {
     max-width: 80%;
     margin: 0 auto;
@@ -61,6 +89,13 @@ body {
     transform: scaleX(1);
 }
 
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* ✅ 자식 요소들 가로 중앙 정렬 */
+  margin-top: 40px;
+}
+
 .titleText {
   font-size: 24px;
   font-weight: bold;
@@ -73,6 +108,10 @@ body {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+
+   min-width: 300px;   /* 최소 너비 */
+   max-width: 800px;   /* 최대 너비 */
+   width: 100%;        /* 부모 영역 내에서 가변 너비 */
 }
 
 .search-result {
