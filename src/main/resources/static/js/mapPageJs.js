@@ -2,8 +2,23 @@ const urlParams = new URLSearchParams(window.location.search);
 const fromCompare = urlParams.get("from") === "compare";
 const highlightMarket = new URLSearchParams(window.location.search).get("highlight");
 
+const DEFAULT_MARKER = '/resources/image/marker.png';
 
-const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+const defaultMarkerImage = new kakao.maps.MarkerImage(
+    DEFAULT_MARKER,
+    new kakao.maps.Size(39, 44),
+    { offset: new kakao.maps.Point(19, 44) }
+);
+
+//const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+const RED_MARKER = '/resources/image/red_marker.png';
+
+const redMarkerImage = new kakao.maps.MarkerImage(
+  RED_MARKER,
+  new kakao.maps.Size(39, 44),
+  { offset: new kakao.maps.Point(19, 44) }
+);
+
 let selectedMarts = []; // 선택한 마트 이름 2개 저장
 let selectedMarkers = {}; // 마트 이름 → 마커 객체 연결
 
@@ -23,10 +38,13 @@ martNames.forEach(mart => {
         if (status === kakao.maps.services.Status.OK && data.length > 0) {
             const place = data[0];
 
+            var markerImage = defaultMarkerImage;
+
             const marker = new kakao.maps.Marker({
                 map: map,
                 position: new kakao.maps.LatLng(place.y, place.x),
-                title: place.place_name
+                title: place.place_name,
+                image: markerImage
             });
 
             // 인포윈도우 생성
@@ -35,6 +53,7 @@ martNames.forEach(mart => {
             });
 
             let isInfowindowOpen = false;
+            let isRed = false; // 마커가 빨간색인지 상태 저장
 
             // 마커 클릭 이벤트 등록
             kakao.maps.event.addListener(marker, 'click', function () {
@@ -45,6 +64,14 @@ martNames.forEach(mart => {
                     infowindow.open(map, marker);
                     isInfowindowOpen = true;
                 }
+
+                // 마커 색상 전환
+                if (isRed) {
+                    marker.setImage(defaultMarkerImage);  // 회색으로 복귀
+                } else {
+                    marker.setImage(redMarkerImage);      // 빨간색으로 변경
+                }
+                isRed = !isRed; // 상태 토글
             });
 
             // 👉 마커 객체 저장 (클릭 시 접근 위해)
@@ -127,7 +154,7 @@ function handleMarkerClick(martName) {
     // 이미 선택된 경우: 제거 + 마커 원래대로
     if (selectedMarts.includes(martName)) {
         selectedMarts = selectedMarts.filter(m => m !== martName);
-        marker.setImage(null); // 기본 파란 마커로 복원
+        marker.setImage(defaultMarkerImage); // 기본 마커로 복원
         console.log(`❌ 선택 해제: ${martName}`);
         return;
     }
@@ -140,10 +167,8 @@ function handleMarkerClick(martName) {
 
     // 새로 선택: 빨간색 마커 적용
     selectedMarts.push(martName);
-    const markerImage = new kakao.maps.MarkerImage(
-        RED_MARKER,
-        new kakao.maps.Size(24, 35)
-    );
+
+    const markerImage = redMarkerImage;
     marker.setImage(markerImage);
     console.log(`✅ 선택됨: ${martName}`);
 
