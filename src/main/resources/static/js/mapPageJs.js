@@ -1,6 +1,10 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fromCompare = urlParams.get("from") === "compare";
 const highlightMarket = new URLSearchParams(window.location.search).get("highlight");
+const panel = document.getElementById('slidePanelIngreSearch');
+
+let activeMarker = null; // 현재 빨간색으로 선택된 마커 하나만 저장
+let activeInfowindow = null;    // 현재 열려 있는 인포윈도우
 
 const DEFAULT_MARKER = '/resources/image/marker.png';
 
@@ -33,6 +37,8 @@ const ps = new kakao.maps.services.Places();
 
 console.log(martNames);
 
+let isPanelOpen = false;
+
 martNames.forEach(mart => {
     ps.keywordSearch(mart, function (data, status) {
         if (status === kakao.maps.services.Status.OK && data.length > 0) {
@@ -52,27 +58,40 @@ martNames.forEach(mart => {
                 content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
             });
 
-            let isInfowindowOpen = false;
-            let isRed = false; // 마커가 빨간색인지 상태 저장
 
             // 마커 클릭 이벤트 등록
             kakao.maps.event.addListener(marker, 'click', function () {
-                if (isInfowindowOpen) {
+                 // 1. 같은 마커를 다시 클릭한 경우 → 비활성화
+                if (activeMarker === marker) {
+                    marker.setImage(defaultMarkerImage);
                     infowindow.close();
-                    isInfowindowOpen = false;
-                } else {
-                    infowindow.open(map, marker);
-                    isInfowindowOpen = true;
+                    activeMarker = null;
+                    activeInfowindow = null;
+                    closePanel();
+                    return;
                 }
 
-                // 마커 색상 전환
-                if (isRed) {
-                    marker.setImage(defaultMarkerImage);  // 회색으로 복귀
-                } else {
-                    marker.setImage(redMarkerImage);      // 빨간색으로 변경
+                // 2. 기존 마커가 있으면 → 비활성화 + 인포윈도우 닫기
+                if (activeMarker) {
+                    activeMarker.setImage(defaultMarkerImage);
                 }
-                isRed = !isRed; // 상태 토글
+                if (activeInfowindow) {
+                    activeInfowindow.close();
+                }
+
+                // 3. 현재 클릭한 마커 → 활성화
+                marker.setImage(redMarkerImage);
+                infowindow.open(map, marker);
+                fetchMartInfo(place.place_name); // 패널 열기 포함
+
+                // 4. 상태 업데이트
+                activeMarker = marker;
+                activeInfowindow = infowindow;
+
             });
+
+
+
 
             // 👉 마커 객체 저장 (클릭 시 접근 위해)
             selectedMarkers[place.place_name] = marker;
@@ -96,6 +115,65 @@ martNames.forEach(mart => {
         rect: "126.76,37.41,127.23,37.71"
     });
 });
+
+function fetchMartInfo(martName) {
+    fetch(`/recipick/martInfo?martName=${encodeURIComponent(martName)}`)
+        .then(response => response.json())
+        .then(data => {
+            renderMartInfo(martName, data); // 받아온 데이터로 패널 내용 업데이트
+            openPanel();
+        })
+        .catch(err => {
+            console.error(`❌ ${martName}에 대한 데이터 불러오기 실패`, err);
+        });
+}
+
+function renderMartInfo(martName, martItems) {
+    // 마트 이름 표시
+    const title = document.getElementById('martTitle');
+    title.textContent = martName;
+
+    // 식재료 목록 표시
+    const container = document.getElementById('martInfoContainer');
+    container.innerHTML = ''; // 초기화
+
+    martItems.forEach(item => {
+        console.log(item);
+
+        const div = document.createElement('div');
+        div.classList.add('ingredient-item');
+        div.innerHTML = `
+            <strong>${item.aName}</strong> - ${item.aPrice.toLocaleString()}원
+        `;
+        container.appendChild(div);
+    });
+}
+
+// 슬라이드 패널 열기
+function openPanel() {
+    if (isPanelOpen) return;
+    panel.style.display = 'block';
+    requestAnimationFrame(() => {
+        panel.classList.add('open');
+    });
+    isPanelOpen = true;
+}
+
+// 슬라이드 패널 닫기
+function closePanel() {
+    if (!isPanelOpen) return;
+    panel.classList.remove('open');
+    isPanelOpen = false;
+
+    panel.addEventListener('transitionend', function handler(event) {
+        if (event.propertyName === 'transform') {
+            if (!isPanelOpen) {
+                panel.style.display = 'none';
+            }
+            panel.removeEventListener('transitionend', handler);
+        }
+    });
+}
 
 
 // 비교 장보기에서 선택한 시장의 마커 하이라이트
@@ -200,4 +278,15 @@ window.addEventListener('DOMContentLoaded', () => {
     if (fromCompare) {
         showCompareToast();
     }
+});
+
+// 식재료 검색 기능
+document.getElementById('ingredientSearch').addEventListener('input', function (e) {
+    const keyword = e.target.value.trim().toLowerCase();
+    const items = document.querySelectorAll('#martInfoContainer .ingredient-item');
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = !keyword || text.includes(keyword) ? 'block' : 'none';
+    });
 });
