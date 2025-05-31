@@ -133,6 +133,15 @@ public class MapPageController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/recipick/martInfo")
+    public ResponseEntity<?> getMartInfo(@RequestParam String martName) {
+
+        List<MartInfo> result = new ArrayList<>();
+        result = martInfoService.findByMName(martName);
+
+        return ResponseEntity.ok(result);
+    }
+
     public static class MartTotal {
         private String mName;
         private String mGuName;

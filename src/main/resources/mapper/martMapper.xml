@@ -40,6 +40,14 @@
         and a_price != '0';
     </select>
 
+    <select id="findByMName" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE
+        REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price != '0';
+    </select>
+
     <insert id="saveMartInfo" parameterType="MartInfo">
         INSERT INTO mart_info (
             P_SEQ, M_SEQ, M_NAME, A_SEQ, A_NAME, A_UNIT, A_PRICE,

@@ -74,6 +74,10 @@ public class MartInfoService {
         return martInfoMapper.getIrdntPrice(ingredient);
     }
 
+    public List<MartInfo> findByMName(String martName) {
+        return martInfoMapper.findByMName(martName);
+    }
+
     public List<Object> searchMartInKakao(List<MartInfo> martList, String ingredient) {
         String apiKey = "KakaoAK "  + kakaoRestApiKey;
         String url = "https://dapi.kakao.com/v2/local/search/keyword.json";
