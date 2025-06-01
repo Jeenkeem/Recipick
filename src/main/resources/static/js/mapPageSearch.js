@@ -15,8 +15,17 @@ document.addEventListener('DOMContentLoaded', function () {
     ingredientButtonsContainer.appendChild(allButton); // 항상 맨 마지막에 위치
 
     allButton.addEventListener('click', function () {
-        // 기존 선택된 버튼 초기화
         const allIngredientButtons = ingredientButtonsContainer.querySelectorAll('.ingredient-button');
+
+        // 이미 선택된 상태에서 다시 클릭한 경우: 비활성화 + 패널 닫기
+        if (selectedButton === allButton) {
+            allButton.classList.remove('selected');
+            selectedButton = null;
+            closePanel();
+            return;
+        }
+
+        // 기존 선택된 버튼 초기화
         allIngredientButtons.forEach(btn => btn.classList.remove('selected'));
 
         allButton.classList.add('selected');
@@ -30,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .filter(btn => btn !== allButton)
             .map(btn => btn.firstChild.textContent);
 
-        // 서버에 전체 식재료 요청
         sendMultipleIngredients(selectedIngredients);
     });
 
@@ -165,13 +173,17 @@ document.addEventListener('DOMContentLoaded', function () {
         filtered.forEach((item, index) => {
             const storeItem = document.createElement('div');
             storeItem.className = 'store-item';
+            const formattedPrice = item.aPrice.toLocaleString(); // 가격 단위 설정
+
             storeItem.innerHTML = `
-                <div>
-                    <div class="store-name">${item.mName || '가게'}</div>
-                    <div>${item.aName} 가격 ${item.aPrice}원</div>
-                    <div>${item.mGuName}</div>
-                </div>
-                <!-- <div class="check-icon">✔</div> -->
+              <div class="store-header">
+                <div class="store-name">${item.mName || '가게'}</div>
+                <div class="gu-name">${item.mGuName}</div>
+              </div>
+              <div class="store-contents">
+                <div class="ingredient">${item.aName}</div>
+                <div class="ingredient-price">가격 ${formattedPrice}원(개)</div>
+              </div>
             `;
             storeList.appendChild(storeItem);
         });
@@ -294,9 +306,11 @@ document.addEventListener('DOMContentLoaded', function () {
             storeItem.className = 'store-item';
             storeItem.innerHTML = `
                 <div>
-                    <div class="store-name">${mart.mName}</div>
-                    <div>자치구: ${guName}</div>
-                    <div>총합 가격: ${mart.totalPrice.toLocaleString()}원</div>
+                    <div class="store-header">
+                        <div class="store-name">${mart.mName}</div>
+                        <div class="gu-name">${guName}</div>
+                    </div>
+                    <div class="ingredient-price">총합 가격: ${mart.totalPrice.toLocaleString()}원</div>
                 </div>
             `;
             storeList.appendChild(storeItem);
