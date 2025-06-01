@@ -138,12 +138,14 @@ function renderMartInfo(martName, martItems) {
     container.innerHTML = ''; // 초기화
 
     martItems.forEach(item => {
-        console.log(item);
-
         const div = document.createElement('div');
         div.classList.add('ingredient-item');
         div.innerHTML = `
-            <strong>${item.aName}</strong> - ${item.aPrice.toLocaleString()}원
+            <div class="ingredient-list">
+                <div class="ingredient">${item.aName}</div>
+                <div class="ingredient-price">가격 ${item.aPrice.toLocaleString()}원</div>
+            </div>
+
         `;
         container.appendChild(div);
     });
