@@ -90,9 +90,6 @@ martNames.forEach(mart => {
 
             });
 
-
-
-
             // 👉 마커 객체 저장 (클릭 시 접근 위해)
             selectedMarkers[place.place_name] = marker;
 
@@ -115,6 +112,33 @@ martNames.forEach(mart => {
         rect: "126.76,37.41,127.23,37.71"
     });
 });
+
+
+
+// 비교 장보기에서 선택한 시장의 마커 하이라이트
+if (highlightMarket) {
+  console.log("📌 하이라이트 마트:", highlightMarket);
+  searchMarket(highlightMarket, true); // 추가 인자 전달
+}
+
+// 페이지 로딩 시 쿼리 파라미터 확인
+window.addEventListener('DOMContentLoaded', () => {
+    if (fromCompare) {
+        showCompareToast();
+    }
+});
+
+// 식재료 검색 기능
+document.getElementById('ingredientSearch').addEventListener('input', function (e) {
+    const keyword = e.target.value.trim().toLowerCase();
+    const items = document.querySelectorAll('#martInfoContainer .ingredient-item');
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = !keyword || text.includes(keyword) ? 'block' : 'none';
+    });
+});
+
 
 function fetchMartInfo(martName) {
     fetch(`/recipick/martInfo?martName=${encodeURIComponent(martName)}`)
@@ -176,14 +200,6 @@ function closePanel() {
         }
     });
 }
-
-
-// 비교 장보기에서 선택한 시장의 마커 하이라이트
-if (highlightMarket) {
-  console.log("📌 하이라이트 마트:", highlightMarket);
-  searchMarket(highlightMarket, true); // 추가 인자 전달
-}
-
 
 function searchMarket(keyword, focus = false) {
     const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
@@ -275,20 +291,4 @@ function showCompareToast() {
     }, 3000);
 }
 
-// 페이지 로딩 시 쿼리 파라미터 확인
-window.addEventListener('DOMContentLoaded', () => {
-    if (fromCompare) {
-        showCompareToast();
-    }
-});
 
-// 식재료 검색 기능
-document.getElementById('ingredientSearch').addEventListener('input', function (e) {
-    const keyword = e.target.value.trim().toLowerCase();
-    const items = document.querySelectorAll('#martInfoContainer .ingredient-item');
-
-    items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = !keyword || text.includes(keyword) ? 'block' : 'none';
-    });
-});
