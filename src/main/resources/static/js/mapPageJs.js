@@ -1,43 +1,182 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fromCompare = urlParams.get("from") === "compare";
 const highlightMarket = new URLSearchParams(window.location.search).get("highlight");
+const panel = document.getElementById('slidePanelIngreSearch');
 
+let activeMarker = null; // 현재 빨간색으로 선택된 마커 하나만 저장
+let activeInfowindow = null;    // 현재 열려 있는 인포윈도우
 
-const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+const DEFAULT_MARKER = '/resources/image/marker.png';
+
+const defaultMarkerImage = new kakao.maps.MarkerImage(
+    DEFAULT_MARKER,
+    new kakao.maps.Size(39, 44),
+    { offset: new kakao.maps.Point(19, 44) }
+);
+
+//const RED_MARKER = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+const RED_MARKER = '/resources/image/red_marker.png';
+
+const redMarkerImage = new kakao.maps.MarkerImage(
+  RED_MARKER,
+  new kakao.maps.Size(39, 44),
+  { offset: new kakao.maps.Point(19, 44) }
+);
+
 let selectedMarts = []; // 선택한 마트 이름 2개 저장
 let selectedMarkers = {}; // 마트 이름 → 마커 객체 연결
 
-
-var container = document.getElementById('map');
-var options = {
-    center: new kakao.maps.LatLng(37.5601, 126.9960),
-    level: 8
+const mapContainer = document.getElementById('map');
+const mapOption = {
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 7
 };
 
-var map = new kakao.maps.Map(container, options);
+const map = new kakao.maps.Map(mapContainer, mapOption);
+const ps = new kakao.maps.services.Places();
 
-init('/recipick/polygon');
+console.log(martNames);
 
-// HTML5의 geolocation으로 사용자 위치를 얻어 지도 중심을 변경합니다
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
+let isPanelOpen = false;
 
-        var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-            message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+martNames.forEach(mart => {
+    ps.keywordSearch(mart, function (data, status) {
+        if (status === kakao.maps.services.Status.OK && data.length > 0) {
+            const place = data[0];
 
-        // 마커와 인포윈도우를 표시합니다
-        displayMarker(locPosition, message);
+            var markerImage = defaultMarkerImage;
+
+            const marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(place.y, place.x),
+                title: place.place_name,
+                image: markerImage
+            });
+
+            // 인포윈도우 생성
+            const infowindow = new kakao.maps.InfoWindow({
+                content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
+            });
+
+
+            // 마커 클릭 이벤트 등록
+            kakao.maps.event.addListener(marker, 'click', function () {
+                 // 1. 같은 마커를 다시 클릭한 경우 → 비활성화
+                if (activeMarker === marker) {
+                    marker.setImage(defaultMarkerImage);
+                    infowindow.close();
+                    activeMarker = null;
+                    activeInfowindow = null;
+                    closePanel();
+                    return;
+                }
+
+                // 2. 기존 마커가 있으면 → 비활성화 + 인포윈도우 닫기
+                if (activeMarker) {
+                    activeMarker.setImage(defaultMarkerImage);
+                }
+                if (activeInfowindow) {
+                    activeInfowindow.close();
+                }
+
+                // 3. 현재 클릭한 마커 → 활성화
+                marker.setImage(redMarkerImage);
+                infowindow.open(map, marker);
+                fetchMartInfo(place.place_name); // 패널 열기 포함
+
+                // 4. 상태 업데이트
+                activeMarker = marker;
+                activeInfowindow = infowindow;
+
+            });
+
+
+
+
+            // 👉 마커 객체 저장 (클릭 시 접근 위해)
+            selectedMarkers[place.place_name] = marker;
+
+            // 👉 마커 클릭 이벤트 연결
+            // 비교장보기 탭일 때만 실행 됨
+            kakao.maps.event.addListener(marker, 'click', function () {
+                handleMarkerClick(place.place_name);
+            });
+            /*
+            if (focus) {
+                map.setLevel(5); // 확대
+                map.panTo(new kakao.maps.LatLng(place.y, place.x)); // 카메라 이동
+            }
+            */
+
+        } else {
+            console.warn(`❌ ${mart} 검색 결과 없음`);
+        }
+    }, {
+        rect: "126.76,37.41,127.23,37.71"
+    });
+});
+
+function fetchMartInfo(martName) {
+    fetch(`/recipick/martInfo?martName=${encodeURIComponent(martName)}`)
+        .then(response => response.json())
+        .then(data => {
+            renderMartInfo(martName, data); // 받아온 데이터로 패널 내용 업데이트
+            openPanel();
+        })
+        .catch(err => {
+            console.error(`❌ ${martName}에 대한 데이터 불러오기 실패`, err);
+        });
+}
+
+function renderMartInfo(martName, martItems) {
+    // 마트 이름 표시
+    const title = document.getElementById('martTitle');
+    title.textContent = martName;
+
+    // 식재료 목록 표시
+    const container = document.getElementById('martInfoContainer');
+    container.innerHTML = ''; // 초기화
+
+    martItems.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('ingredient-item');
+        div.innerHTML = `
+            <div class="ingredient-list">
+                <div class="ingredient">${item.aName}</div>
+                <div class="ingredient-price">가격 ${item.aPrice.toLocaleString()}원</div>
+            </div>
+
+        `;
+        container.appendChild(div);
     });
 }
-else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-        message = 'geolocation을 사용할수 없어요..'
-
-    displayMarker(locPosition, message);
+// 슬라이드 패널 열기
+function openPanel() {
+    if (isPanelOpen) return;
+    panel.style.display = 'block';
+    requestAnimationFrame(() => {
+        panel.classList.add('open');
+    });
+    isPanelOpen = true;
 }
+
+// 슬라이드 패널 닫기
+function closePanel() {
+    if (!isPanelOpen) return;
+    panel.classList.remove('open');
+    isPanelOpen = false;
+
+    panel.addEventListener('transitionend', function handler(event) {
+        if (event.propertyName === 'transform') {
+            if (!isPanelOpen) {
+                panel.style.display = 'none';
+            }
+            panel.removeEventListener('transitionend', handler);
+        }
+    });
+}
+
 
 // 비교 장보기에서 선택한 시장의 마커 하이라이트
 if (highlightMarket) {
@@ -45,157 +184,6 @@ if (highlightMarket) {
   searchMarket(highlightMarket, true); // 추가 인자 전달
 }
 
-
-// 지도에 마커와 인포윈도우를 표시하는 함수입니다
-function displayMarker(locPosition, message) {
-    var marker = new kakao.maps.Marker({
-        map: map,
-        position: locPosition
-    });
-
-    var iwContent = message, // 인포윈도우에 표시할 내용
-        iwRemoveable = true;
-
-    var infowindow = new kakao.maps.InfoWindow({
-        content : iwContent,
-        removable : iwRemoveable
-    });
-
-    infowindow.open(map, marker);
-    map.setCenter(locPosition);
-}
-
-function sendLocation() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            fetch('/location', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ latitude: latitude, longitude: longitude })
-            })
-            .then(response => response.text())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-function init(path) {
-    fetch(path)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (geojson) {
-            polygons = [];
-
-            // 지오메트리 데이터를 기반으로 폴리곤을 생성합니다.
-            geojson.features.forEach(function (feature) {
-                var paths = [];
-                if (feature.geometry.type === 'Polygon') {
-                    // 단일 폴리곤 처리
-                    paths = feature.geometry.coordinates.map(function (ring) {
-                        return ring.map(function (coord) {
-                            return new kakao.maps.LatLng(coord[1], coord[0]);
-                        });
-                    });
-                } else if (feature.geometry.type === 'MultiPolygon') {
-                    // 멀티폴리곤 처리
-                    feature.geometry.coordinates.forEach(function (polygon) {
-                        var polygonPath = polygon.map(function (ring) {
-                            return ring.map(function (coord) {
-                                return new kakao.maps.LatLng(coord[1], coord[0]);
-                            });
-                        });
-                        paths.push(polygonPath);
-                    });
-                }
-
-                // 폴리곤을 생성하고 이벤트를 설정합니다.
-                paths.forEach(function (path) {
-                    var polygon = new kakao.maps.Polygon({
-                        map: map,
-                        path: path,
-                        strokeWeight: 1,
-                        strokeColor: '#004c80',
-                        strokeOpacity: 0.8,
-                        fillColor: '#fff',
-                        fillOpacity: 0.7
-                    });
-
-                    // 마우스 오버 시 폴리곤의 색상을 변경합니다.
-                    kakao.maps.event.addListener(polygon, 'mouseover', function () {
-                        polygon.setOptions({ fillColor: '#09f' });
-                    });
-
-                    // 마우스 아웃 시 폴리곤의 색상을 원래대로 변경합니다.
-                    kakao.maps.event.addListener(polygon, 'mouseout', function () {
-                        polygon.setOptions({ fillColor: '#fff' });
-                    });
-
-                    // 폴리곤 클릭 시 동작 작성.
-                    kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
-                        const guName = feature.properties.SIG_KOR_NM; // 자치구 이름 가져오기
-
-                        fetch('/recipick/getProductByCuCode?gu_name=' + encodeURIComponent(guName), {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Success:', data);
-
-                            const clickPosition = mouseEvent.latLng; // 클릭한 위치
-
-                            map.panTo(clickPosition); // 지도 중심 이동
-
-                            let currentLevel = map.getLevel(); // 현재 레벨 가져오기
-                            const targetLevel = 6;              // 최종 목표 레벨 (5단계 확대)
-                            const intervalSpeed = 300;           // ★ 여기: 200ms(=0.2초)마다 한 단계 확대
-
-                            const zoomInterval = setInterval(function () {
-                                if (currentLevel > targetLevel) {
-                                    currentLevel--;
-                                    map.setLevel(currentLevel);
-                                } else {
-                                    clearInterval(zoomInterval); // 다 줄어들면 interval 멈추기
-                                }
-                            }, intervalSpeed); // ★ 여기 속도로 조절 (ms 단위)
-
-
-                            // 시장명으로 카카오 키워드 검색
-                            data.forEach(market => {
-                                    searchMarket(market); // 하나씩 넘겨서 검색
-                            });
-                        })
-                        .catch(error => console.error('Error:', error));
-                    });
-
-                    // 지도 줌 레벨이 바뀔 때마다 체크
-                    kakao.maps.event.addListener(map, 'zoom_changed', function() {
-                        const currentLevel = map.getLevel();
-
-                        if (currentLevel <= 6) {
-                            polygon.setMap(null); // 폴리곤 숨기기
-                        } else {
-                            polygon.setMap(map); // 폴리곤 다시 보이기
-                        }
-                    });
-
-                    polygons.push(polygon);
-                });
-            });
-        })
-        .catch(error => console.error('GeoJSON 데이터 로드 실패:', error));
-}
 
 function searchMarket(keyword, focus = false) {
     const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
@@ -224,17 +212,7 @@ function searchMarket(keyword, focus = false) {
             });
             infowindow.open(map, marker);
 
-            // 👉 마커 객체 저장 (클릭 시 접근 위해)
-            selectedMarkers[place.place_name] = marker;
 
-            // 👉 마커 클릭 이벤트 연결
-            kakao.maps.event.addListener(marker, 'click', function () {
-                handleMarkerClick(place.place_name);
-            });
-            if (focus) {
-                map.setLevel(5); // 확대
-                map.panTo(new kakao.maps.LatLng(place.y, place.x)); // 카메라 이동
-            }
         } else {
             console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
         }
@@ -244,15 +222,6 @@ function searchMarket(keyword, focus = false) {
     });
 }
 
-
-function removePolygons() {
-// 모든 폴리곤을 지도에서 제거하고 배열을 초기화합니다.
-polygons.forEach(function (polygon) {
-    polygon.setMap(null);
-});
-polygons = [];
-console.log("폴리곤 제거 완료");
-}
 
 function handleMarkerClick(martName) {
     if (!fromCompare) {
@@ -265,7 +234,7 @@ function handleMarkerClick(martName) {
     // 이미 선택된 경우: 제거 + 마커 원래대로
     if (selectedMarts.includes(martName)) {
         selectedMarts = selectedMarts.filter(m => m !== martName);
-        marker.setImage(null); // 기본 파란 마커로 복원
+        marker.setImage(defaultMarkerImage); // 기본 마커로 복원
         console.log(`❌ 선택 해제: ${martName}`);
         return;
     }
@@ -278,10 +247,8 @@ function handleMarkerClick(martName) {
 
     // 새로 선택: 빨간색 마커 적용
     selectedMarts.push(martName);
-    const markerImage = new kakao.maps.MarkerImage(
-        RED_MARKER,
-        new kakao.maps.Size(24, 35)
-    );
+
+    const markerImage = redMarkerImage;
     marker.setImage(markerImage);
     console.log(`✅ 선택됨: ${martName}`);
 
@@ -313,4 +280,15 @@ window.addEventListener('DOMContentLoaded', () => {
     if (fromCompare) {
         showCompareToast();
     }
+});
+
+// 식재료 검색 기능
+document.getElementById('ingredientSearch').addEventListener('input', function (e) {
+    const keyword = e.target.value.trim().toLowerCase();
+    const items = document.querySelectorAll('#martInfoContainer .ingredient-item');
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = !keyword || text.includes(keyword) ? 'block' : 'none';
+    });
 });

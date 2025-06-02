@@ -2,7 +2,6 @@ package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.RecipeInfo;
-import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.service.MartInfoService;
 import com.project.recipick.service.RecipeCardService;
 import com.project.recipick.service.RecipeDetailService;
@@ -159,6 +158,59 @@ public class DataController {
         String apiKey = "8d6d9d4bb3d2f6bc550aff59664c8f940d21003e41d7c03303b975b3b17510ab";
         String addr = "http://211.237.50.150:7080/openapi/";
         recipeCardService.callRecipeApiAndSaveData(apiKey, addr);
+    }
+
+    @GetMapping("/saveRecipeIngredient")
+    public void callRecipeIngredientApi(){
+        String apiKey = "2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8";
+        String addr = "http://211.237.50.150:7080/openapi/";
+        recipeCardService.callRecipeIngredientAndSaveData(apiKey, addr);
+    }
+
+    @GetMapping("/saveMartInfo")
+    public void saveMartInfo() throws ParseException {
+        String apiKey = "4d48764c53776c67373041696a576b";
+        String url = "http://openAPI.seoul.go.kr:8088/" + apiKey + "/json/ListNecessariesPricesService/1001/2000/?P_YEAR_MONTH=2025-05";
+
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String responseBody = responseEntity.getBody();
+        //System.out.println(responseBody);
+
+        String jsonString = responseBody;
+        JSONParser parser = new JSONParser();
+
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+        String ListNecessariesPricesService = jsonObject.get("ListNecessariesPricesService").toString();
+
+        JSONObject jsonObj = (JSONObject) parser.parse(ListNecessariesPricesService);
+        String row = jsonObj.get("row").toString();
+
+        JSONArray jsonArray = (JSONArray) parser.parse(row);
+
+        System.out.println(jsonArray.get(0));
+
+        for(int i=0; i<jsonArray.size(); i++) {
+            JSONObject obj = (JSONObject) jsonArray.get(i);
+
+            MartInfo martInfo = new MartInfo();
+
+            martInfo.setpSeq(obj.get("P_SEQ").toString());
+            martInfo.setmSeq(obj.get("M_SEQ").toString());
+            martInfo.setmName(obj.get("M_NAME").toString());
+            martInfo.setaSeq(obj.get("A_SEQ").toString());
+            martInfo.setaName(obj.get("A_NAME").toString());
+            martInfo.setaUnit(obj.get("A_UNIT").toString());
+            martInfo.setaPrice(obj.get("A_PRICE").toString());
+            martInfo.setpYearMonth(obj.get("P_YEAR_MONTH").toString());
+            martInfo.setAddCol(obj.get("ADD_COL").toString());
+            martInfo.setpDate(obj.get("P_DATE").toString());
+            martInfo.setmTypeCode(obj.get("M_TYPE_CODE").toString());
+            martInfo.setmTypeName(obj.get("M_TYPE_NAME").toString());
+            martInfo.setmGuCode(obj.get("M_GU_CODE").toString());
+            martInfo.setmGuName(obj.get("M_GU_NAME").toString());
+
+            martInfoService.saveMartInfo(martInfo);
+        }
     }
 
 }

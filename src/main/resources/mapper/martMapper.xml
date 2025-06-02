@@ -9,6 +9,11 @@
         SELECT * FROM mart_info
     </select>
 
+    <select id="getAllMartName" resultType="com.project.recipick.Entity.MartNameAndLocation">
+        SELECT DISTINCT ON (m_name) m_name, m_gu_name
+        FROM mart_info
+    </select>
+
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
         WHERE m_gu_code = #{gu_code}
@@ -30,7 +35,30 @@
         ORDER BY a_name, m_gu_name DESC
     </select>
 
+    <select id="getIrdntPrice" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE a_name LIKE CONCAT(#{ingredient}, ' %')
+        and a_price != '0';
+    </select>
 
+    <select id="findByMName" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE
+        REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price != '0';
+    </select>
 
+    <insert id="saveMartInfo" parameterType="MartInfo">
+        INSERT INTO mart_info (
+            P_SEQ, M_SEQ, M_NAME, A_SEQ, A_NAME, A_UNIT, A_PRICE,
+            P_YEAR_MONTH, ADD_COL, P_DATE, M_TYPE_CODE, M_TYPE_NAME,
+            M_GU_CODE, M_GU_NAME
+        ) VALUES (
+            #{P_SEQ}, #{M_SEQ}, #{M_NAME}, #{A_SEQ}, #{A_NAME}, #{A_UNIT}, #{A_PRICE},
+            #{P_YEAR_MONTH}, #{ADD_COL}, #{P_DATE}, #{M_TYPE_CODE}, #{M_TYPE_NAME},
+            #{M_GU_CODE}, #{M_GU_NAME}
+        )
+    </insert>
 
 </mapper>

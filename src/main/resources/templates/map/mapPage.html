@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/mapPageIrdntStyle.css">
 </head>
 <body>
+<div class="bg-deco">
+    <img src="/resources/image/carrot.png" class="bg-img carrot">
+    <img src="/resources/image/green_onion.png" class="bg-img g_onion">
+</div>
+
 <div class="recipe-container">
     <div class="menu-wrapper">
         <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
@@ -18,21 +23,85 @@
     </div>
 
     <div>
-        <div class="titleText">내 주변 시장 찾기</div>
+        <div class="search-wrapper">
+            <div class="titleText">내 주변 시장 찾기</div>
 
-        <div class="search-bar">
-            <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+            </div>
         </div>
+
+        <div class="search-result">
+            <div id="ingredient-buttons" class="ingredient-buttons">
+                <!-- JS로 버튼 생성 예정 -->
+            </div>
+        </div>
+
 
         <div class="map-section">
             <div id="map"></div>
-            <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+ ${kakaoApiKey}" ></script>
+
+            <!-- 카카오 SDK (서비스 포함 + autoload false) -->
+            <script type="text/javascript"
+                    th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoApiKey} + '&libraries=services'">
+            </script>
+
+            <script th:inline="javascript">
+                const martNames = [[${martNames}]];
+            </script>
+
+            <div id="slidePanelIngreSearch" class="slide-panel">
+                <div class="martTitle" id="martTitle">식재료명</div>
+                <div class="panel-search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="ingredientSearch" placeholder="식재료 검색...">
+                </div>
+                <div id="martInfoContainer"></div>
+            </div>
+
             <script src="/resources/js/mapPageJs.js"></script>
+
+
 
             <!-- 오른쪽 슬라이드 패널 -->
             <div id="slidePanel" class="slide-panel">
                 <div class="slide-title" id="ingredientName">식재료명</div>
-                <div class="sort-options">정렬 거리순 할인율순 가격순</div>
+                <div class="sort-container">
+                    <select class="sort-options">
+                        <option value="정렬">정렬</option>
+                        <option value="가격순">가격순</option>
+                    </select>
+                    <!-- 자치구 선택 드롭다운 -->
+                    <select id="guFilter">
+                        <option value="all">전체 자치구</option>
+                        <option value="강남구">강남구</option>
+                        <option value="강동구">강동구</option>
+                        <option value="강북구">강북구</option>
+                        <option value="강서구">강서구</option>
+                        <option value="관악구">관악구</option>
+                        <option value="광진구">광진구</option>
+                        <option value="구로구">구로구</option>
+                        <option value="금천구">금천구</option>
+                        <option value="노원구">노원구</option>
+                        <option value="도봉구">도봉구</option>
+                        <option value="동대문구">동대문구</option>
+                        <option value="동작구">동작구</option>
+                        <option value="마포구">마포구</option>
+                        <option value="서대문구">서대문구</option>
+                        <option value="서초구">서초구</option>
+                        <option value="성동구">성동구</option>
+                        <option value="성북구">성북구</option>
+                        <option value="송파구">송파구</option>
+                        <option value="양천구">양천구</option>
+                        <option value="영등포구">영등포구</option>
+                        <option value="용산구">용산구</option>
+                        <option value="은평구">은평구</option>
+                        <option value="종로구">종로구</option>
+                        <option value="중구">중구</option>
+                        <option value="중랑구">중랑구</option>
+                    </select>
+                </div>
                 <div class="store-list" id="storeList">
                     <!-- 가게 목록이 들어갈 자리 -->
                 </div>
@@ -41,11 +110,7 @@
 
     </div>
 
-
-
-
-    <button onclick="sendLocation()">위치 정보 전송</button>
-
+    <script src="/resources/js/mapPageSearch.js"></script>
 
 </div>
 
