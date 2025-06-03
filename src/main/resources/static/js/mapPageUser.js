@@ -61,16 +61,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     image: defaultMarkerImage
                 });
 
+
                 const infowindow = new kakao.maps.InfoWindow({
-                    content: `<div style="padding:5px; font-size:13px;">${place.place_name}</div>`
+                    //position:  new daum.maps.LatLng(position.latlng[0], position.latlng[1]),
+                    content: `<span class="markerPlaceName">${place.place_name}</span>`
                 });
+
+
+                var content = `<div class="markerPlaceName">${place.place_name}</div>`;
+                var overlay = new kakao.maps.CustomOverlay({
+                    content: content,
+                    map: map,
+                    position: marker.getPosition()
+                });
+
+                overlay.setMap(null);
 
                 // 마커 클릭시
                 kakao.maps.event.addListener(marker, 'click', function () {
+
+                    overlay.setMap(null);
+
                     // 1. 같은 마커 다시 클릭시 닫기
                     if (activeMarker === marker) {
                         marker.setImage(defaultMarkerImage);
                         infowindow.close();
+                        overlay.setMap(null);
                         activeMarker = null;
                         activeInfowindow = null;
                         updateArrowBtns();
@@ -78,12 +94,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     }
                     // 2. 기존 마커 닫기
-                    if (activeMarker) activeMarker.setImage(defaultMarkerImage);
-                    if (activeInfowindow) activeInfowindow.close();
+                    if (activeMarker) {
+                        activeMarker.setImage(defaultMarkerImage);
+                        overlay.setMap(null);
+                    }
+                    if (activeInfowindow) {
+                        activeInfowindow.close();
+                        overlay.setMap(null);
+                    }
 
                     // 3. 현 마커 열기
                     marker.setImage(redMarkerImage);
                     infowindow.open(map, marker);
+                    overlay.setMap(map);
                     fetchMartInfo(place.place_name, marker, infowindow);
                     openMartPanel();
 
@@ -119,6 +142,10 @@ document.addEventListener('DOMContentLoaded', function () {
         martTitle.textContent = martName;
 
         martInfoContainer.innerHTML = '';
+        if (!martItems || martItems.length === 0) {
+            martInfoContainer.innerHTML = `<div class="empty-message">텅..</div>`;
+            return;
+        }
         martItems.forEach(item => {
             const div = document.createElement('div');
             div.classList.add('ingredient-item');
