@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const panel = document.getElementById('slidePanel');
     const ingredientName = document.getElementById('ingredientName');
     const storeList = document.getElementById('storeList');
+    const arrowBtn = document.getElementById('panelArrowBtn');  // 패널 내부 닫기 화살표
+    const openBtn = document.getElementById('openPanelBtn');    // 화면 끝 열기 화살표
 
     let selectedButton = null;
     let isPanelOpen = false;
+    let openBtnTimeout = null; // 타이머 핸들 저장
 
     const allButton = document.createElement('div');
     allButton.className = 'ingredient-button';
@@ -22,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
             allButton.classList.remove('selected');
             selectedButton = null;
             closePanel();
+            updateOpenBtnVisibility();
             return;
         }
 
@@ -41,6 +45,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         sendMultipleIngredients(selectedIngredients);
     });
+
+
+
+    // 1. "패널 열기" 화살표 버튼 (오른쪽 끝)
+    openBtn.addEventListener('click', function () {
+        openPanel();
+    });
+
+    // 2. 패널 내부 닫기 화살표 버튼
+    arrowBtn.addEventListener('click', function () {
+        closePanel();
+    });
+
+    panel.style.display = 'none';
+    isPanelOpen = false;
+    updateArrowBtns();
+    updateOpenBtnVisibility();
 
     function sendMultipleIngredients(ingredientList) {
         fetch('/recipick/selectAll', {
@@ -64,6 +85,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // 패널 상태에 따라 화살표 표시 업데이트
+    function updateArrowBtns() {
+        if (isPanelOpen) {
+            openBtn.style.display = 'none';
+            arrowBtn.style.display = 'flex';
+        } else {
+            openBtn.style.display = 'flex';
+            arrowBtn.style.display = 'none';
+        }
+    }
+
+
 
     // 슬라이드 패널 열기
     function openPanel() {
@@ -73,6 +106,8 @@ document.addEventListener('DOMContentLoaded', function () {
             panel.classList.add('open');
         });
         isPanelOpen = true;
+        updateArrowBtns();
+        updateOpenBtnVisibility();
     }
 
     // 슬라이드 패널 닫기
@@ -89,6 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 panel.removeEventListener('transitionend', handler);
             }
         });
+        updateArrowBtns();
+        updateOpenBtnVisibility();
     }
 
     function updateAllButtonVisibility() {
@@ -107,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.remove('selected');
                 closePanel();
                 selectedButton = null;
+                updateOpenBtnVisibility();
                 return;
             }
 
@@ -133,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             button.remove();
             updateAllButtonVisibility();
+            updateOpenBtnVisibility(); // 삭제 후에도 호출
         });
     }
 
@@ -217,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const button = createIngredientButton(name);
             ingredientButtonsContainer.insertBefore(button, allButton); // always before allButton
             updateAllButtonVisibility();
+            updateOpenBtnVisibility();
         }
     }
 
@@ -318,6 +358,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
+    function updateOpenBtnVisibility() {
+        // 선택된 식재료(전체 버튼 제외) 하나라도 있으면 보이기
+        // "selected" 클래스를 가진 ingredient-button이 있을 때만 열기 버튼 보이기
+       const hasSelectedIngredient = !!ingredientButtonsContainer.querySelector('.ingredient-button.selected');
+
+        // 먼저 기존 타이머 클리어 (빠른 상태 전환 대응)
+        if (openBtnTimeout) {
+            clearTimeout(openBtnTimeout);
+            openBtnTimeout = null;
+        }
+
+       if (hasSelectedIngredient && !isPanelOpen) {
+           // 0.3초 뒤에 보여주기
+           openBtn.style.display = 'none'; // 처음엔 숨겨둠
+           openBtnTimeout = setTimeout(() => {
+               openBtn.style.display = 'flex';
+               openBtnTimeout = null;
+           }, 300);
+       } else {
+           openBtn.style.display = 'none';
+           // 선택된 버튼이 없다면 패널도 닫기
+           //closePanel();
+       }
+    }
 
 
 

@@ -48,10 +48,11 @@
             </script>
 
             <script th:inline="javascript">
-                const martNames = [[${martNames}]];
+                window.martNames = [[${martNames}]];
             </script>
 
             <div id="slidePanelIngreSearch" class="slide-panel">
+                <div class="panel-arrow-btn" id="martPanelArrowBtn">&gt;</div>
                 <div class="martTitle" id="martTitle">식재료명</div>
                 <div class="panel-search-bar">
                     <span class="search-icon">🔍</span>
@@ -59,13 +60,14 @@
                 </div>
                 <div id="martInfoContainer"></div>
             </div>
+            <div id="martPanelOpenBtn" class="open-panel-btn" style="display: none;">&lt;</div>
 
-            <script src="/resources/js/mapPageJs.js"></script>
-
+            <!--<script src="/resources/js/mapPageJs.js"></script>-->
 
 
             <!-- 오른쪽 슬라이드 패널 -->
             <div id="slidePanel" class="slide-panel">
+                <div id="panelArrowBtn" class="panel-arrow-btn">&gt;</div>
                 <div class="slide-title" id="ingredientName">식재료명</div>
                 <div class="sort-container">
                     <select class="sort-options">
@@ -106,12 +108,13 @@
                     <!-- 가게 목록이 들어갈 자리 -->
                 </div>
             </div>
+            <div id="openPanelBtn" class="open-panel-btn">&lt;</div>
         </div>
 
     </div>
 
-    <script src="/resources/js/mapPageSearch.js"></script>
-
+    <!--<script src="/resources/js/mapPageSearch.js"></script>-->
+    <script src="/resources/js/mapPageUser.js"></script>
 </div>
 
 <div id="toast" class="toast"> 원하는 시장 2개를 선택해주세요. </div> <!-- 토스트 메세지 -->

@@ -237,6 +237,61 @@ body {
    transform: translateX(0); /* ★ 열릴 때 제자리로 부드럽게 */
 }
 
+.panel-arrow-btn {
+    position: absolute;
+    left: -6px; /* 패널 왼쪽에 살짝 나와있게 */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-size: 2rem;
+    color: #555;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.panel-arrow-btn:hover {
+    background: #f2f2f2;
+}
+
+/* 오른쪽 끝에 열기 버튼 */
+.open-panel-btn {
+  position: fixed;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 60px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 16px 0 0 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  font-size: 2.2rem;
+  color: #ff7131;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2001;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.open-panel-btn:hover {
+  background: #ffe5d1;
+}
+
+/* 패널 열릴 때는 화살표 버튼 숨김 */
+.slide-panel.open ~ .open-panel-btn {
+  display: none;
+}
+
 .slide-title {
   font-size: 35px;
   font-weight: bold;

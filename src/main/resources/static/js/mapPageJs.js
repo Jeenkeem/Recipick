@@ -1,13 +1,17 @@
 const urlParams = new URLSearchParams(window.location.search);
 const fromCompare = urlParams.get("from") === "compare";
 const highlightMarket = new URLSearchParams(window.location.search).get("highlight");
+
 const panel = document.getElementById('slidePanelIngreSearch');
+const openBtn = document.getElementById('openPanelBtn');    // 화면 끝 열기 화살표\
+const arrowBtn = document.getElementById('panelArrowBtn');  // 패널 내부 닫기 화살표
 
 let activeMarker = null; // 현재 빨간색으로 선택된 마커 하나만 저장
 let activeInfowindow = null;    // 현재 열려 있는 인포윈도우
+let isPanelOpen = false;
+let openBtnTimeout = null;
 
 const DEFAULT_MARKER = '/resources/image/marker.png';
-
 const defaultMarkerImage = new kakao.maps.MarkerImage(
     DEFAULT_MARKER,
     new kakao.maps.Size(39, 44),
@@ -36,8 +40,6 @@ const map = new kakao.maps.Map(mapContainer, mapOption);
 const ps = new kakao.maps.services.Places();
 
 console.log(martNames);
-
-let isPanelOpen = false;
 
 martNames.forEach(mart => {
     ps.keywordSearch(mart, function (data, status) {
@@ -183,6 +185,8 @@ function openPanel() {
         panel.classList.add('open');
     });
     isPanelOpen = true;
+    updateArrowBtns();
+    updateOpenBtnVisibility();
 }
 
 // 슬라이드 패널 닫기
@@ -199,7 +203,42 @@ function closePanel() {
             panel.removeEventListener('transitionend', handler);
         }
     });
+    updateArrowBtns();
+    updateOpenBtnVisibility();
 }
+
+// 패널 상태에 따라 화살표 표시 업데이트
+function updateArrowBtns() {
+    if (isPanelOpen) {
+        openBtn.style.display = 'none';
+        arrowBtn.style.display = 'flex';
+    } else {
+        openBtn.style.display = 'flex';
+        arrowBtn.style.display = 'none';
+    }
+}
+
+function updateOpenBtnVisibility() {
+    // 패널이 닫혀있을 때만 0.3초 뒤 표시
+    if (openBtnTimeout) {
+        clearTimeout(openBtnTimeout);
+        openBtnTimeout = null;
+    }
+
+   if (!isPanelOpen) {
+       // 0.3초 뒤에 보여주기
+       openBtn.style.display = 'none'; // 처음엔 숨겨둠
+       openBtnTimeout = setTimeout(() => {
+           openBtn.style.display = 'flex';
+           openBtnTimeout = null;
+       }, 300);
+   } else {
+       openBtn.style.display = 'none';
+       // 선택된 버튼이 없다면 패널도 닫기
+       //closePanel();
+   }
+}
+
 
 function searchMarket(keyword, focus = false) {
     const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
