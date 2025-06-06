@@ -615,22 +615,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = "/recipick/comparePage";
             }
             else {
-                console.log(selectedMarts);
-                console.log(activeMarker);
-                console.log(activeOverlay);
+                // 마지막 선택한 것만 남기고 나머지 해제
+                const last = selectedMarts[1];  // 마지막에 선택된 마트
+                const prev = selectedMarts[0];  // 그 전에 선택된 마트
+                const prevMarker = selectedMarkers[prev];
+                if (prevMarker) prevMarker.setImage(defaultMarkerImage);
+                if (selectedOverlays[prev]) selectedOverlays[prev].setMap(null);
 
-                if (activeMarker) {
-                    activeMarker.setImage(defaultMarkerImage);
-                }
-                if (activeOverlay) {
-                    activeOverlay.setMap(null);
-                }
+                // selectedMarts를 마지막 것만 남김
+                selectedMarts = [last];
+                return;
             }
-            selectedMarts = [];
         }
-        console.log(selectedMarts);
-        console.log(activeMarker);
-        console.log(activeOverlay);
     }
 
     // 비교장보기 토스트 메시지
