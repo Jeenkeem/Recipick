@@ -685,4 +685,28 @@ document.addEventListener('DOMContentLoaded', function () {
     updateArrowBtns();
     updateOpenBtnVisibility();
 
+    // irdntNames 파라미터가 있으면 자동으로 식재료 추가
+    const irdntsFromUrl = getIrdntsFromUrl();
+    if (irdntsFromUrl.length > 0) {
+        irdntsFromUrl.forEach(name => addIngredient(name));
+
+        // 첫 번째 식재료를 선택된 버튼으로 설정하여 자동 조회
+        const firstButton = ingredientButtonsContainer.querySelector('.ingredient-button:not(.all-button)');
+        if (firstButton) {
+            firstButton.classList.add('selected');
+            selectedButton = firstButton;
+            ingredientName.textContent = firstButton.firstChild.textContent;
+            openPanel(); // 패널 열기
+            sendSelectedIngredient(firstButton.firstChild.textContent);
+        }
+    }
+
+    function getIrdntsFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const irdnts = params.get('irdntNames');
+        if (!irdnts) return [];
+        return irdnts.split(',').map(name => decodeURIComponent(name.trim()));
+    }
+
+
 });

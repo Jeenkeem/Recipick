@@ -39,7 +39,7 @@
 
     <select id="getIrdntPrice" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE a_name LIKE CONCAT(#{ingredient}, ' %')
+        WHERE a_name ~ ('(^|[\\s(])' || #{ingredient} || '(?=[\\s(])')
         and a_price != '0';
     </select>
 
