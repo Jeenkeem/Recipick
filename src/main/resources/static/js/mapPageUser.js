@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let isPanelOpen = false;         // 식재료 패널
     let isMartPanelOpen = false;     // 마트 패널
     let openBtnTimeout = null;
+
     let activeMarker = null;
+    let activeOverlay = null;
+
     let activeInfowindow = null;
     let selectedMarts = [];
     let selectedMarkers = {};
@@ -61,62 +64,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     image: defaultMarkerImage
                 });
 
-
-                const infowindow = new kakao.maps.InfoWindow({
-                    //position:  new daum.maps.LatLng(position.latlng[0], position.latlng[1]),
-                    content: `<span class="markerPlaceName">${place.place_name}</span>`
-                });
-
-
-                var content = `<div class="markerPlaceName">${place.place_name}</div>`;
+                // 오버레이 컨텐츠 (간단히 place_name만 표시)
+                var overlayContent = `<div class="markerPlaceName">${place.place_name}</div>`;
                 var overlay = new kakao.maps.CustomOverlay({
-                    content: content,
-                    map: map,
-                    position: marker.getPosition()
+                    content: overlayContent,
+                    position: marker.getPosition(),
+                    yAnchor: 2.3
                 });
-
                 overlay.setMap(null);
 
                 // 마커 클릭시
                 kakao.maps.event.addListener(marker, 'click', function () {
-
-                    overlay.setMap(null);
-
                     // 1. 같은 마커 다시 클릭시 닫기
                     if (activeMarker === marker) {
                         marker.setImage(defaultMarkerImage);
-                        infowindow.close();
                         overlay.setMap(null);
                         activeMarker = null;
-                        activeInfowindow = null;
+                        activeOverlay = null;
                         updateArrowBtns();
                         closeMartPanel();
                         return;
                     }
-                    // 2. 기존 마커 닫기
+                    // 2. 기존 마커/오버레이 닫기
                     if (activeMarker) {
                         activeMarker.setImage(defaultMarkerImage);
-                        overlay.setMap(null);
                     }
-                    if (activeInfowindow) {
-                        activeInfowindow.close();
-                        overlay.setMap(null);
+                    if (activeOverlay) {
+                        activeOverlay.setMap(null);
                     }
-
-                    // 3. 현 마커 열기
+                    // 3. 현 마커/오버레이 열기
                     marker.setImage(redMarkerImage);
-                    infowindow.open(map, marker);
                     overlay.setMap(map);
-                    fetchMartInfo(place.place_name, marker, infowindow);
+                    fetchMartInfo(place.place_name, marker, overlay);
                     openMartPanel();
 
                     activeMarker = marker;
-                    activeInfowindow = infowindow;
+                    activeOverlay = overlay;
                 });
 
                 selectedMarkers[place.place_name] = marker;
 
-                // 비교장보기 모드의 마커 추가 선택/해제 기능
+                // 비교장보기 모드 마커 선택/해제
                 kakao.maps.event.addListener(marker, 'click', function () {
                     handleMarkerClick(place.place_name);
                 });
@@ -126,12 +114,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- [2. 마트 상세 패널 기능] ----------
 
-    function fetchMartInfo(martName, marker, infowindow) {
+    function fetchMartInfo(martName, marker, overlay) {
         fetch(`/recipick/martInfo?martName=${encodeURIComponent(martName)}`)
             .then(response => response.json())
             .then(data => {
                 renderMartInfo(martName, data);
-                openMartPanel(marker, infowindow); // 마커, 인포윈도우 넘기기
+                openMartPanel(marker, overlay); // 마커, 오버레이 넘기기
             })
             .catch(err => {
                 console.error(`❌ ${martName}에 대한 데이터 불러오기 실패`, err);
@@ -159,26 +147,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function openMartPanel(marker, infowindow) {
+    function openMartPanel(marker, overlay) {
         closePanel();
         deselectIngredientButtons();
 
         // 기존 마커 비활성화
         if (activeMarker && activeMarker !== marker) {
             activeMarker.setImage(defaultMarkerImage);
-            if (activeInfowindow) activeInfowindow.close();
+            if (activeOverlay) activeOverlay.setMap(null);
         }
 
-        // 새 마커 활성화 (marker와 infowindow가 정의되어 있으면만)
-        if (marker && infowindow) {
+        // 새 마커 활성화
+        if (marker && overlay) {
             marker.setImage(redMarkerImage);
-            infowindow.open(map, marker);
+            overlay.setMap(map);
             activeMarker = marker;
-            activeInfowindow = infowindow;
+            activeOverlay = overlay;
         } else {
-            // marker가 undefined면 마커 상태는 변경하지 않음
             activeMarker = null;
-            activeInfowindow = null;
+            activeOverlay = null;
         }
 
         if (isMartPanelOpen) return;
@@ -271,9 +258,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const exists = Array.from(ingredientButtonsContainer.children).some(
             btn => btn !== allButton && btn.firstChild.textContent === name
         );
+
         if (!exists) {
             const button = createIngredientButton(name);
             ingredientButtonsContainer.insertBefore(button, allButton);
+
             updateAllButtonVisibility();
             updateOpenBtnVisibility();
         }
@@ -282,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleButtonClick(button) {
         button.addEventListener('click', function (event) {
             if (event.target.classList.contains('remove-btn')) return;
+
             if (selectedButton === button) {
                 button.classList.remove('selected');
                 closePanel();
@@ -289,6 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateOpenBtnVisibility();
                 return;
             }
+
             if (selectedButton) selectedButton.classList.remove('selected');
             button.classList.add('selected');
             selectedButton = button;
@@ -296,7 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
             openPanel();
             ingredientName.textContent = button.firstChild.textContent;
         });
+
         const removeBtn = button.querySelector('.remove-btn');
+
         removeBtn.addEventListener('click', function (event) {
             event.stopPropagation();
             if (selectedButton === button) {
@@ -329,6 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 식재료 패널 서버 전송 함수
     let currentStoreData = [];
+
     function sendSelectedIngredient(name) {
         fetch('/recipick/select', {
             method: 'POST',
@@ -450,10 +444,11 @@ document.addEventListener('DOMContentLoaded', function () {
             activeMarker.setImage(defaultMarkerImage);
             activeMarker = null;
         }
-        if (activeInfowindow) {
-            activeInfowindow.close();
-            activeInfowindow = null;
-        }
+
+        if (activeOverlay) {
+                activeOverlay.setMap(null);
+                activeOverlay = null;
+            }
 
         // 식재료 패널 오픈
         if (isPanelOpen) return;
