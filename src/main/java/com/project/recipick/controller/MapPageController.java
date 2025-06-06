@@ -57,7 +57,6 @@ public class MapPageController {
         return "map/mapPageIrdnt";
     }
 
-
     static class Location {
         private double latitude;
         private double longitude;
