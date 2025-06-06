@@ -47,16 +47,6 @@ public class MapPageController {
         return "map/mapPage";
     }
 
-    @GetMapping("/recipick/mapPageIrdnt")
-    public String mapPage(@RequestParam String irdntNames, Model model) {
-
-        model.addAttribute("kakaoApiKey", kakaoApiKey);
-
-        String[] names = irdntNames.split(",");
-        model.addAttribute("irdntsList", Arrays.asList(names));
-        return "map/mapPageIrdnt";
-    }
-
     static class Location {
         private double latitude;
         private double longitude;
