@@ -16,6 +16,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class MartInfoService {
@@ -106,6 +108,13 @@ public class MartInfoService {
         }
 
         return resultList;
+    }
+
+    public List<MartItemDTO> getMartItemsByFuzzyMatch(String martName) {
+        List<MartInfo> list = martInfoMapper.findByMName(martName);
+        return list.stream()
+                .map(m -> new MartItemDTO(m.getaName(), m.getaPrice()))
+                .collect(Collectors.toList());
     }
 
 }
