@@ -16,7 +16,7 @@
 
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE m_gu_code = #{gu_name}
+        WHERE m_gu_code = #{gu_code}
     </select>
 
     <select id="getProductByCuCode" resultType="String">
