@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let activeInfowindow = null;
     let selectedMarts = [];
     let selectedMarkers = {};
+    let selectedOverlays = {};
 
     // kakao map 초기화
     const mapContainer = document.getElementById('map');
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 selectedMarkers[place.place_name] = marker;
+                selectedOverlays[place.place_name] = overlay;
 
                 // 비교장보기 모드 마커 선택/해제
                 kakao.maps.event.addListener(marker, 'click', function () {
@@ -595,6 +597,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedMarts.includes(martName)) {
             selectedMarts = selectedMarts.filter(m => m !== martName);
             marker.setImage(defaultMarkerImage);
+            activeMarker = null;
+            activeOverlay = null;
             return;
         }
         if (selectedMarts.length >= 2) {
@@ -603,7 +607,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         selectedMarts.push(martName);
-        marker.setImage(redMarkerImage);
 
         if (selectedMarts.length === 2) {
             localStorage.setItem("mart1", selectedMarts[0]);
@@ -611,7 +614,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if(confirm(`${selectedMarts[0]}, ${selectedMarts[1]}을 선택했습니다.\n비교장보기 페이지로 이동할까요?`)) {
                 window.location.href = "/recipick/comparePage";
             }
+            else {
+                console.log(selectedMarts);
+                console.log(activeMarker);
+                console.log(activeOverlay);
+
+                if (activeMarker) {
+                    activeMarker.setImage(defaultMarkerImage);
+                }
+                if (activeOverlay) {
+                    activeOverlay.setMap(null);
+                }
+            }
+            selectedMarts = [];
         }
+        console.log(selectedMarts);
+        console.log(activeMarker);
+        console.log(activeOverlay);
     }
 
     // 비교장보기 토스트 메시지
@@ -624,50 +643,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 
-/*
     // 마트 하이라이트 처리
     if (highlightMarket) {
         console.log("📌 하이라이트 마트:", highlightMarket);
-        searchMarket(highlightMarket, true); // 추가 인자 전달
+
+        const tryHighlight = () => {
+            const marker = selectedMarkers[highlightMarket];
+            const overlay = selectedOverlays[highlightMarket];
+
+            if (marker && overlay) {
+                // 기존 마커/오버레이 닫기
+                if (activeMarker && activeMarker !== marker) activeMarker.setImage(defaultMarkerImage);
+                if (activeOverlay && activeOverlay !== overlay) activeOverlay.setMap(null);
+
+                // 마커 빨간색, 지도 중심 이동, 오버레이/패널 열기
+                marker.setImage(redMarkerImage);
+                map.setLevel(3); // 더 확대하려면 더 작은 숫자(2 등)
+                map.panTo(marker.getPosition());
+                overlay.setMap(map);
+
+                fetchMartInfo(highlightMarket, marker, overlay);
+                openMartPanel(marker, overlay);
+
+                activeMarker = marker;
+                activeOverlay = overlay;
+
+                clearInterval(highlightInterval); // 더 이상 반복 안함
+            }
+        };
+
+        const highlightInterval = setInterval(tryHighlight, 100);
+        setTimeout(() => clearInterval(highlightInterval), 2000); // 2초 뒤 종료
     }
 
-    function searchMarket(keyword, focus = false) {
-        const kakaoApiKey = 'c3c9b9b585c852112db76e368206e453'; // 여기에 REST 키 넣기
-
-        fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(keyword)}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'KakaoAK ' + kakaoApiKey
-            }
-        })
-        .then(res => res.json())
-        .then(result => {
-            if (result.documents && result.documents.length > 0) {
-                console.log(`"${keyword}" 검색 결과:`, result.documents);
-
-                // 결과를 지도에 마커로 찍는 예시
-                const place = result.documents[0]; // 가장 첫 번째 결과 사용
-                const marker = new kakao.maps.Marker({
-                    map: map,
-                    position: new kakao.maps.LatLng(place.y, place.x),
-                    title: place.place_name
-                });
-
-                const infowindow = new kakao.maps.InfoWindow({
-                    content: `<div style="padding:5px;">${place.place_name}</div>`
-                });
-                infowindow.open(map, marker);
-
-
-            } else {
-                console.warn(`"${keyword}"에 대한 검색 결과가 없습니다.`);
-            }
-        })
-        .catch(err => {
-            console.error(`"${keyword}" 검색 중 오류 발생:`, err);
-        });
-    }
-*/
     // 비교장보기 진입 토스트
     if (fromCompare) {
         showCompareToast();
@@ -680,4 +688,5 @@ document.addEventListener('DOMContentLoaded', function () {
     isPanelOpen = false;
     updateArrowBtns();
     updateOpenBtnVisibility();
+
 });
