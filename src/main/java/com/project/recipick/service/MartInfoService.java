@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
+
 
 @Service
 public class MartInfoService {
@@ -110,11 +112,39 @@ public class MartInfoService {
         return resultList;
     }
 
+    //📌 아래 findBestMatchingMart 메서드 적용함
     public List<MartItemDTO> getMartItemsByFuzzyMatch(String martName) {
-        List<MartInfo> list = martInfoMapper.findByMName(martName);
+        String bestMatch = findBestMatchingMart(martName);
+        List<MartItemDTO> list = martInfoMapper.selectItemsByMartName(bestMatch);
         return list.stream()
                 .map(m -> new MartItemDTO(m.getaName(), m.getaPrice()))
                 .collect(Collectors.toList());
     }
+
+    // 📌 추가한 메소드: 문자열 정규화(괄호 제거, 공백 제거, 대소문자 통일) + 유사도 비교(pom.xml commons 의존성 추가)
+    public String normalize(String s) {
+        return s.replaceAll("[()\\s]", "").toLowerCase();  // 괄호+공백 제거 후 소문자 변환
+    }
+
+    public String findBestMatchingMart(String martName) {
+        LevenshteinDistance distance = new LevenshteinDistance();
+        List<String> allMartNames = martInfoMapper.getAllMartName().stream()
+                .map(MartNameAndLocation::getmName)
+                .collect(Collectors.toList());
+
+        String input = normalize(martName);
+        String bestMatch = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (String candidate : allMartNames) {
+            int d = distance.apply(input, normalize(candidate));
+            if (d < minDistance) {
+                minDistance = d;
+                bestMatch = candidate;
+            }
+        }
+        return bestMatch;
+    }
+    //📌 여기까지 추가한 메소드
 
 }
