@@ -2,6 +2,7 @@ package com.project.recipick.controller;
 
 import com.project.recipick.Entity.MartInfo;
 import com.project.recipick.Entity.MartNameAndLocation;
+import com.project.recipick.dto.MartItemDTO;
 import com.project.recipick.service.MartInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -125,7 +126,8 @@ public class MapPageController {
     @GetMapping("/recipick/martInfo")
     public ResponseEntity<?> getMartInfo(@RequestParam String martName) {
 
-        List<MartInfo> result = new ArrayList<>();
+        //List<MartInfo> result = new ArrayList<>();
+        List<MartItemDTO> result = new ArrayList<>();
         result = martInfoService.findByMName(martName);
 
         return ResponseEntity.ok(result);
