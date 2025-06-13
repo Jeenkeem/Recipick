@@ -45,9 +45,9 @@ public class RecipeDetailController {
 
         RecipeInfo re = recipeDetailService.findRecipe(recipe_name);
 
-        System.out.println(re.getRECIPE_ID());
+        System.out.println(re.getRecipeId());
         System.out.println(re.getSUMRY());
-        System.out.println(re.getLEVEL_NM());
+        System.out.println(re.getLevelNm());
 
         String apiUrl = "http://211.237.50.150:7080/openapi/2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8/json/Grid_20150827000000000227_1/1/1000?RECIPE_ID="+recipe_id;
 
@@ -133,8 +133,9 @@ public class RecipeDetailController {
 
         model.addAttribute("recipe_title", recipe_name);
         model.addAttribute("recipe_sumry", re.getSUMRY());
-        model.addAttribute("recipe_level", re.getLEVEL_NM());
-        model.addAttribute("recipe_cookingTime", re.getCOOKING_TIME());
+        model.addAttribute("recipe_level", re.getLevelNm());
+        model.addAttribute("recipe_cookingTime", re.getCookingTime());
+        model.addAttribute("calorie", re.getCALORIE());
         model.addAttribute("list", list);
         model.addAttribute("list228", list228);
 

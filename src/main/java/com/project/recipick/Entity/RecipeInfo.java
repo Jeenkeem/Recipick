@@ -21,11 +21,11 @@ public class RecipeInfo {
     private String IRDNT_CODE; // 재료별 분류명
     private String PC_NM; // 가격별 분류
 
-    public int getRECIPE_ID() {
+    public int getRecipeId() {
         return RECIPE_ID;
     }
 
-    public void setRECIPE_ID(int RECIPE_ID) {
+    public void setRecipeId(int RECIPE_ID) {
         this.RECIPE_ID = RECIPE_ID;
     }
 
@@ -77,11 +77,11 @@ public class RecipeInfo {
         this.TY_NM = TY_NM;
     }
 
-    public String getCOOKING_TIME() {
+    public String getCookingTime() {
         return COOKING_TIME;
     }
 
-    public void setCOOKING_TIME(String COOKING_TIME) {
+    public void setCookingTime(String COOKING_TIME) {
         this.COOKING_TIME = COOKING_TIME;
     }
 
@@ -101,11 +101,11 @@ public class RecipeInfo {
         this.QNT = QNT;
     }
 
-    public String getLEVEL_NM() {
+    public String getLevelNm() {
         return LEVEL_NM;
     }
 
-    public void setLEVEL_NM(String LEVEL_NM) {
+    public void setLevelNm(String LEVEL_NM) {
         this.LEVEL_NM = LEVEL_NM;
     }
 

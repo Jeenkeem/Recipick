@@ -90,17 +90,17 @@ public class DataController {
                     JSONObject obj = (JSONObject) jsonArray.get(i);
 
                     RecipeInfo re = new RecipeInfo();
-                    re.setRECIPE_ID(Integer.parseInt(obj.get("RECIPE_ID").toString()));
+                    re.setRecipeId(Integer.parseInt(obj.get("RECIPE_ID").toString()));
                     re.setRECIPE_NM_KO(obj.get("RECIPE_NM_KO").toString());
                     re.setSUMRY(obj.get("SUMRY").toString());
                     re.setNATION_CODE(obj.get("NATION_CODE").toString());
                     re.setNATION_NM(obj.get("NATION_NM").toString());
                     re.setTY_CODE(obj.get("TY_CODE").toString());
                     re.setTY_NM(obj.get("TY_NM").toString());
-                    re.setCOOKING_TIME(obj.get("COOKING_TIME").toString());
+                    re.setCookingTime(obj.get("COOKING_TIME").toString());
                     re.setCALORIE(obj.get("CALORIE").toString());
                     re.setQNT(obj.get("QNT").toString());
-                    re.setLEVEL_NM(obj.get("LEVEL_NM").toString());
+                    re.setLevelNm(obj.get("LEVEL_NM").toString());
                     re.setIRDNT_CODE(obj.get("IRDNT_CODE").toString());
                     re.setPC_NM(obj.get("PC_NM").toString());
 
