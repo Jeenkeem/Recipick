@@ -30,6 +30,7 @@ public class RecipeDetailService {
     }
 
     public RecipeInfo findRecipe(String recipe_name) {
+
         return recipeInfoMapper.findRecipe(recipe_name);
     }
 

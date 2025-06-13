@@ -18,7 +18,7 @@
 
     <select id="findRecipe" resultType="com.project.recipick.Entity.RecipeInfo">
         SELECT * FROM recipe_info
-        WHERE recipe_nm_ko = #{recipe_nm}
+        WHERE recipe_nm_ko = #{recipe_name}
     </select>
 
 </mapper>
