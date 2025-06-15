@@ -24,55 +24,44 @@
     <div class="search-section">
         <p class="search-subtitle">내가 가진 재료로 무엇을 만들 수 있을까요?</p>
         <h1 class="search-title">요리 추천받기</h1>
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input  v-model="ingredientName"
-                    type="text"
-                    class="search-input"
-                    placeholder="내가 가진 재료들을 검색해보세요!"
-                    @input="searchIngredient"
-                    @keyup.enter="filteredRecipe"
-            />
-            <ul v-if="filteredIngredients.length">
-                <li v-for="(item, index) in filteredIngredients" :key="index" @click="selectedIngredient(item)">
-                    {{item}}
-                </li>
-            </ul>
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input  v-model="ingredientName"
+                        type="text"
+                        class="search-input"
+                        placeholder="내가 가진 재료들을 검색해보세요!"
+                        @input="searchIngredient"
+                        @keyup.enter="filteredRecipe"
+                />
+                <ul v-if="filteredIngredients.length" class="autocomplete-list">
+                    <li v-for="(item, index) in filteredIngredients" :key="index" @click="selectedIngredient(item)">
+                        {{item}}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div v-if="clickedIngredient.length">
-        <strong v-for="(item,index) in clickedIngredient" :key="index">
+    <div id="chip-area" v-if="clickedIngredient.length">
+        <div class="chip" v-for="(item,index) in clickedIngredient" :key="index" @click="removeIrdnt(index)">
             {{item}}
-            <button @click="removeIrdnt(index)"></button>
-        </strong>
+            <img src="/resources/image/chip_x_icon.svg" alt="삭제" class="x-icon"/>
+        </div>
     </div>
-
-
-
     <!-- 레시피 카드 목록 -->
     <div id="card-area">
         <div v-if="searched"  class="recipe-container">
             <div v-for="recipe in recipeList" :key="recipe.recipeId" class="recipe-card">
-                <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
-                <h3>{{recipe.recipeNmKo}}</h3>
-                <div class="recipe-meta">
-                    <span class="difficulty">{{recipe.levelNm}}</span>
-                    <span class="difficulty">{{recipe.cookingTime}}</span>
-                    <span class="difficulty">{{recipe.calorie}}</span>
+                <div class="recipe-image-wrapper">
+                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
                 </div>
-            </div>
-        </div>
-        <!--  thymeleaf  -->
-        <div v-else class="recipe-container" id="recipe-container">
-            <div th:each="recipe : ${recipeCards}" class="recipe-card">
-                <img th:src="${recipe.rcpImgUrl}"
-                     th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
-                     alt="레시피 이미지" />
-                <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
-                <div class="recipe-meta">
-                    <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>
-                    <span class="time" th:text="${recipe.cookingTime}">시간</span>
-                    <span class="kcal" th:text="${recipe.calorie}">칼로리</span>
+                <div class="recipe-info">
+                    <h3>{{recipe.recipeNmKo}}</h3>
+                    <div class="recipe-detail">
+                        <div><strong>난이도</strong><span class="stars">{{getStars(recipe.levelNm)}}</span></div>
+                        <div><strong>조리시간</strong> {{recipe.cookingTime}}</div>
+                        <div><strong>칼로리</strong> {{recipe.calorie}}</div>
+                    </div>
                 </div>
             </div>
         </div>

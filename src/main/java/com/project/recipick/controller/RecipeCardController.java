@@ -34,7 +34,6 @@ public class RecipeCardController {
 
     @GetMapping("/rec")
     public String getRecipeCardsRecommend(Model model){
-        model.addAttribute("recipeCards", recipeCardService.getRecipeCardList());
         return "recipeCardPage/recipeRecommend";
     }
 
