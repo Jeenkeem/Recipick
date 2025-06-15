@@ -50,64 +50,72 @@ public class DataController {
     @Value("${kakao.restapi.key}")
     private String kakaoRestApiKey;
 
+    @Value("${martinfoapi.key}")
+    private String martInfoApiKey;
+
     @GetMapping("/saveRecipe")
     public void SaveRecipe() throws ParseException {
-        String apiUrl = "http://211.237.50.150:7080/openapi/2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8/json/Grid_20150827000000000226_1/1/1000";
-
-        // HTTP GET 요청 보내기
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
-
-        // 응답 값
-        String responseBody = responseEntity.getBody();
-        System.out.println("GET Response: " + responseBody);
-
-        String jsonStringStr = responseBody;
-        JSONParser parser = new JSONParser();
-
-        JSONObject jsonObj = (JSONObject) parser.parse(jsonStringStr);
-        String Grid = jsonObj.get("Grid_20150827000000000226_1").toString();
-        System.out.println("Grid -> " + Grid);
-
-        JSONObject jsonObjGrid = (JSONObject) parser.parse(Grid);
-        System.out.println("row -> " + jsonObjGrid.get("row").toString());
-
-        String row = jsonObjGrid.get("row").toString();
-        JSONArray jsonArray = (JSONArray) parser.parse(row);
-
-        System.out.println(jsonArray.get(0));
-
+        int batchSize = 1000;
+        int start = 1;
+        int end = batchSize;
+        boolean hasMore = true;
         ArrayList<RecipeInfo> list = new ArrayList<>();
 
+        JSONParser parser = new JSONParser();
 
+        while (hasMore) {
 
-        for(int i=0; i<jsonArray.size(); i++) {
-            JSONObject obj = (JSONObject) jsonArray.get(i);
+            System.out.println("start: " + start + ", end: " + end);
 
-            RecipeInfo re = new RecipeInfo();
+            String apiUrl = "http://211.237.50.150:7080/openapi/2a2d98088a90a23a81db461c5bd31675ca4cb35b994183c8b27182fe01fd45f8/json/Grid_20150827000000000226_1/" + start + "/" + end;
 
-            re.setRECIPE_ID(Integer.parseInt(obj.get("RECIPE_ID").toString()));
-            re.setRECIPE_NM_KO(obj.get("RECIPE_NM_KO").toString());
-            re.setSUMRY(obj.get("SUMRY").toString());
-            re.setNATION_CODE(obj.get("NATION_CODE").toString());
-            re.setNATION_NM(obj.get("NATION_NM").toString());
-            re.setTY_CODE(obj.get("TY_CODE").toString());
-            re.setTY_NM(obj.get("TY_NM").toString());
-            re.setCOOKING_TIME(obj.get("COOKING_TIME").toString());
-            re.setCALORIE(obj.get("CALORIE").toString());
-            re.setQNT(obj.get("QNT").toString());
-            re.setLEVEL_NM(obj.get("LEVEL_NM").toString());
-            re.setIRDNT_CODE(obj.get("IRDNT_CODE").toString());
-            re.setPC_NM(obj.get("PC_NM").toString());
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(apiUrl, String.class);
+            String responseBody = responseEntity.getBody();
 
-            list.add(re);
+            JSONObject jsonObj = (JSONObject) parser.parse(responseBody);
+            String Grid = jsonObj.get("Grid_20150827000000000226_1").toString();
+            JSONObject jsonObjGrid = (JSONObject) parser.parse(Grid);
+
+            // row가 없거나, 빈 배열이면 반복 종료
+            if (!jsonObjGrid.containsKey("row")) {
+                break;
+            }
+            String row = jsonObjGrid.get("row").toString();
+            JSONArray jsonArray = (JSONArray) parser.parse(row);
+
+            if (jsonArray.size() == 0) {
+                hasMore = false;
+            } else {
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject obj = (JSONObject) jsonArray.get(i);
+
+                    RecipeInfo re = new RecipeInfo();
+                    re.setRecipeId(Integer.parseInt(obj.get("RECIPE_ID").toString()));
+                    re.setRECIPE_NM_KO(obj.get("RECIPE_NM_KO").toString());
+                    re.setSUMRY(obj.get("SUMRY").toString());
+                    re.setNATION_CODE(obj.get("NATION_CODE").toString());
+                    re.setNATION_NM(obj.get("NATION_NM").toString());
+                    re.setTY_CODE(obj.get("TY_CODE").toString());
+                    re.setTY_NM(obj.get("TY_NM").toString());
+                    re.setCookingTime(obj.get("COOKING_TIME").toString());
+                    re.setCALORIE(obj.get("CALORIE").toString());
+                    re.setQNT(obj.get("QNT").toString());
+                    re.setLevelNm(obj.get("LEVEL_NM").toString());
+                    re.setIRDNT_CODE(obj.get("IRDNT_CODE").toString());
+                    re.setPC_NM(obj.get("PC_NM").toString());
+
+                    list.add(re);
+                }
+                // 다음 페이지로 이동
+                start += batchSize;
+                end += batchSize;
+            }
         }
-
-        System.out.println(list.get(0).getRECIPE_NM_KO());
-        System.out.println(list.get(1).getRECIPE_NM_KO());
-
+        // 다 모은 후 저장
         recipeOrderService.saveRecipe(list);
-
+        System.out.println("전체 레시피 저장 완료: " + list.size() + "건");
     }
+
 
     @GetMapping("/getAllMartInfo")
     public List<MartInfo> getAllMartInfo() {
@@ -144,15 +152,6 @@ public class DataController {
         return response;
     }
 
-    @GetMapping("/polygon")
-    public ResponseEntity<Resource> ctprvnGetGeoJson() {
-        // 경로를 'static/ctprvn-wgs84.json'으로 설정
-        Resource resource = resourceLoader.getResource("classpath:static/gu-geojson.json");
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(resource);
-    }
-
     @GetMapping("/saveMafraRecipe")
     public void callMAFRARecipeApi(){
         String apiKey = "8d6d9d4bb3d2f6bc550aff59664c8f940d21003e41d7c03303b975b3b17510ab";
@@ -169,48 +168,87 @@ public class DataController {
 
     @GetMapping("/saveMartInfo")
     public void saveMartInfo() throws ParseException {
-        String apiKey = "4d48764c53776c67373041696a576b";
-        String url = "http://openAPI.seoul.go.kr:8088/" + apiKey + "/json/ListNecessariesPricesService/1001/2000/?P_YEAR_MONTH=2025-05";
+        String apiKey =  martInfoApiKey;
 
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-        String responseBody = responseEntity.getBody();
-        //System.out.println(responseBody);
+        int pageSize = 1000;
+        int start = 1;
+        int lastEnd = 0;
 
-        String jsonString = responseBody;
-        JSONParser parser = new JSONParser();
+        while (true) {
+            int end = start + pageSize - 1;
+            lastEnd = end;
 
-        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
-        String ListNecessariesPricesService = jsonObject.get("ListNecessariesPricesService").toString();
+            String url = "http://openAPI.seoul.go.kr:8088/" + apiKey + "/json/ListNecessariesPricesService/" + start + "/" + end + "/?P_YEAR_MONTH=2025-06";
 
-        JSONObject jsonObj = (JSONObject) parser.parse(ListNecessariesPricesService);
-        String row = jsonObj.get("row").toString();
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+            String responseBody = responseEntity.getBody();
 
-        JSONArray jsonArray = (JSONArray) parser.parse(row);
+            String jsonString = responseBody;
+            JSONParser parser = new JSONParser();
 
-        System.out.println(jsonArray.get(0));
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+            String ListNecessariesPricesService = jsonObject.get("ListNecessariesPricesService").toString();
 
-        for(int i=0; i<jsonArray.size(); i++) {
-            JSONObject obj = (JSONObject) jsonArray.get(i);
+            if (ListNecessariesPricesService == null) break; // 서비스 자체가 없으면 종료
 
-            MartInfo martInfo = new MartInfo();
 
-            martInfo.setpSeq(obj.get("P_SEQ").toString());
-            martInfo.setmSeq(obj.get("M_SEQ").toString());
-            martInfo.setmName(obj.get("M_NAME").toString());
-            martInfo.setaSeq(obj.get("A_SEQ").toString());
-            martInfo.setaName(obj.get("A_NAME").toString());
-            martInfo.setaUnit(obj.get("A_UNIT").toString());
-            martInfo.setaPrice(obj.get("A_PRICE").toString());
-            martInfo.setpYearMonth(obj.get("P_YEAR_MONTH").toString());
-            martInfo.setAddCol(obj.get("ADD_COL").toString());
-            martInfo.setpDate(obj.get("P_DATE").toString());
-            martInfo.setmTypeCode(obj.get("M_TYPE_CODE").toString());
-            martInfo.setmTypeName(obj.get("M_TYPE_NAME").toString());
-            martInfo.setmGuCode(obj.get("M_GU_CODE").toString());
-            martInfo.setmGuName(obj.get("M_GU_NAME").toString());
+            JSONObject jsonObj = (JSONObject) parser.parse(ListNecessariesPricesService);
+            String row = jsonObj.get("row").toString();
 
-            martInfoService.saveMartInfo(martInfo);
+            if (row == null) break; // 서비스 자체가 없으면 종료
+
+            JSONArray jsonArray = (JSONArray) parser.parse(row);
+
+            if (jsonArray.isEmpty()) break; // 빈 배열이면 종료
+
+            boolean hasTargetMonth = false;
+
+            System.out.println(jsonArray.get(0));
+
+            for(int i=0; i<jsonArray.size(); i++) {
+                JSONObject obj = (JSONObject) jsonArray.get(i);
+
+                // 가격이 '0'이면 저장하지 않음
+                String price = obj.get("A_PRICE").toString();
+                if ("0".equals(price)) continue;
+
+                String pYearMonth = obj.get("P_YEAR_MONTH").toString();
+                if ("2025-06".equals(pYearMonth)) {
+                    hasTargetMonth = true;
+
+                    MartInfo martInfo = new MartInfo();
+
+                    martInfo.setpSeq(obj.get("P_SEQ").toString());
+                    martInfo.setmSeq(obj.get("M_SEQ").toString());
+                    martInfo.setmName(obj.get("M_NAME").toString());
+                    martInfo.setaSeq(obj.get("A_SEQ").toString());
+                    martInfo.setaName(obj.get("A_NAME").toString());
+                    martInfo.setaUnit(obj.get("A_UNIT").toString());
+                    martInfo.setaPrice(price);
+                    martInfo.setpYearMonth(obj.get("P_YEAR_MONTH").toString());
+                    martInfo.setAddCol(obj.get("ADD_COL").toString());
+                    martInfo.setpDate(obj.get("P_DATE").toString());
+                    martInfo.setmTypeCode(obj.get("M_TYPE_CODE").toString());
+                    martInfo.setmTypeName(obj.get("M_TYPE_NAME").toString());
+                    martInfo.setmGuCode(obj.get("M_GU_CODE").toString());
+                    martInfo.setmGuName(obj.get("M_GU_NAME").toString());
+
+                    System.out.println("start & end = " + start + ", " + lastEnd);
+                    martInfoService.saveMartInfo(martInfo);
+                }
+
+            }
+
+            // 이번 페이지에 2025-06이 없으면 반복 종료
+            if (!hasTargetMonth) break;
+
+            // 다음 페이지로 이동
+            start += pageSize;
         }
+
+
+        System.out.println("endpage = " + lastEnd);
     }
+
 
 }

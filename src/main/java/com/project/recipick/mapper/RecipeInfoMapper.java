@@ -12,5 +12,5 @@ public interface RecipeInfoMapper {
 
     void saveRecipe(RecipeInfo re);
 
-    RecipeInfo findRecipe(String recipe_nm);
+    RecipeInfo findRecipe(String recipe_name);
 }

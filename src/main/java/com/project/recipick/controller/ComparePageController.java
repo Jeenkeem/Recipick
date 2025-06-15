@@ -23,9 +23,10 @@ public class ComparePageController {
 
     // 👉 마트 데이터 JSON으로 내려주는 API (프론트에서 fetch로 호출함)
     @ResponseBody
+    // 수정 (느슨한 매칭을 사용하는 버전)
     @GetMapping("/mart-items")
     public List<MartItemDTO> getMartItems(@RequestParam String martName) {
-        return martInfoService.getMartItemsByMartName(martName);
+        return martInfoService.getMartItemsByFuzzyMatch(martName);  // ✅ 유사 이름 허용
     }
 
 }

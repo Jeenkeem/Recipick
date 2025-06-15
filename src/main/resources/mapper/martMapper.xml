@@ -16,7 +16,7 @@
 
     <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE m_gu_code = #{gu_name}
+        WHERE m_gu_code = #{gu_code}
     </select>
 
     <select id="getProductByCuCode" resultType="String">
@@ -30,14 +30,26 @@
         a_name AS aName,
         a_price AS aPrice
         FROM mart_info
-        WHERE m_name = #{martName}
+        WHERE REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price::int > 0
         ORDER BY a_name, m_gu_name DESC
     </select>
 
+
     <select id="getIrdntPrice" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
         SELECT * FROM mart_info
-        WHERE a_name LIKE CONCAT(#{ingredient}, ' %')
+        <!-- WHERE a_name ~ ('\y' || #{ingredient} || '\y') -->
+        WHERE a_name ~ (#{ingredient} || '\M')
         and a_price != '0';
+    </select>
+
+    <select id="findByMName" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE
+        REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price != '0';
     </select>
 
     <insert id="saveMartInfo" parameterType="MartInfo">
@@ -50,6 +62,21 @@
             #{P_YEAR_MONTH}, #{ADD_COL}, #{P_DATE}, #{M_TYPE_CODE}, #{M_TYPE_NAME},
             #{M_GU_CODE}, #{M_GU_NAME}
         )
+        ON CONFLICT (P_SEQ) DO UPDATE
+        SET
+            M_SEQ = EXCLUDED.M_SEQ,
+            M_NAME = EXCLUDED.M_NAME,
+            A_SEQ = EXCLUDED.A_SEQ,
+            A_NAME = EXCLUDED.A_NAME,
+            A_UNIT = EXCLUDED.A_UNIT,
+            A_PRICE = EXCLUDED.A_PRICE,
+            P_YEAR_MONTH = EXCLUDED.P_YEAR_MONTH,
+            ADD_COL = EXCLUDED.ADD_COL,
+            P_DATE = EXCLUDED.P_DATE,
+            M_TYPE_CODE = EXCLUDED.M_TYPE_CODE,
+            M_TYPE_NAME = EXCLUDED.M_TYPE_NAME,
+            M_GU_CODE = EXCLUDED.M_GU_CODE,
+            M_GU_NAME = EXCLUDED.M_GU_NAME
     </insert>
 
 </mapper>

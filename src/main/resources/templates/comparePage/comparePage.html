@@ -96,7 +96,7 @@
     <div class="prev-button-box">
       <button class="nav-button" @click="toPrev" :disabled="clickCount == 0">이전</button>
     </div>
-    <div class="next-button-box">
+    <div class="next-button-box" v-if="page !== 2">
       <button class="nav-button" @click="toNext">다음</button>
     </div>
   </div>

@@ -21,5 +21,7 @@ public interface MartInfoMapper {
 
     List<MartInfo> getIrdntPrice(String ingredient);
 
+    List<MartInfo> findByMName(String martName);
+
     void saveMartInfo(MartInfo martInfo);
 }
