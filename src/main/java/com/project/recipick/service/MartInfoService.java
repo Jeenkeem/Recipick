@@ -45,6 +45,19 @@ public class MartInfoService {
         martInfoMapper.saveMartInfo(martInfo);
     }
 
+    public void deleteAllMartInfo() {
+        martInfoMapper.deleteAllMartInfo();
+    }
+
+    public void deleteMartInfo(MartInfo martInfo) {
+        String m_name = martInfo.getmName();
+        martInfoMapper.deleteMartInfo(m_name);
+    }
+
+    public MartInfo findLatestByMartAndItem(String mName, String aName) {
+        return martInfoMapper.findLatestByMartAndItem(mName, aName);
+    }
+
     public List<MartInfo> getAllMartInfo() {
         return martInfoMapper.findAll();
     }

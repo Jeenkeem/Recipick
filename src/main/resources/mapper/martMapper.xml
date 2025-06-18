@@ -79,4 +79,23 @@
             M_GU_NAME = EXCLUDED.M_GU_NAME
     </insert>
 
+    <delete id="deleteAllMartInfo">
+        DELETE FROM mart_info;
+    </delete>
+
+    <delete id="deleteMartInfo" parameterType="String">
+        DELETE FROM mart_info
+        WHERE m_name = #{m_name};
+    </delete>
+
+    <select id="findLatestByMartAndItem" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT *
+        FROM mart_info
+        WHERE m_name = #{mName}
+        AND a_name = #{aName}
+        ORDER BY p_date DESC
+        LIMIT 1
+    </select>
+
+
 </mapper>
