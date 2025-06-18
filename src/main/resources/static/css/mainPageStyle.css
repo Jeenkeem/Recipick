@@ -1,0 +1,182 @@
+body {
+    background-image: url("../image/BG_illust.svg");
+    background-repeat: no-repeat;
+    background-position: calc(50% - 130px) -300px;
+    background-size: 140%;
+    font-family: 'Pretendard', 'Noto Sans KR',sans-serif;
+}
+
+.main-logo {
+    display: flex;                /* 자식(img)을 가운데로 정렬하려면 필요 */
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;               /* 이 줄이 핵심: div 자체를 페이지 가로 가운데로 */
+    margin-top: 200px;
+}
+
+.logo-img{
+    width: 394px;
+    height: 96px;
+}
+
+/*검색*/
+.search-box-wrapper {
+    position: relative;
+    width: 800px;
+    max-width: 90%;
+    margin: 0 auto 24px;
+}
+
+.search-section {
+    text-align: center;
+    margin-top: 22px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    width: 800px;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 15px 20px;
+    border-radius: 40px;
+    box-sizing: border-box;
+}
+
+.search-icon {
+    font-size: 18px;
+    margin-right: 10px;
+    color: #999;
+}
+
+.search-input {
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 16px;
+    flex-grow: 1;
+    color: #333;
+}
+
+/*가운데 텍스트 */
+.center-text {
+    display: flex;
+    justify-content: center;
+    margin-top: 482px; /* 위 요소와 간격 */
+}
+
+.center-content{
+    font-size: 48px;
+    text-align: left;
+    font-weight: 800;
+}
+/*노란 버튼 영역*/
+.button-section {
+    display: flex;
+    justify-content: center;
+    gap: 120px; /* 버튼 간격 */
+    margin-top: 90px;
+    flex-wrap: wrap; /* 반응형 대비 */
+}
+
+.button-wrapper {
+    text-align: center;
+}
+
+.button-desc {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.yellow-button {
+    background-color: #FFBD55;
+    width: 288px;
+    height: 72px;
+    color: white;
+    font-size: 18px;
+    padding: 16px 44px;
+    border: none;
+    border-radius: 80px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.yellow-button:hover {
+    background-color: #EA840F;
+}
+
+/* 회색 영역 */
+.gray-section{
+    background-color: #EEEEEE;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    margin-top: 264px;
+}
+
+.gray-text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.gray-text-1{
+    font-size: 40px;
+    margin-top: 77px;
+}
+
+.gray-text-2{
+    font-size: 16px;
+    margin-bottom: 77px;
+}
+/* 검색창을 화면 중앙에 정렬 */
+#map-section{
+    position: relative;
+    width: 100%;
+    height: 920px;
+}
+
+.map-search-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-search-box {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 100px;
+    padding: 10px 20px;
+    width: 800px;
+    height: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/*.search-box img {*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    margin-right: 10px;*/
+/*}*/
+
+.map-search-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+}
+
+.map-search-box input::placeholder{
+    color: #111111;
+}

@@ -4,22 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>레시피 리스트</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" href="/resources/css/recipeRecommendStyle.css" />
-        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/resources/js/recipeRecommend.js"></script>
 </head>
 <body>
 <div id="recipeRecommend-page">
-    <div class="menu-wrapper">
-        <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
-        <div class="menu-buttons">
-            <button class="menu-btn">레시피검색</button>
-            <button class="menu-btn">내 동네시장</button>
-            <button class="menu-btn">비교장보기</button>
-        </div>
-    </div>
+    <div th:replace="common/menubar :: menubar"></div>
     <!-- 검색 창-->
     <div class="search-section">
         <p class="search-subtitle">내가 가진 재료로 무엇을 만들 수 있을까요?</p>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>레시피 리스트</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" href="/resources/css/recipeSearchStyle.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 <!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
@@ -12,14 +13,7 @@
 </head>
 <body>
 <div id="recipeSearch-page">
-    <div class="menu-wrapper">
-        <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
-        <div class="menu-buttons">
-            <button class="menu-btn">레시피검색</button>
-            <button class="menu-btn">내 동네시장</button>
-            <button class="menu-btn">비교장보기</button>
-        </div>
-    </div>
+    <div th:replace="common/menubar :: menubar"></div>
     <!-- 검색 창-->
     <div class="search-section">
         <p class="search-subtitle">먹고 싶은 요리를 검색해보세요.</p>
@@ -38,26 +32,37 @@
     <div id="card-area">
         <div v-if="searched" class="recipe-container">
             <div v-for="recipe in results" :key="recipe.recipeId" class="recipe-card">
-                <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
-                <h3>{{recipe.recipeNmKo}}</h3>
-                <div class="recipe-meta">
-                    <span class="difficulty">{{recipe.levelNm}}</span>
-                    <span class="difficulty">{{recipe.cookingTime}}</span>
-                    <span class="difficulty">{{recipe.calorie}}</span>
+                <div class="recipe-image-wrapper">
+                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
+                </div>
+                <div class="recipe-info">
+                    <h3>{{recipe.recipeNmKo}}</h3>
+                    <div class="recipe-detail">
+                        <div><strong>난이도</strong><span class="stars">{{getStars(recipe.levelNm)}}</span></div>
+                        <div><strong>조리시간</strong> {{recipe.cookingTime}}</div>
+                        <div><strong>칼로리</strong> {{recipe.calorie}}</div>
+                    </div>
                 </div>
             </div>
         </div>
         <!--  thymeleaf  -->
         <div v-else class="recipe-container" id="recipe-container">
             <div th:each="recipe : ${recipeCards}" class="recipe-card">
-                <img th:src="${recipe.rcpImgUrl}"
-                     th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
-                     alt="레시피 이미지" />
-                <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
-                <div class="recipe-meta">
-                    <span class="difficulty" th:text="${recipe.levelNm}">난이도</span>
-                    <span class="time" th:text="${recipe.cookingTime}">시간</span>
-                    <span class="kcal" th:text="${recipe.calorie}">칼로리</span>
+                <div class="recipe-image-wrapper">
+                    <img th:src="${recipe.rcpImgUrl}"
+                         th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
+                         alt="레시피 이미지" />
+                </div>
+                <div class="recipe-info">
+                    <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
+                    <div class="recipe-detail">
+                        <div><strong>난이도</strong> <span class="stars" th:text="
+                            ${recipe.levelNm == '초보환영' ? '★☆☆' :
+                              (recipe.levelNm == '보통' ? '★★☆' :
+                              (recipe.levelNm == '어려움' ? '★★★' : ''))}">></span></div>
+                        <div><strong>조리시간</strong> <span th:text="${recipe.cookingTime}"></span></div>
+                        <div><strong>칼로리</strong> <span th:text="${recipe.calorie}"></span></div>
+                    </div>
                 </div>
             </div>
         </div>
