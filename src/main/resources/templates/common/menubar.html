@@ -1,10 +1,10 @@
 <div th:fragment="menubar">
     <div class="menu-wrapper">
-        <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
+        <img src="/resources/image/recipick_logo.png" onclick="location.href='/recipick'" alt="Recipick 메뉴바" class="menu-logo">
         <div class="menu-buttons">
-            <button class="menu-btn">레시피검색</button>
-            <button class="menu-btn">내 동네시장</button>
-            <button class="menu-btn">비교장보기</button>
+            <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+            <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
+            <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
         </div>
     </div>
 </div>
