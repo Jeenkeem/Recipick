@@ -4,19 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipick</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/recipeDetailStyle.css">
 </head>
 <body>
     <div class="recipe-container">
-        
-        <div class="menu-wrapper">
-            <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
-            <div class="menu-buttons">
-              <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/cards'">레시피검색</button>
-              <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/mapPage'">내 동네시장</button>
-              <button class="menu-btn">비교장보기</button>
-            </div>
-        </div>
+
+        <div th:replace="common/menubar :: menubar"></div>
 
         <div class="main-section">
             <span th:text="${recipe_sumry}"></span>
