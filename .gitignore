@@ -52,4 +52,5 @@ out/
 
 # Spring Boot
 application.properties
+application-prod.properties
 application.yml
