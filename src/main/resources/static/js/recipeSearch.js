@@ -1,6 +1,6 @@
 function redirectToRecipe(name, id) {
     const encodedName = encodeURIComponent(name);
-    const url = `http://localhost:8080/recipick/recipeInfo?recipe_name=${encodedName}&recipe_id=${id}`;
+    const url = `http://recipick.kro.kr:8099/recipick/recipeInfo?recipe_name=${encodedName}&recipe_id=${id}`;
     location.href = url;
 }
 

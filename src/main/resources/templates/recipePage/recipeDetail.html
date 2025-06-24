@@ -20,7 +20,11 @@
                 <div class="recipe-info">
                     <div class="recipe-info-row">
                         <span class="label">난이도</span>
-                        <span class="value" th:text="${recipe_level}"></span>
+                        <span class="value" th:text="
+                            ${recipe_level == '초보환영' ? '★☆☆' :
+                              (recipe_level == '보통' ? '★★☆' :
+                              (recipe_level == '어려움' ? '★★★' : ''))}">>
+                        </span>
                     </div>
                     <div class="recipe-info-row">
                         <span class="label">조리시간</span>
