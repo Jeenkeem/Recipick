@@ -65,7 +65,7 @@ body {
 .center-text {
     display: flex;
     justify-content: center;
-    margin-top: 482px; /* 위 요소와 간격 */
+    margin-top: 282px; /* 위 요소와 간격 */
 }
 
 .center-content{
@@ -116,8 +116,7 @@ body {
     height: 240px;
     display: flex;
     justify-content: center;
-    margin-top: 864px;
-    margin-bottom: 400px;
+    margin-top: 300px;
 }
 
 .gray-text-center {
