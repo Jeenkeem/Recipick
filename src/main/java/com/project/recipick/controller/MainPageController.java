@@ -13,9 +13,7 @@ public class MainPageController {
 
     @GetMapping("/recipick")
     public String home(Model model){
-
         model.addAttribute("kakaoApiKey", kakaoApiKey);
-
         return "MainPage";
     }
 }
