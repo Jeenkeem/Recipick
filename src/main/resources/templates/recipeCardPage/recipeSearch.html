@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>레시피 리스트</title>
+    <title>recipick</title>
     <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" href="/resources/css/recipeSearchStyle.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -13,7 +13,8 @@
 </head>
 <body>
 <div id="recipeSearch-page">
-    <div th:replace="common/menubar :: menubar"></div>
+    <div th:replace="~{common/menubar :: menubar}"></div>
+
     <!-- 검색 창-->
     <div class="search-section">
         <p class="search-subtitle">먹고 싶은 요리를 검색해보세요.</p>

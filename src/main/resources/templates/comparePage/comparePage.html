@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>recipick</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <link rel="stylesheet" href="/resources/css/menubar.css" />
 </head><link rel="stylesheet" type="text/css" href="/resources/css/comparePriceStyle.css">
 
 <body>
 <img src="/resources/image/page_background.png" class="page-background">
-<div th:replace="common/menubar :: menubar"></div>
+<div th:replace="~{common/menubar :: menubar}"></div>
 <div id="compare-page">
 
   <div class="total-table-wrapper">

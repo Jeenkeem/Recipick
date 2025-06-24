@@ -10,7 +10,7 @@
 <body>
     <div class="recipe-container">
 
-        <div th:replace="common/menubar :: menubar"></div>
+        <div th:replace="~{common/menubar :: menubar}"></div>
 
         <div class="main-section">
             <span th:text="${recipe_sumry}"></span>
@@ -60,7 +60,7 @@
                     function goToMapPage() {
                         const inputs = document.querySelectorAll('#irdntContainer input');
                         const names = Array.from(inputs).map(input => input.value).join(',');
-                        const url = `http://localhost:8080/recipick/mapPage?irdntNames=${encodeURIComponent(names)}`;
+                        const url = `http://recipick.kro.kr:8099/recipick/mapPage?irdntNames=${encodeURIComponent(names)}`;
                         location.href = url;
                       }
                 </script>
