@@ -24,4 +24,10 @@ public interface MartInfoMapper {
     List<MartInfo> findByMName(String martName);
 
     void saveMartInfo(MartInfo martInfo);
+
+    void deleteAllMartInfo();
+
+    void deleteMartInfo(String m_name);
+
+    MartInfo findLatestByMartAndItem(String mName, String aName);
 }

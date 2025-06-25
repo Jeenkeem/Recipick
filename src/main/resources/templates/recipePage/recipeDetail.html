@@ -4,148 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipick</title>
-    <style>
-        .recipe-container {
-            max-width: 50%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .menu-wrapper {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 0 20px 0;
-            margin-bottom: 40px;
-        }
-
-        .menu-logo {
-            height: 20px; /* 로고 높이 조정 */
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-
-        .menu-buttons {
-            display: flex;
-            gap: 30px; /* 버튼 간격 */
-            justify-content: center;
-        }
-
-        .menu-btn {
-        position: relative;
-        background: transparent;
-        border: none;
-        color: #000;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        padding-bottom: 4px;
-        transition: all 0.3s ease;
-        }
-
-        .menu-btn::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 2px;
-        width: 100%;
-        background-color: #000;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
-        }
-
-        .menu-btn:hover::after {
-        transform: scaleX(1);
-        }
-
-        
-        .main-image {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .ingredients-section {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            margin-top: 70px;
-        }
-        .steps-section {
-            margin: 30px 0;
-        }
-        .step {
-            margin-bottom: 25px;
-            padding: 15px;
-            background-color: #fff;
-            border: 1px solid #eee;
-            border-radius: 8px;
-        }
-        .step-number {
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-right: 10px;
-        }
-
-        
-        .bg-img {
-            width: 200px; /* 원하는 너비로 조절 가능 */
-            height: auto; /* 비율 유지 */
-            top: 50%;
-            left: 50%;
-            margin: 20px 0;
-        }
-        .custom-button {
-          background-color: #ff7131; /* 주황색 */
-          color: white;
-          padding: 12px 24px;
-          margin-top: 30px;
-          margin-bottom: 50px;
-          border: none;
-          border-radius: 999px; /* 완전 둥근 버튼 */
-          font-size: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          transition: background-color 0.3s ease;
-        }
-
-        .custom-button:hover {
-          background-color: #ff8c4a; /* 약간 밝은 주황 */
-        }
-
-        .main-section {
-          border-radius: 20px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          background-color: #ffffff;
-          padding: 50px;
-          padding-top: 70px;
-          padding-bottom: 200px;
-        }
-    </style>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/recipeDetailStyle.css">
 </head>
 <body>
     <div class="recipe-container">
-        
-        <div class="menu-wrapper">
-            <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
-            <div class="menu-buttons">
-              <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/cards'">레시피검색</button>
-              <button class="menu-btn" onclick="location.href='http://localhost:8080/recipick/mapPage'">내 동네시장</button>
-              <button class="menu-btn">비교장보기</button>
-            </div>
-        </div>
+
+        <div th:replace="~{common/menubar :: menubar}"></div>
 
         <div class="main-section">
             <span th:text="${recipe_sumry}"></span>
-            <h2><span th:text="${recipe_title}"></span></h2>
-            난이도 <span th:text="${recipe_level}"></span> <br>
-            조리시간 <span th:text="${recipe_cookingTime}"></span>
+
+            <div class="top-section">
+                <h2><span th:text="${recipe_title}"></span></h2>
+                <div class="recipe-info">
+                    <div class="recipe-info-row">
+                        <span class="label">난이도</span>
+                        <span class="value" th:text="
+                            ${recipe_level == '초보환영' ? '★☆☆' :
+                              (recipe_level == '보통' ? '★★☆' :
+                              (recipe_level == '어려움' ? '★★★' : ''))}">>
+                        </span>
+                    </div>
+                    <div class="recipe-info-row">
+                        <span class="label">조리시간</span>
+                        <span class="value" th:text="${recipe_cookingTime}"></span>
+                    </div>
+                    <div class="recipe-info-row">
+                        <span class="label">칼로리</span>
+                        <span class="value" th:text="${calorie}"></span>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="ingredients-section">
                 <h2>🥘 필요한 재료</h2>
@@ -169,7 +60,7 @@
                     function goToMapPage() {
                         const inputs = document.querySelectorAll('#irdntContainer input');
                         const names = Array.from(inputs).map(input => input.value).join(',');
-                        const url = `http://localhost:8080/recipick/mapPage?irdntNames=${encodeURIComponent(names)}`;
+                        const url = `http://recipick.kro.kr:8099/recipick/mapPage?irdntNames=${encodeURIComponent(names)}`;
                         location.href = url;
                       }
                 </script>

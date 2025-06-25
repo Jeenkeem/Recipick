@@ -36,57 +36,6 @@ body {
 .recipe-container {
     max-width: 80%;
     margin: 0 auto;
-    padding: 20px;
-}
-
-.menu-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 0 20px 0;
-    margin-bottom: 40px;
-}
-
-.menu-logo {
-    height: 20px; /* 로고 높이 조정 */
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.menu-buttons {
-    display: flex;
-    gap: 30px; /* 버튼 간격 */
-    justify-content: center;
-}
-
-.menu-btn {
-    position: relative;
-    background: transparent;
-    border: none;
-    color: #000;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    padding-bottom: 4px;
-    transition: all 0.3s ease;
-}
-
-.menu-btn::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 100%;
-    background-color: #000;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.menu-btn:hover::after {
-    transform: scaleX(1);
 }
 
 .search-wrapper {
@@ -232,7 +181,7 @@ body {
   position: absolute;
   top: 75px;
   right: 25px;
-  width: 30%;
+  width: 35%;
   height: 750px;
   background-color: white;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
@@ -279,9 +228,9 @@ body {
 
 /* 오른쪽 끝에 열기 버튼 */
 .open-panel-btn {
-  position: fixed;
+  position: absolute;
   top: 50%;
-  right: 10%;
+  right: 0px;
   transform: translateY(-50%);
   width: 40px;
   height: 60px;

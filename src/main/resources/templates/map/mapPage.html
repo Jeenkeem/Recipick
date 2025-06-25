@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>recipick</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/mapPageIrdntStyle.css">
 </head>
 <body>
@@ -13,21 +14,13 @@
 </div>
 
 <div class="recipe-container">
-    <div class="menu-wrapper">
-        <img src="/resources/image/recipick_logo.png" alt="Recipick 메뉴바" class="menu-logo">
-        <div class="menu-buttons">
-            <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
-            <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
-            <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
-        </div>
-    </div>
-
+    <div th:replace="~{common/menubar :: menubar}"></div>
     <div>
         <div class="search-wrapper">
             <div class="titleText">내 주변 시장 찾기</div>
 
             <div class="search-bar">
-                <span class="search-icon">🔍</span>
+                <span id="search-icon" style="cursor: pointer;">🔍</span>
                 <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
             </div>
         </div>

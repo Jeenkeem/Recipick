@@ -45,6 +45,19 @@ public class MartInfoService {
         martInfoMapper.saveMartInfo(martInfo);
     }
 
+    public void deleteAllMartInfo() {
+        martInfoMapper.deleteAllMartInfo();
+    }
+
+    public void deleteMartInfo(MartInfo martInfo) {
+        String m_name = martInfo.getmName();
+        martInfoMapper.deleteMartInfo(m_name);
+    }
+
+    public MartInfo findLatestByMartAndItem(String mName, String aName) {
+        return martInfoMapper.findLatestByMartAndItem(mName, aName);
+    }
+
     public List<MartInfo> getAllMartInfo() {
         return martInfoMapper.findAll();
     }
@@ -78,8 +91,15 @@ public class MartInfoService {
         return martInfoMapper.getIrdntPrice(ingredient);
     }
 
-    public List<MartInfo> findByMName(String martName) {
-        return martInfoMapper.findByMName(martName);
+    public List<MartItemDTO> findByMName(String martName) {
+        //return martInfoMapper.findByMName(martName);
+
+        String bestMatch = findBestMatchingMart(martName);
+        List<MartItemDTO> list = martInfoMapper.selectItemsByMartName(bestMatch);
+        return list.stream()
+                .map(m -> new MartItemDTO(m.getaName(), m.getaPrice()))
+                .collect(Collectors.toList());
+
     }
 
     public List<Object> searchMartInKakao(List<MartInfo> martList, String ingredient) {

@@ -22,7 +22,7 @@ public class RecipeCardController {
     public String getRecipeCards(Model model) {
         model.addAttribute("recipeCards", recipeCardService.getRecipeCardList());
 
-        return "recipeCardPage/recipeSearch";
+        return "recipecardPage/recipeSearch";
     }
 
     @RequestMapping("/search")
@@ -34,18 +34,17 @@ public class RecipeCardController {
 
     @GetMapping("/rec")
     public String getRecipeCardsRecommend(Model model){
-        model.addAttribute("recipeCards", recipeCardService.getRecipeCardList());
-        return "recipeCardPage/recipeRecommend";
+        return "recipecardPage/recipeRecommend";
     }
 
-    @RequestMapping("rec/ingrnm")
+    @RequestMapping("/rec/ingrnm")
     @ResponseBody
     public List<RecipeIngredientEntity> searchIngredient(@RequestParam String inputIngredient){
         List<RecipeIngredientEntity> result = recipeCardService.getSearchedIngredientList(inputIngredient);
         return result;
     }
 
-    @RequestMapping("rec/result")
+    @RequestMapping("/rec/result")
     @ResponseBody
     public List<RecipeCardDTO> getRecommendRecipe(@RequestBody List<String> ingredients){
         int selectedSize = ingredients.size();

@@ -64,6 +64,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.recipeList = [];
                     this.searched = false;
                 }
+            },
+
+            getStars(levelNm){
+                const levels = {
+                    '초보환영': 1,
+                    '보통': 2,
+                    '어려움': 3
+                };
+                const count = levels[levelNm] || 0;
+                return '★'.repeat(count) + '☆'.repeat(3 - count);
             }
         }
     });
