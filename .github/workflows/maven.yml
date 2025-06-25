@@ -37,7 +37,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         source: "target/*.jar"
-        target: "C:\\Users\\DEKSTOP\\Desktop\\recipick_project"  # <- Windows 경로 (필요시 수정)
+        target: "C:\\Users\\DEKSTOP\\Desktop\\recipick_project"
 
     - name: Restart application on Windows
       uses: appleboy/ssh-action@master
