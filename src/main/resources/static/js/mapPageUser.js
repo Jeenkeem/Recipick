@@ -304,16 +304,30 @@ function handleButtonClick(button) {
     });
 }
 
+
+// Enter 키로 검색
 searchInput.addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        const ingredient = searchInput.value.trim();
-        if (ingredient) {
-            addIngredient(ingredient);
-            searchInput.value = '';
-        }
+        handleSearch();
     }
 });
+
+const searchIcon = document.getElementById('search-icon');
+
+// 돋보기 클릭으로 검색
+searchIcon.addEventListener('click', function () {
+    handleSearch();
+});
+
+// 검색 처리 함수
+function handleSearch() {
+    const ingredient = searchInput.value.trim();
+    if (ingredient) {
+        addIngredient(ingredient);
+        searchInput.value = '';
+    }
+}
 
 function updateAllButtonVisibility() {
     const ingredientButtons = Array.from(ingredientButtonsContainer.children).filter(
