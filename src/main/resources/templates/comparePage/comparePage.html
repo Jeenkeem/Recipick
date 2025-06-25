@@ -19,24 +19,22 @@
     </div>
   </div>
 
+  <div class="page-header">
+    <p class="page-subtitle">총 가격이 더 저렴한 가게를 비교해요</p>
+    <h3>마트별 비교 장보기</h3>
+  </div>
+
   <div class="total-table-wrapper">
     <!-- 왼쪽 테이블 -->
     <div class="table-wrapper">
       <img src="/resources/image/recipe_background.png" class="bg-img">
-      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
-      <div class="table-header">
-        <table>
-          <thead>
-          <tr><th>품목</th><th>가격</th></tr>
-          </thead>
-        </table>
-      </div>
+      <button class="table-title-button" :class="getLeftTextClass()" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
       <div class="table-content">
         <table>
           <tbody>
           <tr v-for="(item, index) in leftItems" :key="index">
-            <td>{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
-            <td>{{ item.price.toLocaleString() }}</td>
+            <td :class="getLeftTextClass()">{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
+            <td :class="getLeftTextClass()">{{ item.price.toLocaleString() }}</td>
             <td v-if="page != 2">
               <div class="quantity-control">
                 <button class="quantity-button" @click.stop="decreaseQuantity(index)">-</button>
@@ -50,11 +48,11 @@
       <div class="table-footer">
         <table>
           <tfoot>
-          <tr v-if="page == 2">
-            <td>총 금액: {{ leftTotal }}원</td>
+          <tr v-if = "page == 2">
+            <td :class="getLeftTextClass()">총 금액: {{ leftTotal }}원</td>
           </tr>
           <tr v-else>
-            <td>&nbsp;</td>
+            <td :class="getLeftTextClass()" style="font-size: 16px;">필요한 재료를 담고, 왼쪽의 <span style="color: #0000FF;">총 구매 금액(영수증)</span>을 확인해보세요</td>
           </tr>
           </tfoot>
         </table>
@@ -64,20 +62,16 @@
     <!-- 오른쪽 테이블 -->
     <div class="table-wrapper">
       <img src="/resources/image/recipe_background.png" class="bg-img">
-      <button class="table-title-button" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
-      <div class="table-header">
-        <table>
-          <thead>
-          <tr><th>품목</th><th>가격</th></tr>
-          </thead>
-        </table>
-      </div>
+      <button class="table-title-button" :class="getRightTextClass()" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
       <div class="table-content">
         <table>
           <tbody>
-          <tr v-for="(item, index) in rightItems" :key="'r' + index" @click="page != 2 ? removeFromRight(index) : null">
-            <td>{{ item.name }} ({{ item.quantity }}개)</td>
-            <td>{{ (item.price * item.quantity).toLocaleString() }}</td>
+          <tr v-for="(item, index) in rightItems" :key="'r' + index">
+            <td :class="getRightTextClass()">{{ item.name }} ({{ item.quantity }}개)</td>
+            <td :class="getRightTextClass()">{{ (item.price * item.quantity).toLocaleString() }}</td>
+            <td>
+              <button class="quantity-button" @click.stop="removeFromRight(index)" v-if="page !== 2">x</button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -85,7 +79,7 @@
       <div class="table-footer">
         <table>
           <tfoot>
-          <tr><td>총 금액: {{ rightTotal }}원</td></tr>
+          <tr><td :class="getRightTextClass()">총 금액: {{ rightTotal }}원</td></tr>
           </tfoot>
         </table>
       </div>
@@ -203,6 +197,13 @@
         if (this.page !== 2) return;
         const url = `/recipick/mapPage?highlight=${encodeURIComponent(martName)}`;
         window.location.href = url;
+      },
+      getLeftTextClass() {
+        // 페이지 0 또는 1일 때는 검정
+        return (this.page === 0 || this.page === 1 || this.page === 2) ? 'text-black' : 'text-blue';
+      },
+      getRightTextClass() {
+        return this.page === 2 ? 'text-black' : 'text-blue';
       }
     }
   });
