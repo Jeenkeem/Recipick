@@ -38,7 +38,6 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        ssh_passphrase: ${{ secrets.SSH_PASSPHRASE }}
         source: "target/*.jar"
         target: "C:\\Users\\DEKSTOP\\Desktop\\recipick_project"  # <- Windows 경로 (필요시 수정)
 
