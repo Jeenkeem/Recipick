@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>recipick</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <link rel="stylesheet" href="/static/css/menubar.css" />
-</head><link rel="stylesheet" type="text/css" href="/static/css/comparePriceStyle.css">
+  <link rel="stylesheet" href="/resources/css/menubar.css" />
+</head><link rel="stylesheet" type="text/css" href="/resources/css/comparePriceStyle.css">
 
 <body>
-<img src="/static/image/page_background.png" class="page-background">
+<img src="/resources/image/page_background.png" class="page-background">
 <div th:replace="~{common/menubar :: menubar}"></div>
 <div id="compare-page">
 
@@ -20,7 +20,7 @@
   <div class="total-table-wrapper">
     <!-- 왼쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/static/image/recipe_background.png" class="bg-img">
+      <img src="/resources/image/recipe_background.png" class="bg-img">
       <button class="table-title-button" :class="getLeftTextClass()" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
       <div class="table-content">
         <table>
@@ -59,7 +59,7 @@
 
     <!-- 오른쪽 테이블 -->
     <div class="table-wrapper">
-      <img src="/static/image/recipe_background.png" class="bg-img">
+      <img src="/resources/image/recipe_background.png" class="bg-img">
       <button class="table-title-button" :class="getRightTextClass()" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
       <div class="table-content">
         <table>
