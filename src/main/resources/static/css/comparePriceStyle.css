@@ -281,7 +281,7 @@ table {
 }
 
 .page-2 .table-wrapper .table-content table th:nth-child(2) {
-    padding-right: 60px;
+    padding-right: 60px; /* 원래보다 조금 왼쪽으로 */
 }
 
 .table-wrapper:nth-child(2) .quantity-button {
