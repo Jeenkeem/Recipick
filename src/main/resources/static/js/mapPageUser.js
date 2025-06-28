@@ -47,8 +47,8 @@ const map = new kakao.maps.Map(mapContainer, mapOption);
 const ps = new kakao.maps.services.Places();
 
 // 마커 이미지
-const DEFAULT_MARKER = '/resources/image/marker.png';
-const RED_MARKER = '/resources/image/red_marker.png';
+const DEFAULT_MARKER = '/resources/image/marker.svg';
+const RED_MARKER = '/resources/image/red_marker.svg';
 const defaultMarkerImage = new kakao.maps.MarkerImage(DEFAULT_MARKER, new kakao.maps.Size(39, 44), { offset: new kakao.maps.Point(19, 44) });
 const redMarkerImage = new kakao.maps.MarkerImage(RED_MARKER, new kakao.maps.Size(39, 44), { offset: new kakao.maps.Point(19, 44) });
 
@@ -591,6 +591,7 @@ sortSelect.addEventListener('change', () => {
         applyGuFilter();
     }
 });
+
 
 // 마트 패널 내 식재료 검색
 document.getElementById('ingredientSearch').addEventListener('input', function (e) {

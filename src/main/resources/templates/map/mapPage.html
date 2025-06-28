@@ -17,11 +17,15 @@
     <div th:replace="~{common/menubar :: menubar}"></div>
     <div>
         <div class="search-wrapper">
-            <div class="titleText">내 주변 시장 찾기</div>
+            <div class="titleText">
+                <div class="subTitle">주변에서 가장 저렴한 식재료를 찾을 수 있어요</div> <br>
+                <div class="mainTitle">식재료 검색하기</div>
+            </div>
 
             <div class="search-bar">
-                <span id="search-icon" style="cursor: pointer;">🔍</span>
-                <input type="text" class="search-input" placeholder="부족한 식재료 지도에서 검색하기">
+                <img src="/resources/image/search_icon.svg" id="search-icon">
+                <!--<span id="search-icon" style="cursor: pointer;">🔍</span>-->
+                <input type="text" class="search-input" placeholder="필요한 재료를 검색해보세요!">
             </div>
         </div>
 
@@ -48,8 +52,9 @@
                 <div class="panel-arrow-btn" id="martPanelArrowBtn">&gt;</div>
                 <div class="martTitle" id="martTitle">식재료명</div>
                 <div class="panel-search-bar">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="ingredientSearch" placeholder="식재료 검색...">
+                    <img src="/resources/image/search_icon.svg" id="search-icon-ingredient">
+                    <!--<span class="search-icon">🔍</span>-->
+                    <input type="text" id="ingredientSearch" placeholder="필요한 재료를 검색해보세요!">
                 </div>
                 <div id="martInfoContainer"></div>
             </div>
