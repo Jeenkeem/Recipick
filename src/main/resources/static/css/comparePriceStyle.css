@@ -264,19 +264,27 @@ table {
 }
 
 .quantity-button.minus {
-    background-image: url("/static/image/recipe_minus.png");
+    background-image: url("/image/recipe_minus.png");
 }
 
 .quantity-button.plus {
-    background-image: url("/static/image/recipe_plus.png");
+    background-image: url("/image/recipe_plus.png");
+}
+
+.quantity-button.cancel {
+    background-image: url("/image/recipe_cancel.png");
 }
 
 .quantity-button.minus:hover {
-    background-image: url("/static/image/recipe_minus_hover.png");
+    background-image: url("/image/recipe_minus_hover.png");
 }
 
 .quantity-button.plus:hover {
-    background-image: url("/static/image/recipe_plus_hover.png");
+    background-image: url("/image/recipe_plus_hover.png");
+}
+
+.quantity-button.cancel:hover {
+    background-image: url("/image/recipe_cancel_hover.png");
 }
 
 .text-black {

@@ -75,7 +75,7 @@
             <td :class="getRightTextClass()">{{ item.name }}</td>
             <td :class="getRightTextClass()">{{ (item.price * item.quantity).toLocaleString() }}</td>
             <td>
-              <button class="quantity-button" @click.stop="removeFromRight(index)" v-if="page !== 2">x</button>
+              <button class="quantity-button cancel" @click.stop="removeFromRight(index)" v-if="page !== 2"></button>
             </td>
           </tr>
           </tbody>
