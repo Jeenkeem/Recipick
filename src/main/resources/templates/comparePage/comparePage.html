@@ -26,8 +26,8 @@
         <table>
           <thead>
           <tr>
-            <th>품목</th>
-            <th>{{ page == 2 ? '가격' : '가격(단위)' }}</th>
+            <th>품목(단위)</th>
+            <th>{{ page == 2 ? '가격' : '가격' }}</th>
             <th v-if="page != 2"></th>
           </tr>
           </thead>
@@ -37,9 +37,9 @@
             <td :class="getLeftTextClass()">{{ item.price.toLocaleString() }}</td>
             <td v-if="page != 2">
               <div class="quantity-control">
-                <button class="quantity-button" @click.stop="decreaseQuantity(index)">-</button>
+                <button class="quantity-button minus" @click.stop="decreaseQuantity(index)"></button>
                 <span class="quantity-display">{{ item.quantity }}</span>
-                <button class="quantity-button" @click.stop="increaseQuantity(index)">+</button>
+                <button class="quantity-button plus" @click.stop="increaseQuantity(index)"></button>
               </div>
             </td>
           </tr>
@@ -65,14 +65,14 @@
         <table>
           <thead>
           <tr>
-            <th :class="getRightTextClass()">품목</th>
+            <th :class="getRightTextClass()">품목(단위)</th>
             <th :class="getRightTextClass()">가격</th>
             <th v-if="page != 2"></th> <!-- 페이지 2 아닐 때 수량 제거 버튼 열 유지 -->
           </tr>
           </thead>
           <tbody>
           <tr v-for="(item, index) in rightItems" :key="'r' + index">
-            <td :class="getRightTextClass()">{{ item.name }} ({{ item.quantity }}개)</td>
+            <td :class="getRightTextClass()">{{ item.name }}</td>
             <td :class="getRightTextClass()">{{ (item.price * item.quantity).toLocaleString() }}</td>
             <td>
               <button class="quantity-button" @click.stop="removeFromRight(index)" v-if="page !== 2">x</button>

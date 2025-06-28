@@ -65,7 +65,7 @@ table {
     transform: translate(-50%, -50%);
     z-index: -1;
     object-fit: cover;
-    filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.1));
+    filter: drop-shadow(0px 0px 40px rgba(0,0,0,0.1));
 }
 
 .table-title-button {
@@ -122,10 +122,6 @@ table {
     text-align: left;  /* 왼쪽 열은 왼쪽 정렬 */
  }
 
- .table-content table td:nth-child(2) {
-    text-align: right; /* 오른쪽 열은 오른쪽 정렬 */
- }
-
 .table-content {
     width: 550px;
     height: 600px;
@@ -154,6 +150,11 @@ table {
     white-space: nowrap;
     overflow: hidden;
     padding: 14px;
+}
+
+.table-content table th:nth-child(1),
+.table-content table td:nth-child(1) {
+    width: 45%;
 }
 
 .table-content table tr {
@@ -252,24 +253,30 @@ table {
 .quantity-button {
     width: 40px;
     height: 40px;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1;
     border: none;
-    background: #CCC;
-    color: white;
+    background: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    vertical-align: middle;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
 }
 
-.quantity-button:hover {
-    color: white;
-    background: #FFBD55;
+.quantity-button.minus {
+    background-image: url("/static/image/recipe_minus.png");
+}
+
+.quantity-button.plus {
+    background-image: url("/static/image/recipe_plus.png");
+}
+
+.quantity-button.minus:hover {
+    background-image: url("/static/image/recipe_minus_hover.png");
+}
+
+.quantity-button.plus:hover {
+    background-image: url("/static/image/recipe_plus_hover.png");
 }
 
 .text-black {
