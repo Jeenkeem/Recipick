@@ -12,72 +12,77 @@
 }
 
 table {
-    width:100%;                   /* 테이블이 부모 너비의 100% 차지 */
+    width: 100%;                   /* 테이블이 부모 너비의 100% 차지 */
+    height: 100%;
     table-layout: fixed;          /* 셀 너비 균등하게 고정 */
-    border-collapse: collapse;    /* 셀 테두리를 하나로 합침 */
+    border-collapse: separate;
+    border-spacing: 0 28px;
+    height: auto;
 }
-
 
 .page-header {
   text-align: center;
-  margin-top: 30px;
-  margin-bottom: 40px;
+  margin-top: 92px;
+  margin-bottom: 24px;
 }
 
 .page-header .page-subtitle {
-  font-size: 18px;         /* 본문 크기 줄임 */
-  margin-bottom: 6px;      /* 아래 줄(h3)과의 간격 */
-  color: #555;             /* 글자 색 옅게 (선택) */
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #22222;
 }
 
-.page-header h3 {
-  font-size: 28px;         /* 제목 크기 조정 */
-  font-weight: bold;
-  margin: 0;               /* 기본 간격 제거 */
+.page-header .page-title {
+  font-size: 48px;
+  margin: 0;
+  color: #22222;
 }
 
 .total-table-wrapper {
     display: flex;              /* 두 테이블을 수평 배치 */
-    gap: 5vw;                   /* 테이블 사이의 간격 */
+    gap: 140px;                   /* 테이블 사이의 간격 */
     justify-content: center;    /* 두 테이블을 가운데 정렬 */
+    margin-top: 24px;
 }
 
 .table-wrapper {
     position: relative;
-    width: 30vw;
-    min-width: 300px;
-    max-width: 500px;
+    min-height: 1000px;
     height: auto;
-    padding-bottom: 2vw;
     box-sizing: border-box;
     background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .bg-img {
     position: absolute;
-    width: 125%;
-    height: 125%;
+    width: 680px;
+    height: 1000px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: -1;
-    object-fit: fill;
+    object-fit: cover;
     filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.1));
 }
 
 .table-title-button {
-    width: 100%;
-    padding: 1vw 2vw;         /* 버튼 안쪽 여백 */
-    border-radius: 1000px;
+    width: 530px;
+    height: 86px;
+    padding: 21.5px 89.5px;         /* 버튼 안쪽 여백 */
+    border-radius: 60px;
     font-weight: 700;
-    font-size: 30px;
-    color: #0000FF;
+    font-size: 36px;
+    color: #FFFFFF;
+    margin-top: 100px;
+    gap: 20px;
     background: transparent;    /* 배경 투명 */
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
     display: inline-block;
-    margin-bottom: 1vw;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -86,26 +91,21 @@ table {
     box-shadow: none;
 }
 
-.table-title-button:disabled {
-    width: 100%;
-    padding: 10px 25px;         /* 버튼 안쪽 여백 */
-    font-weight: 700;
-    font-size: 30px;
-    color: #0000FF;
-    background: transparent;    /* 배경 투명 */
-    cursor: default;
-    position: relative;
-    display: inline-block;
-    margin-bottom: 16px;
-    border: none;
-        outline: none;
-        box-shadow: none;
+.table-title-button:enabled {
+    background: #F5F5F5;
+    color: #222; /* 필요시 글자색 변경 */
 }
 
-.table-title-button:hover {
+.table-title-button:disabled {
+    background: transparent;
+    color: #FFF;
+    cursor: default;
+}
+
+.table-title-button:enabled:hover {
     color: #FFF;
     box-shadow: none;
-    background: #FFA500;
+    background: #EA840F;
     border: none;
     outline: none;
     box-shadow: none;
@@ -113,7 +113,7 @@ table {
 
 .table-title-button:disabled:hover {
     background: transparent;
-    color: #0000FF;
+    color: #FFF;
     box-shadow: none;
     cursor: default;
 }
@@ -127,61 +127,87 @@ table {
  }
 
 .table-content {
-    height: 20vw;                         /* 테이블 내용 부분 높이 */
+    width: 550px;
+    height: 600px;
+    padding: 6px;
     overflow-y:auto;                      /* 세로 스크롤 */
     border: none;
-}
-
-.table-content table td {
-    padding: 1vw;
-    text-align: left;
-    vertical-align:middle;
-    font-weight: 500;
-    font-size: 20px;
-    color: #0000FF;
-    border-bottom: solid 1px rgba(0,0,0,0.1); /* 아래 테두리 색 */
-    white-space: nowrap;
-    overflow: hidden;
     position: relative;
 }
 
-.table-content table tr:hover {
-    background-color: #f0f0f0; /* 마우스를 올렸을 때 색 */
-    cursor: pointer; /* 올렸을 때 마우스 포인터 변경 */
-}
-
-.table-footer {
-    margin-top: 0px;                      /* 위쪽 여백 */
-    border: none;
-}
-
-.table-footer table td {
-    padding: 15px;
-    text-align: right;
-    vertical-align: middle;
-    font-weight: 500;
+.table-content table th {
+    text-align: left;
+    font-weight: 700;
     font-size: 20px;
-    color: #0000FF;
+    color: #222222;
+    border: none;
+    padding: 14px;
+}
+
+.table-content table td {
+    text-align: left;
+    vertical-align:middle;
+    font-weight: 700;
+    font-size: 20px;
+    color: #222222;
+    border-bottom: 1px dotted rgba(0,0,0,0.3);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 14px;
 }
 
-.nav-button-wrapper {
+.table-content table tr {
+    height: 56px;
+}
+
+.table-fixed-total {
+    position: absolute;
+    bottom: 128px;
+    left: 0;
+    width: 500px;
+    text-align: left;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 3vh;
-    padding: 2vw;
-    gap: 1vw;
+    box-sizing: border-box;
+    gap: 16px;
+}
+
+.table-fixed-total .label {
+    flex: 1;
+    text-align: left;
+    font-size: 30px;
+}
+
+.table-fixed-total .amount {
+    flex: 1;
+    text-align: right;
+    font-size: 30px;
+}
+
+.nav-button-wrapper {
+    position: fixed;
+    width: 380px;
+    height: 80px;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    gap: 20px;
 }
 
 .prev-button-box .nav-button {
-  border-radius: 100px 0 0 100px; /* 왼쪽만 반원 */
+  border-radius: 40px 0 0 40px; /* 왼쪽만 반원 */
 }
 
 .next-button-box .nav-button {
-  border-radius: 0 100px 100px 0; /* 오른쪽만 반원 */
+  border-radius: 0 40px 40px 0; /* 오른쪽만 반원 */
 }
 
 .prev-button-box {
@@ -193,25 +219,26 @@ table {
 }
 
 .nav-button {
-    width: 8vw;
-    padding: 1vw 2vw;
+    width: 180px;
+    height: 80px;
     border: none;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 20px;
     background: #e0e0e0;
-    color: #FFF;
+    color: #AAAAAA;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .nav-button:disabled {
-    visibility: hidden;
+    background: #EEEEEE;
     cursor: default;
+    cursor: not-allowed;
 }
 
 .nav-button:hover:enabled {
     color: #FFF;
-    background: #FFA500;
+    background: #FFBD55;
     box-shadow: none;
 }
 
@@ -219,17 +246,17 @@ table {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
 }
 
 .quantity-button {
-    width: 2vw;
-    height: 2vw;
+    width: 40px;
+    height: 40px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1;
     border: none;
-    background: #e0e0e0;
+    background: #CCC;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -242,12 +269,12 @@ table {
 
 .quantity-button:hover {
     color: white;
-    background: #FFA500;
+    background: #FFBD55;
 }
 
 .text-black {
   color: black !important;
 }
 .text-blue {
-  color: #0000FF !important;
+  color: #002AD4 !important;
 }
