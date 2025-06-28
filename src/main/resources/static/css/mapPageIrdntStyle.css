@@ -46,10 +46,23 @@ body {
 }
 
 .titleText {
-  font-size: 24px;
-  font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
+  width: 450px;
+}
+
+.subTitle {
+    font-size: 16px;
+    /* font-weight: bold; */
+    width: 400px;
+    padding-left: 27px;
+}
+
+.mainTitle {
+    font-size: 48px;
+    /* font-weight: bold; */
+    width: 450px;
+    height: 60px;
 }
 
 .search-bar {
