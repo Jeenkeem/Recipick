@@ -231,23 +231,24 @@ body {
 
 .panel-arrow-btn {
     position: absolute;
-    left: -6px;
+    right: 510px;
     top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 60px;
+    width: 10px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0 10px 10px 0;
-    /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); */
-    font-size: 2rem;
-    color: #555;
+    border-radius: 10px 0px 0px 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     z-index: 10;
-    transition: background 0.2s;
+    padding-top: 25px;
+    padding-right: 10px;
+    padding-bottom: 25px;
+    padding-left: 10px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
 }
 
 .panel-arrow-btn:hover {
@@ -260,21 +261,22 @@ body {
   top: 50%;
   right: 0px;
   transform: translateY(-50%);
-  width: 30px;
-  height: 60px;
-  background: #fff;
-  border: 1px solid #ddd;
+  width: 10px;
+  height: 16px;
+  background: #ff7131;
   border-radius: 10px 0 0 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  font-size: 2.2rem;
-  color: #ff7131;
-  display: flex;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   align-items: center;
   justify-content: center;
   z-index: 2001;
   cursor: pointer;
   transition: background 0.2s;
+  padding-top: 25px;
+  padding-right: 10px;
+  padding-bottom: 25px;
+  padding-left: 10px;
 }
+
 .open-panel-btn:hover {
   background: #ffe5d1;
 }
@@ -290,15 +292,11 @@ body {
   padding-top: 10%;
   padding-left: 10%;
   padding-right: 10%;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .sort-container {
-  display: flex;
-  gap: 10px;
   margin-top: 50px;
-  margin-bottom: 20px;
-  padding-left: 10%;
   padding-right: 10%;
 }
 
@@ -307,7 +305,7 @@ body {
   font-size: 14px;
   padding: 5px 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 60px;
   background-color: white;
 }
 
@@ -319,6 +317,13 @@ body {
 .sort-options:focus,
 #guFilter:focus {
   border-color: #888;
+}
+
+.dropBox-container {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .store-list {

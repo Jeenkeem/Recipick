@@ -592,7 +592,6 @@ sortSelect.addEventListener('change', () => {
     }
 });
 
-
 // 마트 패널 내 식재료 검색
 document.getElementById('ingredientSearch').addEventListener('input', function (e) {
     const keyword = e.target.value.trim().toLowerCase();
