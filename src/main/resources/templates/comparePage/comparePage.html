@@ -10,7 +10,7 @@
 <body>
 <img src="/resources/image/page_background.png" class="page-background">
 <div th:replace="~{common/menubar :: menubar}"></div>
-<div id="compare-page">
+<div id="compare-page" :class="{'page-2': page === 2}">
 
   <div class="page-header">
     <p class="page-subtitle">총 가격이 더 저렴한 가게를 비교해요</p>
@@ -38,7 +38,7 @@
             <td v-if="page != 2">
               <div class="quantity-control">
                 <button class="quantity-button minus" @click.stop="decreaseQuantity(index)"></button>
-                <span class="quantity-display">{{ item.quantity }}</span>
+                <span class="quantity-display">{{ getRecipeQuantity(item.name) }}</span>
                 <button class="quantity-button plus" @click.stop="increaseQuantity(index)"></button>
               </div>
             </td>
@@ -74,8 +74,8 @@
           <tr v-for="(item, index) in rightItems" :key="'r' + index">
             <td :class="getRightTextClass()">{{ item.name }}</td>
             <td :class="getRightTextClass()">{{ (item.price * item.quantity).toLocaleString() }}</td>
-            <td>
-              <button class="quantity-button cancel" @click.stop="removeFromRight(index)" v-if="page !== 2"></button>
+            <td v-if="page !== 2">
+              <button class="quantity-button cancel" @click.stop="removeFromRight(index)"></button>
             </td>
           </tr>
           </tbody>
@@ -114,35 +114,9 @@
       martBName: ''
     },
     created() {
-      // 테스트용 기본 마트명 주입
-    this.martAName = localStorage.getItem("mart1") || "테스트마트A";
-    this.martBName = localStorage.getItem("mart2") || "테스트마트B";
-
-    // 테스트용 데이터 주입
-    this.itemA = [
-      { name: "사과", price: 1000, quantity: 1 },
-      { name: "바나나", price: 1500, quantity: 1 },
-      { name: "우유", price: 2500, quantity: 1 }
-    ];
-    this.itemB = [
-      { name: "사과", price: 1100, quantity: 1 },
-      { name: "바나나", price: 1400, quantity: 1 },
-      { name: "우유", price: 2400, quantity: 1 }
-    ];
-    this.recipeA = [
-      { name: "사과", price: 1000, quantity: 2 },
-      { name: "바나나", price: 1500, quantity: 1 }
-    ];
-    this.recipeB = [
-      { name: "사과", price: 1100, quantity: 1 },
-      { name: "우유", price: 2400, quantity: 1 }
-    ];
-
-
-
-      //this.martAName = localStorage.getItem("mart1");
-      //this.martBName = localStorage.getItem("mart2");
-      //this.fetchItems();
+      this.martAName = localStorage.getItem("mart1");
+      this.martBName = localStorage.getItem("mart2");
+      this.fetchItems();
     },
     computed: {
       page() {
@@ -234,6 +208,11 @@
       },
       getRightTextClass() {
         return this.page === 2 ? 'text-black' : 'text-blue';
+      },
+      getRecipeQuantity(itemName) {
+      const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+      const found = targetList.find(item => item.name === itemName);
+      return found ? found.quantity : 0;
       }
     }
   });
