@@ -48,46 +48,54 @@
 
 <!--   레시피 추천  -->
     <select id="getSearchedIngredientList" resultType="com.project.recipick.Entity.RecipeIngredientEntity" parameterType="java.lang.String">
-        with mapped_ingredients as(
-            SELECT distinct
-                CASE
-                    WHEN it2.irdnt_nm LIKE '%불린 쌀%' THEN '쌀'
-                    WHEN it2.irdnt_nm LIKE '%생수%' OR it2.irdnt_nm LIKE '%정수물%' OR it2.irdnt_nm LIKE '%수돗물%' OR it2.irdnt_nm LIKE '적당량의 물' THEN '물'
-                    WHEN it2.irdnt_nm LIKE '%파프리카%' THEN '파프리카'
-                    WHEN it2.irdnt_nm LIKE '%고추' THEN '고추'
-                    WHEN it2.irdnt_nm LIKE '%고추가루' OR it2.irdnt_nm LIKE '%고춧가루' THEN '고추가루'
-                    WHEN it2.irdnt_nm LIKE '%다진 마늘%' or it2.irdnt_nm LIKE '%다진마늘%' or it2.irdnt_nm LIKE '%마늘%'  THEN '마늘'
-                    WHEN it2.irdnt_nm LIKE '%다진 파' or it2.irdnt_nm like '%다진파' or it2.irdnt_nm like '가는파' or it2.irdnt_nm like '%쪽파' or it2.irdnt_nm like '%대파' or it2.irdnt_nm like '%통파' or it2.irdnt_nm like '실파' THEN '파'
-                    WHEN it2.irdnt_nm LIKE '%간장%' THEN '간장'
-                    WHEN it2.irdnt_nm LIKE '%소금' THEN '소금'
-                    WHEN it2.irdnt_nm LIKE '%후춧가루%' or it2.irdnt_nm like '%후추%' THEN '후추'
-                    WHEN it2.irdnt_nm LIKE '%피망%' THEN '피망'
-                    WHEN it2.irdnt_nm LIKE '%파마%산치즈%' THEN '파마산치즈'
-                    WHEN it2.irdnt_nm LIKE '%생강' THEN '생강'
-                    WHEN it2.irdnt_nm LIKE '%도라지' THEN '도라지'
-                    WHEN it2.irdnt_nm LIKE '%토마토페%스트' THEN '토마토페이스트'
-                    WHEN it2.irdnt_nm LIKE '%칼국수%' THEN '칼국수'
-                    WHEN it2.irdnt_nm LIKE '%포도씨유' THEN '포도씨유'
-                    WHEN it2.irdnt_nm LIKE '%부추' THEN '부추'
-                    WHEN it2.irdnt_nm LIKE '%파슬리' THEN '파슬리'
-                    WHEN it2.irdnt_nm LIKE '적당량의 우유%' THEN '우'
-                    WHEN it2.irdnt_nm LIKE '%비트%' THEN '비트'
-                    WHEN it2.irdnt_nm LIKE '%소시지' THEN '소시지'
-                    WHEN it2.irdnt_nm LIKE '브로코리' then '브로콜리'
-                    WHEN it2.irdnt_nm LIKE '다시%물' THEN '다시물'
-                    WHEN it2.irdnt_nm LIKE '%상추' THEN '상추'
-                    WHEN it2.irdnt_nm LIKE '가%오브시%' THEN '가쓰오브시'
-                    WHEN it2.irdnt_nm LIKE '%굴소스%' THEN '굴소스'
-                    WHEN it2.irdnt_nm LIKE '%진밥%' THEN '진밥'
-                    WHEN it2.irdnt_nm LIKE '%쌈장' THEN '쌈장'
-                    ELSE it2.irdnt_nm
-                    END
-            FROM ingredient_tb it
-                     JOIN ingredient_tb it2 ON it.irdnt_sn = it2.irdnt_sn
-        )
-        select *
-        from mapped_ingredients
-        where irdnt_nm like '%${inputIngredient}%'
+        WITH valid_recipes AS (
+            SELECT r.recipe_id
+            FROM recipe_info r
+                     JOIN recipe_tb rt ON r.recipe_nm_ko = rt."CKG_NM"
+        ),
+             mapped_ingredients AS (
+                 SELECT DISTINCT
+                     it.recipe_id,
+                     CASE
+                         WHEN it2.irdnt_nm LIKE '%불린 쌀%' THEN '쌀'
+                         WHEN it2.irdnt_nm LIKE '%생수%' OR it2.irdnt_nm LIKE '%정수물%' OR it2.irdnt_nm LIKE '%수돗물%' OR it2.irdnt_nm LIKE '적당량의 물' THEN '물'
+                         WHEN it2.irdnt_nm LIKE '%파프리카%' THEN '파프리카'
+                         WHEN it2.irdnt_nm LIKE '%고추가루%' OR it2.irdnt_nm LIKE '%고춧가루%' THEN '고추가루'
+                         WHEN it2.irdnt_nm LIKE '%고추%' THEN '고추'
+                         WHEN it2.irdnt_nm LIKE '%다진 마늘%' OR it2.irdnt_nm LIKE '%다진마늘%' OR it2.irdnt_nm LIKE '%마늘%' THEN '마늘'
+                         WHEN it2.irdnt_nm LIKE '%다진 파%' OR it2.irdnt_nm LIKE '%다진파%' OR it2.irdnt_nm LIKE '가는파' OR it2.irdnt_nm LIKE '%쪽파%' OR it2.irdnt_nm LIKE '%대파%' OR it2.irdnt_nm LIKE '%통파%' OR it2.irdnt_nm LIKE '실파' THEN '파'
+                         WHEN it2.irdnt_nm LIKE '%간장%' THEN '간장'
+                         WHEN it2.irdnt_nm LIKE '%소금%' THEN '소금'
+                         WHEN it2.irdnt_nm LIKE '%후춧가루%' OR it2.irdnt_nm LIKE '%후추%' THEN '후추'
+                         WHEN it2.irdnt_nm LIKE '%피망%' THEN '피망'
+                         WHEN it2.irdnt_nm LIKE '%파마%산치즈%' THEN '파마산치즈'
+                         WHEN it2.irdnt_nm LIKE '%생강%' THEN '생강'
+                         WHEN it2.irdnt_nm LIKE '%도라지%' THEN '도라지'
+                         WHEN it2.irdnt_nm LIKE '%토마토페%스트%' THEN '토마토페이스트'
+                         WHEN it2.irdnt_nm LIKE '%칼국수%' THEN '칼국수'
+                         WHEN it2.irdnt_nm LIKE '%포도씨유%' THEN '포도씨유'
+                         WHEN it2.irdnt_nm LIKE '%부추%' THEN '부추'
+                         WHEN it2.irdnt_nm LIKE '%파슬리%' THEN '파슬리'
+                         WHEN it2.irdnt_nm LIKE '적당량의 우유%' THEN '우'
+                         WHEN it2.irdnt_nm LIKE '%비트%' THEN '비트'
+                         WHEN it2.irdnt_nm LIKE '%소시지%' THEN '소시지'
+                         WHEN it2.irdnt_nm LIKE '브로코리' THEN '브로콜리'
+                         WHEN it2.irdnt_nm LIKE '다시%물' THEN '다시물'
+                         WHEN it2.irdnt_nm LIKE '%상추%' THEN '상추'
+                         WHEN it2.irdnt_nm LIKE '가%오브시%' THEN '가쓰오브시'
+                         WHEN it2.irdnt_nm LIKE '%굴소스%' THEN '굴소스'
+                         WHEN it2.irdnt_nm LIKE '%진밥%' THEN '진밥'
+                         WHEN it2.irdnt_nm LIKE '%쌈장%' THEN '쌈장'
+                         ELSE it2.irdnt_nm
+                         END AS irdnt_nm2
+                 FROM ingredient_tb it
+                          JOIN ingredient_tb it2 ON it.irdnt_sn = it2.irdnt_sn
+                 WHERE it.recipe_id IN (SELECT recipe_id FROM valid_recipes)
+             )
+        SELECT DISTINCT irdnt_nm2 as irdnt_nm
+        FROM mapped_ingredients
+        WHERE irdnt_nm2 LIKE '${inputIngredient}' || '%'
+        ORDER BY irdnt_nm2;
     </select>
 
     <select id="getRecommendRecipe" resultType="com.project.recipick.dto.RecipeCardDTO" parameterType="map">

@@ -6,6 +6,7 @@
     <title>recipick</title>
     <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" href="/resources/css/recipeSearchStyle.css" />
+    <link rel="stylesheet" href="/resources/css/noResultStyle.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 <!--    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -31,10 +32,10 @@
     </div>
     <!-- 레시피 카드 목록 -->
     <div id="card-area">
-        <div v-if="searched" class="recipe-container">
+        <div v-if="searched && results.length > 0" class="recipe-container">
             <div v-for="recipe in results" :key="recipe.recipeId" class="recipe-card">
                 <div class="recipe-image-wrapper">
-                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
+                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)" loading="lazy"/>
                 </div>
                 <div class="recipe-info">
                     <h3>{{recipe.recipeNmKo}}</h3>
@@ -46,13 +47,19 @@
                 </div>
             </div>
         </div>
+<!--        레시피가 없을 때 표출되는 항목-->
+        <div v-else-if="searched && results.length === 0" class="no-results">
+            <img src="/resources/image/q_mark.png" alt="물음표" class="q-mark"/>
+            <div class="no-result-text-1">검색 결과가 없어요</div><br>
+            <div class="no-result-text-2">어떤 요리를 먹고 싶나요? 검색해서 레시피를 찾을 수 있어요.</div>
+        </div>
         <!--  thymeleaf  -->
         <div v-else class="recipe-container" id="recipe-container">
             <div th:each="recipe : ${recipeCards}" class="recipe-card">
                 <div class="recipe-image-wrapper">
                     <img th:src="${recipe.rcpImgUrl}"
                          th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
-                         alt="레시피 이미지" />
+                         alt="레시피 이미지" loading="lazy"/>
                 </div>
                 <div class="recipe-info">
                     <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>

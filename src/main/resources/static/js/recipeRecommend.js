@@ -17,17 +17,26 @@ document.addEventListener('DOMContentLoaded', function () {
             searched: false
         },
         methods: {
+            onInput(event) {
+                const value = event.target.value;
+                this.ingredientName = value;
+
+                clearTimeout(this.inputDebounceTimer);
+                this.inputDebounceTimer = setTimeout(() => {
+                    this.searchIngredient(value);
+                }, 200);
+            },
             //input 실시간 검색 요청
-            async searchIngredient(){
-                const keyword = this.ingredientName.trim();
-                if(keyword === ''){
+            async searchIngredient(keyword){
+                const trimmed = keyword.trim();
+                if(!trimmed){
                     this.filteredIngredients = [];
                     return;
                 }
 
                 try{
                     const response = await axios.get('/recipick/rec/ingrnm',{
-                        params:{ inputIngredient: keyword}
+                        params:{ inputIngredient: trimmed}
                     });
                     //검색한 재료 리스트
                     this.filteredIngredients = response.data.map(item => item.IRDNT_NM)

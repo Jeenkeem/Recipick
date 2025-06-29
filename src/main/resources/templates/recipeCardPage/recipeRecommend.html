@@ -6,6 +6,7 @@
     <title>레시피 리스트</title>
     <link rel="stylesheet" href="/resources/css/menubar.css" />
     <link rel="stylesheet" href="/resources/css/recipeRecommendStyle.css" />
+    <link rel="stylesheet" href="/resources/css/noResultStyle.css" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/resources/js/recipeRecommend.js"></script>
@@ -24,7 +25,7 @@
                         type="text"
                         class="search-input"
                         placeholder="내가 가진 재료들을 검색해보세요!"
-                        @input="searchIngredient"
+                        @input="onInput"
                         @keyup.enter="filteredRecipe"
                 />
                 <ul v-if="filteredIngredients.length" class="autocomplete-list">
@@ -35,7 +36,8 @@
             </div>
         </div>
     </div>
-    <div id="chip-area" v-if="clickedIngredient.length">
+<!--    재료 칩 -->
+    <div id="chip-area"  v-show="true" :class="{ empty: clickedIngredient.length === 0 }">
         <div class="chip" v-for="(item,index) in clickedIngredient" :key="index" @click="removeIrdnt(index)">
             {{item}}
             <img src="/resources/image/chip_x_icon.svg" alt="삭제" class="x-icon"/>
@@ -43,7 +45,7 @@
     </div>
     <!-- 레시피 카드 목록 -->
     <div id="card-area">
-        <div v-if="searched"  class="recipe-container">
+        <div v-if="searched && recipeList.length > 0"  class="recipe-container">
             <div v-for="recipe in recipeList" :key="recipe.recipeId" class="recipe-card">
                 <div class="recipe-image-wrapper">
                     <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
@@ -57,6 +59,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+<!--        레시피 없을 때 표출되는 항목    -->
+        <div v-else-if="searched && recipeList.length === 0" class="no-results">
+            <img src="/resources/image/q_mark.png" alt="물음표" class="q-mark"/>
+            <div class="no-result-text-1">검색 결과가 없어요</div><br>
+            <div class="no-result-text-2">어떤 요리를 먹고 싶나요? 검색해서 레시피를 찾을 수 있어요.</div>
         </div>
     </div>
 </div>

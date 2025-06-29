@@ -62,6 +62,12 @@
     justify-content: left; /* 칩들을 가로 중앙 정렬 */
     margin: 0 auto 180px;           /* 영역 자체를 페이지 중앙으로 */
     flex-wrap: wrap;          /* 칩이 여러 줄로 내려갈 수 있게 */
+    min-height: 60px;
+}
+
+#chip-area.empty {
+    pointer-events: none;
+    opacity: 0; /* 칩 없을 때는 시각적으로만 안 보이게 */
 }
 
 .chip {
