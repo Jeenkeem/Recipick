@@ -175,6 +175,10 @@ function openMartPanel(marker, overlay) {
     panelMart.style.display = 'block';
     requestAnimationFrame(() => {
         panelMart.classList.add('open');
+
+        // martPanelArrowBtn도 같이 open 상태로
+        if (martPanelArrowBtn) martPanelArrowBtn.classList.add('slide-open');
+
     });
 
     isMartPanelOpen = true;
@@ -186,7 +190,12 @@ function openMartPanel(marker, overlay) {
 function closeMartPanel() {
     if (!isMartPanelOpen) return;
     panelMart.classList.remove('open');
+
+    // martPanelArrowBtn도 같이 닫기 상태로
+    if (martPanelArrowBtn) martPanelArrowBtn.classList.remove('slide-open');
+
     isMartPanelOpen = false;
+
     if (activeMarker) {
         activeMarker.setImage(defaultMarkerImage);
         activeMarker = null;
@@ -232,7 +241,7 @@ allButton.addEventListener('click', function () {
     allIngredientButtons.forEach(btn => btn.classList.remove('selected'));
     allButton.classList.add('selected');
     selectedButton = allButton;
-    ingredientName.textContent = '전체 식재료';
+    ingredientName.textContent = '전체';
     openPanel();
 
     const selectedIngredients = Array.from(ingredientButtonsContainer.children)
@@ -471,6 +480,12 @@ function openPanel() {
     panelIngredient.style.display = 'block';
     requestAnimationFrame(() => {
         panelIngredient.classList.add('open');
+
+        // 화살표 버튼에도 클래스 추가
+        document.querySelectorAll('.panel-arrow-btn').forEach(btn => {
+            btn.classList.add('slide-open');
+        });
+
     });
     isPanelOpen = true;
     updateArrowBtns();
@@ -481,6 +496,12 @@ function closePanel() {
     if (!isPanelOpen) return;
 
     panelIngredient.classList.remove('open');
+
+    // 화살표 버튼에도 클래스 제거
+    document.querySelectorAll('.panel-arrow-btn').forEach(btn => {
+        btn.classList.remove('slide-open');
+    });
+
     isPanelOpen = false;
 
     panelIngredient.addEventListener('transitionend', function handler(event) {
@@ -525,32 +546,76 @@ if (martPanelOpenBtn) {
 
 
 function updateArrowBtns() {
+    const hasSelectedIngredient = !!ingredientButtonsContainer.querySelector('.ingredient-button.selected');
+
     if (isPanelOpen) {
-        openBtn.style.display = 'none';
-        arrowBtn.style.display = 'flex';
-        if (martPanelArrowBtn) martPanelArrowBtn.style.display = 'none';
-        if (martPanelOpenBtn) martPanelOpenBtn.style.display = 'none';
+        // 식재료 패널 열림
+        openBtn.style.opacity = '0';
+        openBtn.style.pointerEvents = 'none';
+
+        arrowBtn.style.opacity = '1';
+        arrowBtn.style.pointerEvents = 'auto';
+
+        if (martPanelArrowBtn) {
+            martPanelArrowBtn.style.opacity = '0';
+            martPanelArrowBtn.style.pointerEvents = 'none';
+            martPanelArrowBtn.classList.remove('slide-open');
+        }
+
+        if (martPanelOpenBtn) {
+            martPanelOpenBtn.style.opacity = '0';
+            martPanelOpenBtn.style.pointerEvents = 'none';
+        }
+
     } else if (isMartPanelOpen) {
-        openBtn.style.display = 'none';
-        if (martPanelArrowBtn) martPanelArrowBtn.style.display = 'flex';
-        if (martPanelOpenBtn) martPanelOpenBtn.style.display = 'none';
-        arrowBtn.style.display = 'none';
-    } else if (activeMarker) {
-        openBtn.style.display = 'none';
-        if (martPanelArrowBtn) martPanelArrowBtn.style.display = 'none';
-        if (martPanelOpenBtn) martPanelOpenBtn.style.display = 'flex';
-        arrowBtn.style.display = 'none';
+        // 마트 패널 열림
+        openBtn.style.opacity = '0';
+        openBtn.style.pointerEvents = 'none';
+
+        arrowBtn.style.opacity = '0';
+        arrowBtn.style.pointerEvents = 'none';
+
+        if (martPanelArrowBtn) {
+            martPanelArrowBtn.style.opacity = '1';
+            martPanelArrowBtn.style.pointerEvents = 'auto';
+            martPanelArrowBtn.classList.add('slide-open');
+        }
+
+        if (martPanelOpenBtn) {
+            martPanelOpenBtn.style.opacity = '0';
+            martPanelOpenBtn.style.pointerEvents = 'none';
+        }
+
     } else {
-        // *** 여기서 조건을 강화한다 ***
-        // 선택된 식재료 버튼이 있을 때만 보여준다
-        const hasSelectedIngredient = !!ingredientButtonsContainer.querySelector('.ingredient-button.selected');
-        openBtn.style.display = hasSelectedIngredient ? 'flex' : 'none';
-        if (martPanelArrowBtn) martPanelArrowBtn.style.display = 'none';
-        if (martPanelOpenBtn) martPanelOpenBtn.style.display = 'none';
-        arrowBtn.style.display = 'none';
+        // 패널 모두 닫힘 상태
+
+        // 마커가 선택되어 있을 때만 martPanelOpenBtn 보임
+        if (activeMarker) {
+            if (martPanelOpenBtn) {
+                martPanelOpenBtn.style.opacity = '1';
+                martPanelOpenBtn.style.pointerEvents = 'auto';
+            }
+        } else {
+            if (martPanelOpenBtn) {
+                martPanelOpenBtn.style.opacity = '0';
+                martPanelOpenBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        // 식재료 선택이 있으면 openBtn (식재료 패널 여는 버튼) 보임
+        openBtn.style.opacity = hasSelectedIngredient ? '1' : '0';
+        openBtn.style.pointerEvents = hasSelectedIngredient ? 'auto' : 'none';
+
+        arrowBtn.style.opacity = '0';
+        arrowBtn.style.pointerEvents = 'none';
+
+        if (martPanelArrowBtn) {
+            martPanelArrowBtn.style.opacity = '0';
+            martPanelArrowBtn.style.pointerEvents = 'none';
+            martPanelArrowBtn.classList.remove('slide-open');
+        }
     }
 }
-
 
 
 
