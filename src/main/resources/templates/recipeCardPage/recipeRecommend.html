@@ -65,7 +65,7 @@
             </div>
         </div>
 <!--        레시피 없을 때 표출되는 항목    -->
-        <div v-else-if="searched && recipeList.length === 0" class="no-results">
+        <div v-else-if="recipeList.length === 0" class="no-results">
             <img src="/resources/image/q_mark.png" alt="물음표" class="q-mark"/>
             <div class="no-result-text-1">검색 결과가 없어요</div><br>
             <div class="no-result-text-2">어떤 요리를 먹고 싶나요? 검색해서 레시피를 찾을 수 있어요.</div>

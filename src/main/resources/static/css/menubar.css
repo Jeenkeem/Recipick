@@ -67,3 +67,53 @@
     color: #222;
     max-width: 250px;
 }
+
+.menu-item {
+    position: relative;
+}
+
+.has-submenu:hover .submenu {
+    display: flex;
+    flex-direction: column;
+}
+
+.submenu {
+    padding: 6px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    z-index: 100;
+    min-width: 140px;
+}
+
+.submenu-item {
+    padding: 6px 0px 6px 0px;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.submenu-item:hover {
+    background-color: transparent;
+    font-weight: 500;
+    color: #FFBD55;
+}
+
+/* 하위 메뉴에도 밑줄 효과 */
+/*.submenu-item::after {*/
+/*    content: '';*/
+/*    display: block;*/
+/*    height: 2px;*/
+/*    width: 80%;*/
+/*    background-color: #FFBD55;*/
+/*    transform: scaleX(0);*/
+/*    transform-origin: left;*/
+/*    transition: transform 0.3s ease;*/
+/*}*/
+
+/*.submenu-item:hover::after {*/
+/*    transform: scaleX(1);*/
+/*}*/

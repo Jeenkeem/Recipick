@@ -2,7 +2,13 @@
     <div class="menu-wrapper">
         <img src="/resources/image/recipick_logo.png" onclick="location.href='/recipick'" alt="Recipick 메뉴바" class="menu-logo">
         <div class="menu-buttons">
-            <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+            <div class="menu-item has-submenu">
+                <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+                    <div class="submenu">
+                        <a class="submenu-item" href='/recipick/cards'>레시피 검색하기</a>
+                        <a class="submenu-item" href='/recipick/rec'>요리 추천받기</a>
+                    </div>
+            </div>
             <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
             <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
         </div>
