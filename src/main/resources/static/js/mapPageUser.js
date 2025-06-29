@@ -464,7 +464,7 @@ function openPanel() {
     // 마트 패널이 열려있으면 닫기 + 마커 기본화
     closeMartPanel();
 
-    // 마커가 빨간색(activeMarker 존재)면 비활성화! ⭐️
+    // 마커가 빨간색(activeMarker 존재)면 비활성화!
     if (activeMarker) {
         activeMarker.setImage(defaultMarkerImage);
         activeMarker = null;
@@ -486,6 +486,13 @@ function openPanel() {
             btn.classList.add('slide-open');
         });
 
+        // 마트 패널 닫힘 상태에서 닫힘 버튼 보이지 않게
+        if (martPanelArrowBtn) {
+            martPanelArrowBtn.classList.remove('slide-open');
+            martPanelArrowBtn.style.opacity = '0';
+            martPanelArrowBtn.style.pointerEvents = 'none';
+        }
+
     });
     isPanelOpen = true;
     updateArrowBtns();
@@ -501,6 +508,13 @@ function closePanel() {
     document.querySelectorAll('.panel-arrow-btn').forEach(btn => {
         btn.classList.remove('slide-open');
     });
+
+    // 마트 패널 닫힘 상태일 때도 닫힘 버튼 초기화
+    if (martPanelArrowBtn) {
+        martPanelArrowBtn.classList.remove('slide-open');
+        martPanelArrowBtn.style.opacity = '0';
+        martPanelArrowBtn.style.pointerEvents = 'none';
+    }
 
     isPanelOpen = false;
 
