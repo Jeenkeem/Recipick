@@ -1,21 +1,52 @@
+body {
+    font-family: 'Pretendard', 'Noto Sans KR',sans-serif;
+}
 
+/*배경*/
+.bg-deco {
+    position: fixed;           /* 페이지 전체에 고정 */
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -999;             /* 가장 뒤에 위치 */
+    pointer-events: none;      /* 클릭 막지 않도록 */
+}
+
+.bg-img {
+    position: absolute;
+    opacity: 0.05;             /* 연하게 */
+    z-index: -1;
+    user-select: none;
+}
+
+.carrot {
+    bottom: 0;
+    left: 0;
+    width: 500px;
+}
+
+.g_onion {
+    top: -700px;
+    right: 0;
+    width: 1000px;
+}
 /*검색*/
 .search-section {
     text-align: center;
     margin-top: 60px;
-    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .search-subtitle {
-    color: #666;
+    color: #444444;
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 
 .search-title {
-    font-size: 40px;
-    font-weight: 600;
-    margin-bottom: 40px;
+    color: #222222;
+    font-size: 48px;
+    margin-bottom: 22px;
+    font-family: 'Pretendard','Noto Sans KR', 'sans-serif';
 }
 
 .search-box {
@@ -32,10 +63,8 @@
     margin-bottom: 180px;
 }
 
-.search-icon {
-    font-size: 18px;
-    margin-right: 10px;
-    color: #999;
+#search-icon {
+    margin-left: 20px;
 }
 
 .search-input {
@@ -45,6 +74,7 @@
     font-size: 16px;
     flex-grow: 1;
     color: #333;
+    margin-left: 20px;
 }
 
 /* 레시피 카드 */

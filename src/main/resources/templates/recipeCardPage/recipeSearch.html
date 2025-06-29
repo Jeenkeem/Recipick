@@ -13,15 +13,19 @@
     <script src="/resources/js/recipeSearch.js"></script>
 </head>
 <body>
+<div class="bg-deco">
+    <img src="/resources/image/carrot.png" class="bg-img carrot">
+    <img src="/resources/image/green_onion.png" class="bg-img g_onion">
+</div>
 <div id="recipeSearch-page">
     <div th:replace="~{common/menubar :: menubar}"></div>
 
     <!-- 검색 창-->
     <div class="search-section">
-        <p class="search-subtitle">먹고 싶은 요리를 검색해보세요.</p>
-        <h1 class="search-title">레시피 검색하기</h1>
+        <div class="search-subtitle">먹고 싶은 요리를 검색해보세요.</div>
+        <div class="search-title">레시피 검색하기</div>
         <div class="search-box">
-            <span class="search-icon">🔍</span>
+            <img src="/resources/image/search_icon.svg" id="search-icon">
             <input  v-model="searchWord"
                     type="text"
                     class="search-input"
