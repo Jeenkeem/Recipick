@@ -1,6 +1,8 @@
 <div th:fragment="menubar" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="menu-wrapper">
-        <img src="/resources/image/recipick_logo.png" onclick="location.href='/recipick'" alt="Recipick 메뉴바" class="menu-logo">
+        <button class="logo-button" onclick="location.href='/recipick'">
+            <img src="/resources/image/recipick_logo.png" alt="Recipick 로고" class="menu-logo">
+        </button>
         <div class="menu-buttons">
             <div class="menu-item has-submenu">
                 <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
