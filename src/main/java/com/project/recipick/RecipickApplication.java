@@ -11,6 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class RecipickApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RecipickApplication.class, args);
-		// test pr 2
+		// test pr 1
 	}
 }
