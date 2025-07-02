@@ -28,11 +28,13 @@ public class MartSaveScheduler {
         this.restTemplate = restTemplate;
     }
 
+    /*
     @Scheduled(cron = "55 59 5 * * *") // 매일 오전 5시 59분 55초에 마트 삭제 스케줄러 실행
     public void deleteAllMartInfo() throws ParseException {
         martInfoService.deleteAllMartInfo();
         System.out.println("삭제됐습니다");
     }
+    */
 
     @Scheduled(cron = "* * 6 * * *") // 매일 오전 6시에 마트 저장 스케줄러 실행
     public void saveMartInfo() throws ParseException {
