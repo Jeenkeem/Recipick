@@ -1,0 +1,320 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+.page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+}
+
+table {
+    width: 100%;                   /* 테이블이 부모 너비의 100% 차지 */
+    height: 100%;
+    table-layout: fixed;          /* 셀 너비 균등하게 고정 */
+    border-collapse: separate;
+    border-spacing: 0 28px;
+    height: auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.page-header .page-subtitle {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #22222;
+}
+
+.page-header .page-title {
+  font-size: 48px;
+  margin: 0;
+  color: #22222;
+}
+
+.total-table-wrapper {
+    display: flex;              /* 두 테이블을 수평 배치 */
+    gap: 140px;                   /* 테이블 사이의 간격 */
+    justify-content: center;    /* 두 테이블을 가운데 정렬 */
+    margin-top: 24px;
+}
+
+.table-wrapper {
+    position: relative;
+    min-height: 1000px;
+    height: auto;
+    box-sizing: border-box;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bg-img {
+    position: absolute;
+    width: 680px;
+    height: 1000px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    object-fit: cover;
+    filter: drop-shadow(0px 0px 40px rgba(0,0,0,0.1));
+}
+
+.table-title-button {
+    width: 530px;
+    height: 86px;
+    padding: 21.5px 89.5px;         /* 버튼 안쪽 여백 */
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 36px;
+    color: #FFFFFF;
+    margin-top: 100px;
+    gap: 20px;
+    background: transparent;    /* 배경 투명 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.table-title-button:enabled {
+    background: #F5F5F5;
+    color: #222; /* 필요시 글자색 변경 */
+}
+
+.table-title-button:disabled {
+    background: transparent;
+    color: #FFF;
+    cursor: default;
+}
+
+.table-title-button:enabled:hover {
+    color: #FFF;
+    box-shadow: none;
+    background: #FFBD55;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.table-title-button:disabled:hover {
+    background: transparent;
+    color: #FFF;
+    box-shadow: none;
+    cursor: default;
+}
+
+ .table-content table td:nth-child(1) {
+    text-align: left;  /* 왼쪽 열은 왼쪽 정렬 */
+ }
+
+.table-content {
+    width: 550px;
+    height: 600px;
+    padding: 6px;
+    overflow-y:auto;                      /* 세로 스크롤 */
+    border: none;
+    position: relative;
+}
+
+.table-content table th {
+    text-align: left;
+    font-weight: 700;
+    font-size: 20px;
+    color: #222222;
+    border: none;
+    padding: 14px;
+}
+
+.table-content table td {
+    text-align: left;
+    vertical-align:middle;
+    font-weight: 700;
+    font-size: 20px;
+    color: #222222;
+    border-bottom: 1px dotted rgba(0,0,0,0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 14px;
+}
+
+.table-content table th:nth-child(1),
+.table-content table td:nth-child(1) {
+    width: 45%;
+}
+
+.table-content table tr {
+    height: 56px;
+}
+
+.table-fixed-total {
+    position: absolute;
+    bottom: 128px;
+    left: 0;
+    width: 500px;
+    text-align: left;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 16px;
+}
+
+.table-fixed-total .label {
+    flex: 1;
+    text-align: left;
+    font-size: 30px;
+}
+
+.table-fixed-total .amount {
+    flex: 1;
+    text-align: right;
+    font-size: 30px;
+}
+
+.nav-button-wrapper {
+    position: fixed;
+    width: 380px;
+    height: 80px;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    gap: 20px;
+}
+
+.prev-button-box .nav-button {
+  border-radius: 40px 0 0 40px; /* 왼쪽만 반원 */
+}
+
+.next-button-box .nav-button {
+  border-radius: 0 40px 40px 0; /* 오른쪽만 반원 */
+}
+
+.prev-button-box {
+    text-align: left;
+}
+
+.next-button-box {
+    text-align: right;
+}
+
+.nav-button {
+    width: 180px;
+    height: 80px;
+    border: none;
+    font-weight: 700;
+    font-size: 20px;
+    background: #e0e0e0;
+    color: #AAAAAA;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-button:disabled {
+    background: #EEEEEE;
+    cursor: default;
+    cursor: not-allowed;
+}
+
+.nav-button:hover:enabled {
+    color: #FFF;
+    background: #FFBD55;
+    box-shadow: none;
+}
+
+.quantity-control {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    margin-left: auto;
+}
+
+.table-wrapper:nth-child(2) .table-content table td:last-child {
+    width: 1%;
+    padding-right: 0;
+    text-align: right;
+}
+
+.table-wrapper:nth-child(2) .table-content table th:nth-child(2),
+.table-wrapper:nth-child(2) .table-content table td:nth-child(2) {
+    padding-left: 30px;
+}
+
+.page-2 .table-wrapper .table-content table th:nth-child(2),
+.page-2 .table-wrapper .table-content table td:nth-child(2) {
+    text-align: right !important;
+    padding-right: 30px;
+}
+
+.page-2 .table-wrapper .table-content table th:nth-child(2) {
+    padding-right: 60px; /* 원래보다 조금 왼쪽으로 */
+}
+
+.table-wrapper:nth-child(2) .quantity-button {
+    margin-left: auto;
+}
+
+.quantity-button.minus {
+    background-image: url("/resources/image/recipe_minus.png");
+}
+
+.quantity-button.plus {
+    background-image: url("/resources/image/recipe_plus.png");
+}
+
+.quantity-button.cancel {
+    background-image: url("/resources/image/recipe_cancel.png");
+}
+
+.quantity-button.minus:hover {
+    background-image: url("/resources/image/recipe_minus_hover.png");
+}
+
+.quantity-button.plus:hover {
+    background-image: url("/resources/image/recipe_plus_hover.png");
+}
+
+.quantity-button.cancel:hover {
+    background-image: url("/resources/image/recipe_cancel_hover.png");
+}
+
+.text-black {
+  color: black !important;
+}
+.text-blue {
+  color: #002AD4 !important;
+}

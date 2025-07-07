@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>레시피 리스트</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
+    <link rel="stylesheet" href="/resources/css/recipeRecommendStyle.css" />
+    <link rel="stylesheet" href="/resources/css/noResultStyle.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/resources/js/recipeRecommend.js"></script>
+</head>
+<body>
+<div class="bg-deco">
+    <img src="/resources/image/carrot.png" class="bg-img carrot">
+    <img src="/resources/image/green_onion.png" class="bg-img g_onion">
+</div>
+<div id="recipeRecommend-page">
+    <div th:replace="~{common/menubar :: menubar}"></div>
+    <!-- 검색 창-->
+    <div class="search-section">
+        <div class="search-subtitle">내가 가진 재료로 무엇을 만들 수 있을까요?</div>
+        <div class="search-title">요리 추천받기</div>
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <img src="/resources/image/search_icon.svg" id="search-icon">
+                <input  v-model="ingredientName"
+                        type="text"
+                        class="search-input"
+                        placeholder="내가 가진 재료들을 검색해보세요!"
+                        @input="onInput"
+                        @keyup.enter="filteredRecipe"
+                />
+                <ul v-if="filteredIngredients.length" class="autocomplete-list">
+                    <li v-for="(item, index) in filteredIngredients" :key="index" @click="selectedIngredient(item)">
+                        {{item}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<!--    재료 칩 -->
+    <div id="chip-area"  v-show="true" :class="{ empty: clickedIngredient.length === 0 }">
+        <div class="chip" v-for="(item,index) in clickedIngredient" :key="index" @click="removeIrdnt(index)">
+            {{item}}
+            <img src="/resources/image/chip_x_icon.svg" alt="삭제" class="x-icon"/>
+        </div>
+    </div>
+    <!-- 레시피 카드 목록 -->
+    <div id="card-area">
+        <div v-if="searched && recipeList.length > 0"  class="recipe-container">
+            <div v-for="recipe in recipeList" :key="recipe.recipeId" class="recipe-card">
+                <div class="recipe-image-wrapper">
+                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)"/>
+                </div>
+                <div class="recipe-info">
+                    <h3>{{recipe.recipeNmKo}}</h3>
+                    <div class="recipe-detail">
+                        <div><strong>난이도</strong><span class="stars">{{getStars(recipe.levelNm)}}</span></div>
+                        <div><strong>조리시간</strong> {{recipe.cookingTime}}</div>
+                        <div><strong>칼로리</strong> {{recipe.calorie}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        레시피 없을 때 표출되는 항목    -->
+        <div v-else-if="recipeList.length === 0" class="no-results">
+            <img src="/resources/image/q_mark.png" alt="물음표" class="q-mark"/>
+            <div class="no-result-text-1">검색 결과가 없어요</div><br>
+            <div class="no-result-text-2">어떤 요리를 먹고 싶나요? 검색해서 레시피를 찾을 수 있어요.</div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

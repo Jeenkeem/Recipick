@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>recipick</title>
+  <link rel="stylesheet" href="/resources/css/menubar.css" />
+  <link rel="stylesheet" href="/resources/css/comparePriceStyle.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+<img src="/resources/image/page_background.png" class="page-background">
+<div th:replace="~{common/menubar :: menubar}"></div>
+<div id="compare-page" :class="{'page-2': page === 2}">
+
+  <div class="page-header">
+    <p class="page-subtitle">총 가격이 더 저렴한 가게를 비교해요</p>
+    <p class="page-title">마트별 비교 장보기</p>
+  </div>
+
+  <div class="total-table-wrapper">
+    <!-- 왼쪽 테이블 -->
+    <div class="table-wrapper">
+      <img src="/resources/image/recipe_background.png" class="bg-img">
+      <button class="table-title-button" :class="getLeftTextClass()" :disabled="!isActivated" @click="goToMap(martAName)"> {{ firstTitle }} </button>
+      <div class="table-content">
+        <table>
+          <thead>
+          <tr>
+            <th>품목(단위)</th>
+            <th>{{ page == 2 ? '가격' : '가격' }}</th>
+            <th v-if="page != 2"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item, index) in leftItems" :key="index">
+            <td :class="getLeftTextClass()">{{ item.name }} <span v-if="page == 2">({{ item.quantity }}개)</span></td>
+            <td :class="getLeftTextClass()">{{ item.price.toLocaleString() }}</td>
+            <td v-if="page != 2">
+              <div class="quantity-control">
+                <button class="quantity-button minus" @click.stop="decreaseQuantity(index)"></button>
+                <span class="quantity-display">{{ getRecipeQuantity(item.name) }}</span>
+                <button class="quantity-button plus" @click.stop="increaseQuantity(index)"></button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-if="page == 2" class="table-fixed-total">
+        <span class="label"  :class="getLeftTextClass()">총 금액</span>
+        <span class="amount" :class="getLeftTextClass()">{{ leftTotal }}원</span>
+      </div>
+
+      <div v-if="page !== 2" class="table-fixed-footer">
+        필요한 재료를 담고, 왼쪽의 <span style="color: #0000FF;">총 구매 금액(영수증)</span>을 확인해보세요
+      </div>
+    </div>
+
+    <!-- 오른쪽 테이블 -->
+    <div class="table-wrapper">
+      <img src="/resources/image/recipe_background.png" class="bg-img">
+      <button class="table-title-button" :class="getRightTextClass()" :disabled="!isActivated" @click="goToMap(martBName)"> {{ secondTitle }} </button>
+      <div class="table-content">
+        <table>
+          <thead>
+          <tr>
+            <th :class="getRightTextClass()">품목(단위)</th>
+            <th :class="getRightTextClass()">가격</th>
+            <th v-if="page != 2"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item, index) in rightItems" :key="'r' + index">
+            <td :class="getRightTextClass()">{{ item.name }}</td>
+            <td :class="getRightTextClass()">{{ (item.price * item.quantity).toLocaleString() }}</td>
+            <td v-if="page !== 2">
+              <button class="quantity-button cancel" @click.stop="removeFromRight(index)"></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-fixed-total">
+        <span class="label" :class="getRightTextClass()">총 금액</span>
+        <span class="amount" :class="getRightTextClass()">{{ rightTotal }}원</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-button-wrapper">
+    <div class="prev-button-box">
+      <button class="nav-button" @click="toPrev" :disabled="clickCount == 0">이전</button>
+    </div>
+    <div class="next-button-box">
+      <button class="nav-button" @click="toNext" :disabled="page === 2">다음</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#compare-page',
+    data: {
+      PAGE_COUNT: 3,
+      clickCount: 0,
+      itemA: [],
+      itemB: [],
+      recipeA: [],
+      recipeB: [],
+      martAName: '',
+      martBName: ''
+    },
+    created() {
+      this.martAName = localStorage.getItem("mart1");
+      this.martBName = localStorage.getItem("mart2");
+      this.fetchItems();
+    },
+    computed: {
+      page() {
+        return this.clickCount % this.PAGE_COUNT;
+      },
+      isActivated() {
+        return this.page == 2;
+      },
+      leftItems() {
+        if (this.page == 0) return this.itemA;
+        else if (this.page == 1) return this.itemB;
+        else return this.recipeA;
+      },
+      rightItems() {
+        return this.page == 0 ? this.recipeA : this.recipeB;
+      },
+      leftTotal() {
+        return this.leftItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString();
+      },
+      rightTotal() {
+        return this.rightItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString();
+      },
+      firstTitle() {
+        if (this.page == 0) return `${this.martAName} 장보기`;
+        else if (this.page == 1) return `${this.martBName} 장보기`;
+        else return `${this.martAName} 영수증`;
+      },
+      secondTitle() {
+        if (this.page == 0) return `${this.martAName} 영수증`;
+        else return `${this.martBName} 영수증`;
+      }
+    },
+    methods: {
+      increaseQuantity(index) {
+        const item = this.leftItems[index];
+        const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+        const existing = targetList.find(el => el.name === item.name);
+        if (existing) {
+          existing.quantity++;
+        } else {
+          targetList.push({ ...item, quantity: 1 });
+        }
+      },
+      decreaseQuantity(index) {
+        const item = this.leftItems[index];
+        const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+        const existingIndex = targetList.findIndex(el => el.name === item.name);
+        if (existingIndex !== -1) {
+          const existing = targetList[existingIndex];
+          existing.quantity--;
+          if (existing.quantity <= 0) targetList.splice(existingIndex, 1);
+        }
+      },
+      removeFromRight(index) {
+        if (this.page === 0) this.recipeA.splice(index, 1);
+        else this.recipeB.splice(index, 1);
+      },
+      toNext() {
+        this.clickCount++;
+        this.selectedIndex = null;
+        this.fetchItems();
+      },
+      toPrev() {
+        if (this.clickCount > 0) {
+          this.clickCount--;
+          this.selectedIndex = null;
+          this.fetchItems();
+        }
+      },
+      fetchItems() {
+        const martName = this.page === 0 ? this.martAName : this.page === 1 ? this.martBName : null;
+        if (!martName) return;
+        fetch(`/recipick/mart-items?martName=${encodeURIComponent(martName)}`)
+          .then(res => res.json())
+          .then(data => {
+            const items = data.map(d => ({ name: d.aName, price: d.aPrice, quantity: 1 }));
+            if (this.page === 0) this.itemA = items;
+            else if (this.page === 1) this.itemB = items;
+          });
+      },
+      goToMap(martName) {
+        if (this.page !== 2) return;
+        const url = `/recipick/mapPage?highlight=${encodeURIComponent(martName)}`;
+        window.location.href = url;
+      },
+      getLeftTextClass() {
+        // 페이지 0 또는 1일 때는 검정
+        return (this.page === 0 || this.page === 1 || this.page === 2) ? 'text-black' : 'text-blue';
+      },
+      getRightTextClass() {
+        return this.page === 2 ? 'text-black' : 'text-blue';
+      },
+      getRecipeQuantity(itemName) {
+      const targetList = this.page === 0 ? this.recipeA : this.recipeB;
+      const found = targetList.find(item => item.name === itemName);
+      return found ? found.quantity : 0;
+      }
+    }
+  });
+</script>
+</body>
+</html>

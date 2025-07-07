@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>recipick</title>
+    <link rel="stylesheet" href="/resources/css/mainPageStyle.css" />
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/resources/js/mainPage.js"></script>
+</head>
+<body>
+<div id="mainPage">
+    <div th:replace="~{common/menubar :: menubar}"></div>
+    <div class="main-logo"><img src="/resources/image/logo_black.svg" alt="Recipick 메뉴바" class="logo-img"></div>
+    <!-- 검색 창-->
+    <div class="search-section">
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <!--<span class="search-icon">🔍</span>-->
+                <img src="/resources/image/search_icon.svg" class="search-icon">
+                <input  v-model="homeIngredientNm"
+                        type="text"
+                        class="search-input"
+                        placeholder="내가 가진 재료들을 검색해보세요!"
+                        @keyup.enter="goToSearchPage"
+                />
+            </div>
+        </div>
+    </div>
+<!--    가운데 텍스트 -->
+    <div class="center-text">
+        <span class="center-content">
+            Recipick은<br>
+            더 쉽게 더 빠르게<br>
+            요리와 친하게 해줄거예요.
+        </span>
+    </div>
+
+<!--    노란 버튼 영역-->
+    <div class="button-section">
+        <div class="button-wrapper">
+            <p class="button-desc">눌러서 먹고싶은 요리 찾기</p>
+            <button class="yellow-button" onclick="location.href='/recipick/cards'">레시피 검색하기</button>
+        </div>
+        <div class="button-wrapper">
+            <p class="button-desc">눌러서 요리 추천 받기</p>
+            <button class="yellow-button" onclick="location.href='/recipick/rec'">재료 등록하기</button>
+        </div>
+    </div>
+<!--    회색 영역 -->
+    <div class="gray-section">
+        <div class="gray-text-center">
+            <div class="gray-text-1">새로운 요리에 도전해보세요!</div><br>
+            <div class="gray-text-2">궁금한 레시피 검색하거나, 내가 가진 재료에서 만들 수 있는 요리를 찾아볼 수 있어요</div>
+        </div>
+    </div>
+<!--    지도 영역 -->
+    <div id="map-section">
+        <div id="map" style="width:100%;height:100%;"></div>
+        <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakaoApiKey}"></script>
+
+        <div class="overlay" onclick="location.href='/recipick/mapPage'"></div>
+
+        <div class="map-search-center">
+            <div class="map-search-box">
+                <label>
+                    <input type="text" placeholder="내 주변 최저가 식재료 검색하기" onclick="location.href='/recipick/mapPage'">
+                </label>
+            </div>
+        </div>
+    </div>
+    <script>
+        var container = document.getElementById('map');
+        var options = { //지도를 생성할 때 필요한 기본 옵션
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 7
+        };
+
+        var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    </script>
+</div>
+</body>
+</html>

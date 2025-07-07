@@ -31,3 +31,24 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Java & IDE 관련
+*.class
+*.log
+*.jar
+*.war
+*.ear
+target/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Spring Boot
+application.properties

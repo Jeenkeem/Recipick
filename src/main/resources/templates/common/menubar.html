@@ -1,0 +1,18 @@
+<div th:fragment="menubar" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="menu-wrapper">
+        <button class="logo-button" onclick="location.href='/recipick'">
+            <img src="/resources/image/recipick_logo.png" alt="Recipick 로고" class="menu-logo">
+        </button>
+        <div class="menu-buttons">
+            <div class="menu-item has-submenu">
+                <button class="menu-btn" onclick="location.href='/recipick/cards'">레시피검색</button>
+                    <div class="submenu">
+                        <a class="submenu-item" href='/recipick/cards'>레시피 검색하기</a>
+                        <a class="submenu-item" href='/recipick/rec'>요리 추천받기</a>
+                    </div>
+            </div>
+            <button class="menu-btn" onclick="location.href='/recipick/mapPage'">내 동네시장</button>
+            <button class="menu-btn" onclick="location.href='/recipick/mapPage?from=compare'">비교장보기</button>
+        </div>
+    </div>
+</div>

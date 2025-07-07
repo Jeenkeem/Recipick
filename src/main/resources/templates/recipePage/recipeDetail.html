@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipick</title>
+    <link rel="stylesheet" href="/resources/css/menubar.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/css/recipeDetailStyle.css">
+</head>
+<body>
+    <div class="recipe-container">
+
+        <div th:replace="~{common/menubar :: menubar}"></div>
+
+        <div class="main-section">
+            <span th:text="${recipe_sumry}"></span>
+
+            <div class="top-section">
+                <h2><span th:text="${recipe_title}"></span></h2>
+                <div class="recipe-info">
+                    <div class="recipe-info-row">
+                        <span class="label">난이도</span>
+                        <span class="value" th:text="
+                            ${recipe_level == '초보환영' ? '★☆☆' :
+                              (recipe_level == '보통' ? '★★☆' :
+                              (recipe_level == '어려움' ? '★★★' : ''))}">>
+                        </span>
+                    </div>
+                    <div class="recipe-info-row">
+                        <span class="label">조리시간</span>
+                        <span class="value" th:text="${recipe_cookingTime}"></span>
+                    </div>
+                    <div class="recipe-info-row">
+                        <span class="label">칼로리</span>
+                        <span class="value" th:text="${calorie}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="ingredients-section">
+                <h2>🥘 필요한 재료</h2>
+                <ul th:each="ingredient : ${list}">
+                    <li>
+                        <span th:text="${ingredient.IRDNT_NM}"></span>
+                        <span th:text="${ingredient.IRDNT_CPCTY}"></span>
+                    </li>
+                </ul>
+
+                <div id="irdntContainer">
+                    <input type="hidden" th:each="ingredient : ${list}"
+                           th:value="${ingredient.IRDNT_NM}" />
+                </div>
+
+                <div class="btn-section">
+                    <button class="custom-button" onclick="goToMapPage()">내주변 최저가 식재료 탐색</button>
+                </div>
+
+                <script>
+                    function goToMapPage() {
+                        const inputs = document.querySelectorAll('#irdntContainer input');
+                        const names = Array.from(inputs).map(input => input.value).join(',');
+                        const url = `http://recipick.kro.kr:8099/recipick/mapPage?irdntNames=${encodeURIComponent(names)}`;
+                        location.href = url;
+                      }
+                </script>
+            </div>
+
+
+            <div class="steps-section">
+                <h2>📝 조리 순서</h2>
+                <div class="step" th:each="cookingStep : ${list228}">
+                    <span class="step-number" th:text="'STEP ' + ${cookingStep.COOKING_NO}"></span>
+                    <p th:text="${cookingStep.COOKING_DC}"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

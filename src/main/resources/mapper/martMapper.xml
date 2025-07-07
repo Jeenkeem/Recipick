@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.recipick.mapper.MartInfoMapper">
+
+    <select id="findAll" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+    </select>
+
+    <select id="getAllMartName" resultType="com.project.recipick.Entity.MartNameAndLocation">
+        SELECT DISTINCT ON (m_name) m_name, m_gu_name
+        FROM mart_info
+    </select>
+
+    <select id="findSameMartInfo" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE m_gu_code = #{gu_code}
+    </select>
+
+    <select id="getProductByCuCode" resultType="String">
+        SELECT DISTINCT m_name FROM mart_info
+        WHERE m_gu_name = #{gu_name}
+    </select>
+
+    <!-- 마트 하드코딩 선택 후 왼쪽 표에 넘길 용도 -->
+    <select id="selectItemsByMartName" resultType="com.project.recipick.dto.MartItemDTO">
+        SELECT DISTINCT ON (a_name)
+        a_name AS aName,
+        a_price AS aPrice
+        FROM mart_info
+        WHERE REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price::int > 0
+        ORDER BY a_name, m_gu_name DESC
+    </select>
+
+
+    <select id="getIrdntPrice" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        <!-- WHERE a_name ~ ('\y' || #{ingredient} || '\y') -->
+        WHERE a_name ~ (#{ingredient} || '\M')
+        and a_price != '0';
+    </select>
+
+    <select id="findByMName" parameterType="String" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT * FROM mart_info
+        WHERE
+        REPLACE(REPLACE(REPLACE(m_name, '(', ''), ')', ''), ' ', '')
+        LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(#{martName}, '(', ''), ')', ''), ' ', ''), '%')
+        AND a_price != '0';
+    </select>
+
+    <insert id="saveMartInfo" parameterType="MartInfo">
+        INSERT INTO mart_info (
+            P_SEQ, M_SEQ, M_NAME, A_SEQ, A_NAME, A_UNIT, A_PRICE,
+            P_YEAR_MONTH, ADD_COL, P_DATE, M_TYPE_CODE, M_TYPE_NAME,
+            M_GU_CODE, M_GU_NAME
+        ) VALUES (
+            #{P_SEQ}, #{M_SEQ}, #{M_NAME}, #{A_SEQ}, #{A_NAME}, #{A_UNIT}, #{A_PRICE},
+            #{P_YEAR_MONTH}, #{ADD_COL}, #{P_DATE}, #{M_TYPE_CODE}, #{M_TYPE_NAME},
+            #{M_GU_CODE}, #{M_GU_NAME}
+        )
+        ON CONFLICT (P_SEQ) DO UPDATE
+        SET
+            M_SEQ = EXCLUDED.M_SEQ,
+            M_NAME = EXCLUDED.M_NAME,
+            A_SEQ = EXCLUDED.A_SEQ,
+            A_NAME = EXCLUDED.A_NAME,
+            A_UNIT = EXCLUDED.A_UNIT,
+            A_PRICE = EXCLUDED.A_PRICE,
+            P_YEAR_MONTH = EXCLUDED.P_YEAR_MONTH,
+            ADD_COL = EXCLUDED.ADD_COL,
+            P_DATE = EXCLUDED.P_DATE,
+            M_TYPE_CODE = EXCLUDED.M_TYPE_CODE,
+            M_TYPE_NAME = EXCLUDED.M_TYPE_NAME,
+            M_GU_CODE = EXCLUDED.M_GU_CODE,
+            M_GU_NAME = EXCLUDED.M_GU_NAME
+    </insert>
+
+    <delete id="deleteAllMartInfo">
+        DELETE FROM mart_info;
+    </delete>
+
+    <delete id="deleteMartInfo" parameterType="String">
+        DELETE FROM mart_info
+        WHERE m_name = #{m_name};
+    </delete>
+
+    <select id="findLatestByMartAndItem" resultType="com.project.recipick.Entity.MartInfo">
+        SELECT *
+        FROM mart_info
+        WHERE m_name = #{mName}
+        AND a_name = #{aName}
+        ORDER BY p_date DESC
+        LIMIT 1
+    </select>
+
+
+</mapper>
