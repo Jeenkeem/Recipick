@@ -24,6 +24,7 @@ public class MapPageController {
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
+<<<<<<< HEAD
 
     @Autowired
     final MartInfoService martInfoService;
@@ -33,6 +34,9 @@ public class MapPageController {
     }
 
     @GetMapping("/recipick/mapPage")
+=======
+    @GetMapping("mapPage")
+>>>>>>> 4bde1dac5f6c1063e700682a5ea937fbe7b65427
     public String getMethodName(Model model) {
 
         List<MartNameAndLocation> list = martInfoService.getAllMartName();
