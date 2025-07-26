@@ -2,6 +2,7 @@ package com.project.recipick.mapper;
 
 import com.project.recipick.Entity.RecipeCardEntity;
 import com.project.recipick.Entity.RecipeIngredientEntity;
+import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.dto.RecipeCardDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,7 +18,7 @@ public interface RecipeCardMapper {
 
     List<RecipeCardDTO> getSearchedRecipeList(String searchWord);
 
-    List<RecipeIngredientEntity> getSearchedIngredientList(String inputIngredient);
+    List<RecipeIrdnt> getSearchedIngredientList(String inputIngredient);
 
     List<RecipeCardDTO> getRecommendRecipe(Map<String, Object> paramMap);
 }

@@ -47,7 +47,7 @@
     </select>
 
 <!--   레시피 추천  -->
-    <select id="getSearchedIngredientList" resultType="com.project.recipick.Entity.RecipeIngredientEntity" parameterType="java.lang.String">
+    <select id="getSearchedIngredientList" resultType="com.project.recipick.Entity.RecipeIrdnt" parameterType="java.lang.String">
         WITH valid_recipes AS (
             SELECT r.recipe_id
             FROM recipe_info r

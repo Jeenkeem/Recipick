@@ -1,6 +1,7 @@
 package com.project.recipick.service;
 
 import com.project.recipick.Entity.RecipeIngredientEntity;
+import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.dto.RecipeCardDTO;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public interface RecipeCardService {
 
     List<RecipeCardDTO> getSearchedRecipeList(String searchWord);
 
-    List<RecipeIngredientEntity> getSearchedIngredientList(String inputIngredient);
+    List<RecipeIrdnt> getSearchedIngredientList(String inputIngredient);
 
     List<RecipeCardDTO> getRecommendRecipe(Map<String, Object> paramMap);
 }

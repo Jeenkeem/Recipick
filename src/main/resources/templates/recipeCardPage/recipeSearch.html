@@ -38,14 +38,15 @@
     <div id="card-area">
         <div v-if="searched && results.length > 0" class="recipe-container">
             <div v-for="recipe in results" :key="recipe.recipeId" class="recipe-card">
+
                 <div class="recipe-image-wrapper">
-                    <img :src="recipe.rcpImgUrl" :alt="recipe.recipeNmKo" @click="redirectToRecipe(recipe.recipeNmKo, recipe.recipeId)" loading="lazy"/>
+                    <img :src="recipe.rcp_img_url" :alt="recipe.recipe_nm_ko" @click="redirectToRecipe(recipe.recipe_nm_ko, recipe.recipe_id)" loading="lazy"/>
                 </div>
                 <div class="recipe-info">
-                    <h3>{{recipe.recipeNmKo}}</h3>
+                    <h3>{{recipe.recipe_nm_ko}}</h3>
                     <div class="recipe-detail">
-                        <div><strong>난이도</strong><span class="stars">{{getStars(recipe.levelNm)}}</span></div>
-                        <div><strong>조리시간</strong> {{recipe.cookingTime}}</div>
+                        <div><strong>난이도</strong><span class="stars">{{getStars(recipe.level_nm)}}</span></div>
+                        <div><strong>조리시간</strong> {{recipe.cooking_time}}</div>
                         <div><strong>칼로리</strong> {{recipe.calorie}}</div>
                     </div>
                 </div>
@@ -61,18 +62,18 @@
         <div v-else class="recipe-container" id="recipe-container">
             <div th:each="recipe : ${recipeCards}" class="recipe-card">
                 <div class="recipe-image-wrapper">
-                    <img th:src="${recipe.rcpImgUrl}"
-                         th:attr="onclick=|redirectToRecipe('${recipe.recipeNmKo}', ${recipe.recipeId})|"
+                    <img th:src="${recipe.rcp_img_url}"
+                         th:attr="onclick=|redirectToRecipe('${recipe.recipe_nm_ko}', ${recipe.recipe_id})|"
                          alt="레시피 이미지" loading="lazy"/>
                 </div>
                 <div class="recipe-info">
-                    <h3 th:text="${recipe.recipeNmKo}">레시피 이름</h3>
+                    <h3 th:text="${recipe.recipe_nm_ko}">레시피 이름</h3>
                     <div class="recipe-detail">
                         <div><strong>난이도</strong> <span class="stars" th:text="
-                            ${recipe.levelNm == '초보환영' ? '★☆☆' :
-                              (recipe.levelNm == '보통' ? '★★☆' :
-                              (recipe.levelNm == '어려움' ? '★★★' : ''))}">></span></div>
-                        <div><strong>조리시간</strong> <span th:text="${recipe.cookingTime}"></span></div>
+                            ${recipe.level_nm == '초보환영' ? '★☆☆' :
+                              (recipe.level_nm == '보통' ? '★★☆' :
+                              (recipe.level_nm == '어려움' ? '★★★' : ''))}">></span></div>
+                        <div><strong>조리시간</strong> <span th:text="${recipe.cooking_time}"></span></div>
                         <div><strong>칼로리</strong> <span th:text="${recipe.calorie}"></span></div>
                     </div>
                 </div>

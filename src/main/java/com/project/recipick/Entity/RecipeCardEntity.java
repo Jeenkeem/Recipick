@@ -9,7 +9,7 @@ public class RecipeCardEntity {
     @JsonProperty("ROW_NUM")  // JSON의 "ROW_NUM"을 rowNum 필드로 매핑
     private int rowNum;
 
-    @JsonProperty("RECIPE_ID")
+    @JsonProperty("recipe_id")
     private int recipeId;
 
     @JsonProperty("RECIPE_NM_KO")
