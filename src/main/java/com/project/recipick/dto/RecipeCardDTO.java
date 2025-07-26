@@ -2,8 +2,40 @@ package com.project.recipick.dto;
 
 import lombok.Data;
 
+@Data
 public class RecipeCardDTO {
 
+        private String recipe_id;
+        private String recipe_nm_ko;
+        private String cooking_time;
+        private String calorie;
+        private String level_nm;
+        private String rcp_img_url;  // 이미지 url
+
+        public String getRecipe_id() {
+                return recipe_id;
+        }
+
+        public String getRecipe_nm_ko() {
+                return recipe_nm_ko;
+        }
+
+        public String getCooking_time() {
+                return cooking_time;
+        }
+
+        public String getLevel_nm() {
+                return level_nm;
+        }
+
+        public String getRcp_img_url() {
+                return rcp_img_url;
+        }
+
+        public String getCalorie() {
+                return calorie;
+        }
+        /*
         private String recipeId;
         private String recipeNmKo;
         private String cookingTime;
@@ -63,5 +95,7 @@ public class RecipeCardDTO {
         public void setRcpImgUrl(String rcpImgUrl) {
                 this.rcpImgUrl = rcpImgUrl;
         }
+
+         */
 
 }

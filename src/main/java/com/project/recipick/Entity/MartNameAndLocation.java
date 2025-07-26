@@ -1,22 +1,22 @@
 package com.project.recipick.Entity;
 
 public class MartNameAndLocation {
-    private String mName;
-    private String mGuName;
+    private String M_NAME;
+    private String M_GU_NAME;
 
     public String getmName() {
-        return mName;
+        return M_NAME;
     }
 
-    public void setmName(String  mName) {
-        this.mName = mName;
+    public void setmName(String mName) {
+        this.M_NAME = mName;
     }
 
     public String getmGuName() {
-        return mGuName;
+        return M_GU_NAME;
     }
 
-    public void setmGuName(String  mGuName) {
-        this.mGuName = mGuName;
+    public void setmGuName(String mGuName) {
+        this.M_GU_NAME = mGuName;
     }
 }

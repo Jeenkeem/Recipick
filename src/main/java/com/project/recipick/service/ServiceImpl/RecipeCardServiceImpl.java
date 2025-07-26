@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.recipick.Entity.RecipeCardEntity;
 import com.project.recipick.Entity.RecipeIngredientEntity;
+import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.config.AppConfig;
 import com.project.recipick.dto.RecipeCardDTO;
 import com.project.recipick.mapper.RecipeCardMapper;
@@ -37,7 +38,7 @@ public class RecipeCardServiceImpl implements RecipeCardService {
     }
 
     @Override
-    public List<RecipeIngredientEntity> getSearchedIngredientList(String inputIngredient){
+    public List<RecipeIrdnt> getSearchedIngredientList(String inputIngredient){
         return recipeCardMapper.getSearchedIngredientList(inputIngredient);
     }
 

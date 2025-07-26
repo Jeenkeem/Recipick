@@ -1,6 +1,7 @@
 function redirectToRecipe(name, id) {
     const encodedName = encodeURIComponent(name);
-    const url = `http://recipick.kro.kr:8099/recipick/recipeInfo?recipe_name=${encodedName}&recipe_id=${id}`;
+    //const url = `http://recipick.kro.kr:8099/recipick/recipeInfo?recipe_name=${encodedName}&recipe_id=${id}`;
+    const url = `http://localhost:8090/recipick/recipeInfo?recipe_name=${encodedName}&recipe_id=${id}`;
     location.href = url;
 }
 
@@ -53,8 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     const response = await axios.get('/recipick/rec/ingrnm',{
                         params:{ inputIngredient: trimmed}
                     });
+
                     //검색한 재료 리스트
-                    this.filteredIngredients = response.data.map(item => item.IRDNT_NM)
+                    this.filteredIngredients = response.data.map(item => item.irdnt_NM)
 
                 } catch (error){
                     console.log('실패', error);

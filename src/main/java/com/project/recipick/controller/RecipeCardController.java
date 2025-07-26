@@ -1,6 +1,7 @@
 package com.project.recipick.controller;
 
 import com.project.recipick.Entity.RecipeIngredientEntity;
+import com.project.recipick.Entity.RecipeIrdnt;
 import com.project.recipick.dto.RecipeCardDTO;
 import com.project.recipick.service.RecipeCardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class RecipeCardController {
     public String getRecipeCards(Model model) {
         model.addAttribute("recipeCards", recipeCardService.getRecipeCardList());
 
-        return "recipecardPage/recipeSearch";
+        return "recipeCardPage/recipeSearch";
     }
 
     @RequestMapping("/search")
@@ -34,13 +35,14 @@ public class RecipeCardController {
 
     @GetMapping("/rec")
     public String getRecipeCardsRecommend(Model model){
-        return "recipecardPage/recipeRecommend";
+        return "recipeCardPage/recipeRecommend";
     }
 
     @RequestMapping("/rec/ingrnm")
     @ResponseBody
-    public List<RecipeIngredientEntity> searchIngredient(@RequestParam String inputIngredient){
-        List<RecipeIngredientEntity> result = recipeCardService.getSearchedIngredientList(inputIngredient);
+    public List<RecipeIrdnt> searchIngredient(@RequestParam String inputIngredient){
+        List<RecipeIrdnt> result = recipeCardService.getSearchedIngredientList(inputIngredient);
+
         return result;
     }
 
